@@ -1,0 +1,41 @@
+.header {
+  background-color: black;
+  height: 50px;
+  display: flex;
+  justify-content: center;
+  box-shadow: 0 24px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+}
+.container {
+  padding-top: 17px;
+  display: inline-block;
+}
+
+.link {
+  color: rgb(107, 105, 105);
+  font-family: Georgia, "Times New Roman", Times, serif;
+  font-size: 16px;
+  vertical-align: middle;
+  margin-top: 17px;
+}
+
+.container li {
+  display: inline-block;
+  vertical-align: middle;
+  margin-right: 60px;
+}
+.logo {
+  padding-top: 7px;
+  display: inline-block;
+  margin-right: 60px;
+}
+
+.logo h1 {
+  color: rgb(107, 105, 105);
+  font-family: Georgia, "Times New Roman", Times, serif;
+  font-size: 30px;
+  vertical-align: middle;
+}
+
+.link:hover {
+  color: #82c434;
+}

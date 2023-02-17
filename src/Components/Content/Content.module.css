@@ -1,0 +1,16 @@
+.container {
+  display: relative;
+  margin-top: 10%;
+  margin-left: 20%;
+}
+
+.container h1 {
+  display: inline-block;
+  font-family: Georgia, "Times New Roman", Times, serif;
+  font-size: 31px;
+  line-height: 1.5;
+  color: white;
+}
+.container p {
+  margin-left: 0px;
+}
