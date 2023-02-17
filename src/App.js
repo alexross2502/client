@@ -9,9 +9,7 @@ import TownsPage from "./AdminComponents/Components/TownsPage/TownsPage";
 import ReservationPage from "./AdminComponents/Components/ReservationPage/ReservationPage";
 
 function App() {
-  
   return (
-
     <Suspense fallback="loading">
       <div className="App">
         <Router>
@@ -51,12 +49,9 @@ function App() {
             />
           </Routes>
         </Router>
-        
       </div>
     </Suspense>
   );
 }
 
 export default App;
-
-

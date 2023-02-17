@@ -1,8 +1,8 @@
-import Button from "./Button/Button";
 import style from "./Content.module.css";
 import { useTranslation } from "react-i18next";
 import { useDispatch } from "react-redux";
 import { setModalOrder } from "../../redux/orderReducer";
+import { Button } from "@mui/material";
 
 const Content = () => {
   const { t } = useTranslation();
@@ -18,7 +18,9 @@ const Content = () => {
         <p>{t("mainText.part2")}</p>
       </h1>
       <div className={style.button} onClick={() => onActiveClick()}>
-        <Button />
+        <Button sx={{ background: "#82c434" }} variant="contained">
+          {t("header.login")}
+        </Button>
       </div>
     </div>
   );
