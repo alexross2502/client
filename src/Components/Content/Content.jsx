@@ -1,4 +1,3 @@
-import style from "./Content.module.css";
 import { useTranslation } from "react-i18next";
 import { useDispatch } from "react-redux";
 import { setModalOrder } from "../../redux/orderReducer";
@@ -12,12 +11,12 @@ const Content = () => {
   }
 
   return (
-    <div className={style.container}>
+    <div>
       <h1>
         <p>{t("mainText.part1")}</p>
         <p>{t("mainText.part2")}</p>
       </h1>
-      <div className={style.button} onClick={() => onActiveClick()}>
+      <div onClick={() => onActiveClick()}>
         <Button sx={{ background: "#82c434" }} variant="contained">
           {t("header.login")}
         </Button>

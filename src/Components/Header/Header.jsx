@@ -1,4 +1,3 @@
-import style from "./Header.module.css";
 import { useDispatch } from "react-redux";
 import { setModalActive } from "../../redux/modalWindowReducer";
 import { useTranslation } from "react-i18next";
