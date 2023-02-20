@@ -3,7 +3,7 @@ import style from "../../AdminPage.module.css";
 import { FormButton } from "../FormButton";
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { LeftSideMenu } from "../../LeftSideMenu";
+import { LeftSideMenu } from "../../LeftSideMenu.jsx";
 import { useForm } from "react-hook-form";
 import { ReservationForm } from "./ReservationForm";
 import Api from "../api";

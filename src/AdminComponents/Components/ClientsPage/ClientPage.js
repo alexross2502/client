@@ -4,7 +4,7 @@ import { FormButton } from "../FormButton";
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { clientSave } from "./clientSave";
-import { LeftSideMenu } from "../../LeftSideMenu";
+import { LeftSideMenu } from "../../LeftSideMenu.jsx";
 import { useForm } from "react-hook-form";
 import { ClientForm } from "./ClientForm";
 import Api from "../api";
@@ -20,8 +20,8 @@ const ClientPage = () => {
     let asyncFunc = async () => {
       let clients = [...(await Api.getAll("clients"))];
       setClientsList(clients);
-    }
-    asyncFunc()
+    };
+    asyncFunc();
   }, [rerender]);
 
   const { handleSubmit, register } = useForm({
@@ -35,9 +35,6 @@ const ClientPage = () => {
   const clientListItem = clientsList.map((item) => {
     return <ClientForm data={item} key={item.id} />;
   });
-
- 
-
 
   return (
     <div className={style.container} onSubmit={handleSubmit(newClient)}>

@@ -8,6 +8,8 @@
     "@mui/icons-material": "^5.11.9",
     "@mui/material": "^5.11.9",
     "@mui/styled-engine-sc": "^5.11.9",
+    "@mui/x-data-grid-generator": "^5.17.24",
+    "@mui/x-data-grid-pro": "^5.17.24",
     "@testing-library/jest-dom": "^5.16.1",
     "@testing-library/react": "^12.1.2",
     "@testing-library/user-event": "^13.5.0",

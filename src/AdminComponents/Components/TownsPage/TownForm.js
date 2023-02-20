@@ -2,6 +2,7 @@ import React from "react";
 import style from "../../AdminPage.module.css";
 import { useForm } from "react-hook-form";
 import { DeleteButton } from "../DeleteButton";
+import { Grid } from "@mui/material";
 
 export function TownForm(props) {
   const {
@@ -12,7 +13,7 @@ export function TownForm(props) {
   });
 
   return (
-    <form>
+    <Grid>
       <div className={style.inputContainer}>
         <input
           className={style.inputText}
@@ -21,6 +22,6 @@ export function TownForm(props) {
         ></input>
       </div>
       <DeleteButton buttonType="deleteButton" id={props.data.id} url="towns" />
-    </form>
+    </Grid>
   );
 }

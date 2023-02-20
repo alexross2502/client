@@ -4,7 +4,7 @@ import { FormButton } from "../FormButton";
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { masterSave } from "./masterSave";
-import { LeftSideMenu } from "../../LeftSideMenu";
+import { LeftSideMenu } from "../../LeftSideMenu.jsx";
 import { useForm } from "react-hook-form";
 import { MasterForm } from "./MasterForm";
 import Api from "../api";
@@ -19,12 +19,12 @@ const MastersPage = () => {
 
   useEffect(() => {
     let asyncFunc = async () => {
-    let clients = [...(await Api.getAll("masters"))];
-    setMastersList(clients);
-    let towns = [...(await Api.getAll("towns"))];
-    setTownsList(towns);
-    }
-    asyncFunc()
+      let clients = [...(await Api.getAll("masters"))];
+      setMastersList(clients);
+      let towns = [...(await Api.getAll("towns"))];
+      setTownsList(towns);
+    };
+    asyncFunc();
   }, [rerender]);
 
   const { handleSubmit, register } = useForm({
