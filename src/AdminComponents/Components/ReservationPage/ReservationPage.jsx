@@ -1,13 +1,17 @@
 import { useTranslation } from "react-i18next";
 import style from "../../AdminPage.module.css";
-import { LeftSideMenu } from "../../LeftSideMenu.jsx";
 import { FormButton } from "../FormButton";
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { townSave } from "./townSave";
+import { LeftSideMenu } from "../../LeftSideMenu.jsx";
 import { useForm } from "react-hook-form";
 import Api from "../api";
 import { setPageRerender } from "../../../redux/rerenderReducer";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import { reservationSave } from "./reservationSave";
+import setHours from "date-fns/setHours";
+import setMinutes from "date-fns/setMinutes";
 import { Box } from "@mui/system";
 import {
   Grid,
@@ -15,22 +19,22 @@ import {
   TableCell,
   TableHead,
   TableRow,
-  Button,
   TableBody,
+  Button,
   IconButton,
 } from "@mui/material";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 
-const TownsPage = () => {
+const ReservationPage = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const rerender = useSelector((state) => state.rerender.isRerender);
-  const [townsList, setTownsList] = useState([]);
+  const [reservationList, setReservationList] = useState([]);
 
   useEffect(() => {
     let asyncFunc = async () => {
-      let towns = [...(await Api.getAll("towns"))];
-      setTownsList(towns);
+      let reservation = [...(await Api.getAll("reservation"))];
+      setReservationList(reservation);
     };
     asyncFunc();
   }, [rerender]);
@@ -43,7 +47,7 @@ const TownsPage = () => {
     <>
       <Box height={70} />
       <Box sx={{ display: "flex" }}>
-        <LeftSideMenu name={"towns"} />
+        <LeftSideMenu name={"reservation"} />
         <Box sx={{ height: 520, width: "100%" }}>
           <Table sx={{ width: "100%" }}>
             <TableHead>
@@ -56,7 +60,27 @@ const TownsPage = () => {
                 <TableCell
                   sx={{ color: "white", fontWeight: 600, fintSize: "18px" }}
                 >
-                  {t("table.townName")}
+                  {t("table.day")}
+                </TableCell>
+                <TableCell
+                  sx={{ color: "white", fontWeight: 600, fintSize: "18px" }}
+                >
+                  {t("table.hours")}
+                </TableCell>
+                <TableCell
+                  sx={{ color: "white", fontWeight: 600, fintSize: "18px" }}
+                >
+                  {t("table.master_id")}
+                </TableCell>
+                <TableCell
+                  sx={{ color: "white", fontWeight: 600, fintSize: "18px" }}
+                >
+                  {t("table.towns_id")}
+                </TableCell>
+                <TableCell
+                  sx={{ color: "white", fontWeight: 600, fintSize: "18px" }}
+                >
+                  {t("table.clientId")}
                 </TableCell>
                 <TableCell
                   sx={{ color: "white", fontWeight: 600, fintSize: "18px" }}
@@ -71,14 +95,18 @@ const TownsPage = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {townsList.map((el) => (
+              {reservationList.map((el) => (
                 <TableRow sx={{ borderBottom: "solid 2px black" }}>
                   <TableCell>{el.id}</TableCell>
-                  <TableCell>{el.name}</TableCell>
+                  <TableCell>{el.day}</TableCell>
+                  <TableCell>{el.hours}</TableCell>
+                  <TableCell>{el.master_id}</TableCell>
+                  <TableCell>{el.towns_id}</TableCell>
+                  <TableCell>{el.clientId}</TableCell>
                   <TableCell>
                     <IconButton
                       onClick={() => {
-                        Api.delete("towns", el.props.data.id);
+                        Api.delete("reservation", el.props.data.id);
                         dispatch(setPageRerender());
                       }}
                     >
@@ -95,4 +123,4 @@ const TownsPage = () => {
   );
 };
 
-export default TownsPage;
+export default ReservationPage;

@@ -1,10 +1,10 @@
 import { useTranslation } from "react-i18next";
 import style from "../../AdminPage.module.css";
-import { LeftSideMenu } from "../../LeftSideMenu.jsx";
 import { FormButton } from "../FormButton";
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { townSave } from "./townSave";
+import { masterSave } from "./masterSave";
+import { LeftSideMenu } from "../../LeftSideMenu.jsx";
 import { useForm } from "react-hook-form";
 import Api from "../api";
 import { setPageRerender } from "../../../redux/rerenderReducer";
@@ -14,23 +14,23 @@ import {
   Table,
   TableCell,
   TableHead,
-  TableRow,
   Button,
+  TableRow,
   TableBody,
   IconButton,
 } from "@mui/material";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 
-const TownsPage = () => {
+const MastersPage = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const rerender = useSelector((state) => state.rerender.isRerender);
-  const [townsList, setTownsList] = useState([]);
+  const [mastersList, setMastersList] = useState([]);
 
   useEffect(() => {
     let asyncFunc = async () => {
-      let towns = [...(await Api.getAll("towns"))];
-      setTownsList(towns);
+      let masters = [...(await Api.getAll("masters"))];
+      setMastersList(masters);
     };
     asyncFunc();
   }, [rerender]);
@@ -43,7 +43,7 @@ const TownsPage = () => {
     <>
       <Box height={70} />
       <Box sx={{ display: "flex" }}>
-        <LeftSideMenu name={"towns"} />
+        <LeftSideMenu name={"masters"} />
         <Box sx={{ height: 520, width: "100%" }}>
           <Table sx={{ width: "100%" }}>
             <TableHead>
@@ -56,7 +56,17 @@ const TownsPage = () => {
                 <TableCell
                   sx={{ color: "white", fontWeight: 600, fintSize: "18px" }}
                 >
-                  {t("table.townName")}
+                  {t("table.name")}
+                </TableCell>
+                <TableCell
+                  sx={{ color: "white", fontWeight: 600, fintSize: "18px" }}
+                >
+                  {t("table.surname")}
+                </TableCell>
+                <TableCell
+                  sx={{ color: "white", fontWeight: 600, fintSize: "18px" }}
+                >
+                  {t("table.rating")}
                 </TableCell>
                 <TableCell
                   sx={{ color: "white", fontWeight: 600, fintSize: "18px" }}
@@ -71,14 +81,16 @@ const TownsPage = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {townsList.map((el) => (
+              {mastersList.map((el) => (
                 <TableRow sx={{ borderBottom: "solid 2px black" }}>
                   <TableCell>{el.id}</TableCell>
                   <TableCell>{el.name}</TableCell>
+                  <TableCell>{el.surname}</TableCell>
+                  <TableCell>{el.rating}</TableCell>
                   <TableCell>
                     <IconButton
                       onClick={() => {
-                        Api.delete("towns", el.props.data.id);
+                        Api.delete("masters", el.props.data.id);
                         dispatch(setPageRerender());
                       }}
                     >
@@ -95,4 +107,4 @@ const TownsPage = () => {
   );
 };
 
-export default TownsPage;
+export default MastersPage;

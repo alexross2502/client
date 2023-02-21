@@ -16,11 +16,15 @@ import AccessAlarmsIcon from "@mui/icons-material/AccessAlarms";
 import { useState } from "react";
 import { Box } from "@mui/system";
 import { DrawerComp } from "./DrawerComp";
+import { setModalOrder } from "../../redux/orderReducer";
 
 const Header = () => {
   const dispatch = useDispatch();
-  function onActiveClick() {
+  function onClickLogin() {
     dispatch(setModalActive());
+  }
+  function onClickOrder() {
+    dispatch(setModalOrder());
   }
 
   const { t } = useTranslation();
@@ -78,8 +82,16 @@ const Header = () => {
             <Grid item xs={2}>
               <Box display={"flex"}>
                 <Button
+                  sx={{ background: "#82c434" }}
+                  variant="contained"
+                  onClick={() => onClickOrder()}
+                >
+                  {t("order.header")}
+                </Button>
+                <Button
                   sx={{ marginLeft: "auto", background: "rgba(180,58,58,1)" }}
                   variant="contained"
+                  onClick={() => onClickLogin()}
                 >
                   {t("header.login")}
                 </Button>

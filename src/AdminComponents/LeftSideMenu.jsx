@@ -20,6 +20,14 @@ import InboxIcon from "@mui/icons-material/MoveToInbox";
 import MailIcon from "@mui/icons-material/Mail";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
+import AccessibilityNewIcon from "@mui/icons-material/AccessibilityNew";
+import ApartmentIcon from "@mui/icons-material/Apartment";
+import HourglassBottomIcon from "@mui/icons-material/HourglassBottom";
+import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
+import { Button } from "@mui/material";
+import { useDispatch } from "react-redux";
+import { setAuthorized } from "../redux/authorizationReducer";
+import LogoutIcon from "@mui/icons-material/Logout";
 
 const drawerWidth = 240;
 
@@ -67,10 +75,11 @@ const DrawerHeader = styled("div")(({ theme }) => ({
   justifyContent: "flex-end",
 }));
 
-export function LeftSideMenu() {
+export function LeftSideMenu(props) {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const theme = useTheme();
+  const dispatch = useDispatch();
 
   return (
     <Box sx={{ display: "flex" }}>
@@ -78,7 +87,7 @@ export function LeftSideMenu() {
       <AppBar position="fixed" open={true}>
         <Toolbar>
           <Typography variant="h6" noWrap>
-            {t("adminPage.header")}
+            {t("adminPage.header")} {t(`adminPage.${props.name}`)}
           </Typography>
         </Toolbar>
       </AppBar>
@@ -101,7 +110,7 @@ export function LeftSideMenu() {
           <ListItem disablePadding>
             <ListItemButton onClick={() => navigate("/clients")}>
               <ListItemIcon>
-                <InboxIcon />
+                <AccessibilityNewIcon></AccessibilityNewIcon>
               </ListItemIcon>
               <ListItemText primary={t("adminPage.clients")} />
             </ListItemButton>
@@ -109,7 +118,7 @@ export function LeftSideMenu() {
           <ListItem disablePadding>
             <ListItemButton onClick={() => navigate("/masters")}>
               <ListItemIcon>
-                <InboxIcon />
+                <ManageAccountsIcon></ManageAccountsIcon>
               </ListItemIcon>
               <ListItemText primary={t("adminPage.masters")} />
             </ListItemButton>
@@ -117,7 +126,7 @@ export function LeftSideMenu() {
           <ListItem disablePadding>
             <ListItemButton onClick={() => navigate("/towns")}>
               <ListItemIcon>
-                <InboxIcon />
+                <ApartmentIcon></ApartmentIcon>
               </ListItemIcon>
               <ListItemText primary={t("adminPage.towns")} />
             </ListItemButton>
@@ -125,13 +134,28 @@ export function LeftSideMenu() {
           <ListItem disablePadding>
             <ListItemButton onClick={() => navigate("/reservation")}>
               <ListItemIcon>
-                <InboxIcon />
+                <HourglassBottomIcon></HourglassBottomIcon>
               </ListItemIcon>
               <ListItemText primary={t("adminPage.reservation")} />
             </ListItemButton>
           </ListItem>
         </List>
         <Divider />
+        <ListItem disablePadding>
+          <ListItemButton
+            onClick={() => {
+              sessionStorage.removeItem("token");
+              sessionStorage.removeItem("persist:main-root");
+              dispatch(setAuthorized("false"));
+              navigate("/");
+            }}
+          >
+            <ListItemIcon>
+              <LogoutIcon></LogoutIcon>
+            </ListItemIcon>
+            <ListItemText primary={t("adminPage.logout")} />
+          </ListItemButton>
+        </ListItem>
       </Drawer>
     </Box>
   );
