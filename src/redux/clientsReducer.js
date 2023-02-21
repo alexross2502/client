@@ -1,12 +1,12 @@
-const setMasters = "setMasters";
+const setAddClients = "setAddClients";
 
 const defaultState = {
-  isActive: true,
+  isActive: false,
 };
 
-export default function modalMastersReducer(state = defaultState, action) {
+export default function modalAddClientsReducer(state = defaultState, action) {
   switch (action.type) {
-    case setMasters:
+    case setAddClients:
       if (!state.isActive) {
         return {
           ...state,
@@ -24,4 +24,4 @@ export default function modalMastersReducer(state = defaultState, action) {
   }
 }
 
-export const setModalMasters = () => ({ type: setMasters });
+export const setModalAddClients = () => ({ type: setAddClients });

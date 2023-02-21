@@ -139,34 +139,39 @@ const ModalOrder = () => {
               },
             })}
           />
-          <InputLabel variant="standard" htmlFor="uncontrolled-native">
-            Город
-          </InputLabel>
-          <NativeSelect
-            inputProps={{
-              name: "age",
-              id: "uncontrolled-native",
-            }}
-            style={{ width: 200 }}
-          >
-            <option value={10}>Ten</option>
-            <option value={20}>Twenty</option>
-            <option value={30}>Thirty</option>
-          </NativeSelect>
-          <InputLabel variant="standard" htmlFor="uncontrolled-native">
-            Размер часов
-          </InputLabel>
-          <NativeSelect
-            inputProps={{
-              name: "age",
-              id: "uncontrolled-native",
-            }}
-            style={{ width: 200 }}
-          >
-            <option value={1}>1</option>
-            <option value={2}>2</option>
-            <option value={3}>3</option>
-          </NativeSelect>
+          <Grid item>
+            <InputLabel variant="standard" htmlFor="uncontrolled-native">
+              Город
+            </InputLabel>
+            <NativeSelect
+              inputProps={{
+                name: "age",
+                id: "uncontrolled-native",
+              }}
+              style={{ width: 200 }}
+            >
+              <option value={10}>Ten</option>
+              <option value={20}>Twenty</option>
+              <option value={30}>Thirty</option>
+            </NativeSelect>
+          </Grid>
+          <Grid item>
+            <InputLabel variant="standard" htmlFor="uncontrolled-native">
+              Размер часов
+            </InputLabel>
+            <NativeSelect
+              inputProps={{
+                name: "age",
+                id: "uncontrolled-native",
+              }}
+              style={{ width: 200 }}
+            >
+              <option value={1}>1</option>
+              <option value={2}>2</option>
+              <option value={3}>3</option>
+            </NativeSelect>
+          </Grid>
+
           <TextField
             id="date"
             label="Дата"
@@ -188,7 +193,7 @@ const ModalOrder = () => {
               shrink: true,
             }}
             inputProps={{
-              step: 300, // 5 min
+              step: 3600,
             }}
           />
 

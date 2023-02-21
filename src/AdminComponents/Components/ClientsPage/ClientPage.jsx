@@ -3,7 +3,7 @@ import style from "../../AdminPage.module.css";
 import { FormButton } from "../FormButton";
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { clientSave } from "./clientSave";
+import ClientSave from "./clientSave";
 import { LeftSideMenu } from "../../LeftSideMenu.jsx";
 import { useForm } from "react-hook-form";
 import Api from "../api";
@@ -21,8 +21,11 @@ import {
   Typography,
 } from "@mui/material";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
+import { setModalAddClients } from "../../../redux/clientsReducer";
 
 const ClientPage = () => {
+  const isActive = useSelector((state) => state.addClient.isActive);
+
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const rerender = useSelector((state) => state.rerender.isRerender);
@@ -42,6 +45,7 @@ const ClientPage = () => {
 
   return (
     <>
+      <ClientSave />
       <Box height={70} />
       <Box sx={{ display: "flex" }}>
         <LeftSideMenu name={"clients"} />
@@ -72,6 +76,9 @@ const ClientPage = () => {
                   <Button
                     sx={{ marginLeft: "auto", background: "rgba(180,58,58,1)" }}
                     variant="contained"
+                    onClick={() => {
+                      dispatch(setModalAddClients());
+                    }}
                   >
                     {t("table.add")}
                   </Button>

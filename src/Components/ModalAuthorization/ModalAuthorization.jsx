@@ -70,7 +70,7 @@ const ModalAuthorization = () => {
           <Grid container>
             <Grid item xs={1}></Grid>
             <Grid item xs={10}>
-              <Typography variant="h2" padding={3} textAlign="center">
+              <Typography variant="h4" padding={3} textAlign="center">
                 Вход
               </Typography>
             </Grid>

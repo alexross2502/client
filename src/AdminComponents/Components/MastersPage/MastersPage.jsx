@@ -3,7 +3,7 @@ import style from "../../AdminPage.module.css";
 import { FormButton } from "../FormButton";
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { masterSave } from "./masterSave";
+import MasterSave from "./masterSave";
 import { LeftSideMenu } from "../../LeftSideMenu.jsx";
 import { useForm } from "react-hook-form";
 import Api from "../api";
@@ -20,12 +20,15 @@ import {
   IconButton,
 } from "@mui/material";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
+import { setModalAddMasters } from "../../../redux/mastersReducer";
 
 const MastersPage = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const rerender = useSelector((state) => state.rerender.isRerender);
   const [mastersList, setMastersList] = useState([]);
+
+  const isActive = useSelector((state) => state.addMaster.isActive);
 
   useEffect(() => {
     let asyncFunc = async () => {
@@ -41,6 +44,7 @@ const MastersPage = () => {
 
   return (
     <>
+      <MasterSave />
       <Box height={70} />
       <Box sx={{ display: "flex" }}>
         <LeftSideMenu name={"masters"} />
@@ -74,6 +78,9 @@ const MastersPage = () => {
                   <Button
                     sx={{ marginLeft: "auto", background: "rgba(180,58,58,1)" }}
                     variant="contained"
+                    onClick={() => {
+                      dispatch(setModalAddMasters());
+                    }}
                   >
                     {t("table.add")}
                   </Button>

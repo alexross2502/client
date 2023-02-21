@@ -4,7 +4,7 @@ import { LeftSideMenu } from "../../LeftSideMenu.jsx";
 import { FormButton } from "../FormButton";
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { townSave } from "./townSave";
+import TownSave, { townSave } from "./townSave";
 import { useForm } from "react-hook-form";
 import Api from "../api";
 import { setPageRerender } from "../../../redux/rerenderReducer";
@@ -20,6 +20,7 @@ import {
   IconButton,
 } from "@mui/material";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
+import { setModalAddTowns } from "../../../redux/townsReducer";
 
 const TownsPage = () => {
   const { t } = useTranslation();
@@ -41,6 +42,7 @@ const TownsPage = () => {
 
   return (
     <>
+      <TownSave />
       <Box height={70} />
       <Box sx={{ display: "flex" }}>
         <LeftSideMenu name={"towns"} />
@@ -64,6 +66,9 @@ const TownsPage = () => {
                   <Button
                     sx={{ marginLeft: "auto", background: "rgba(180,58,58,1)" }}
                     variant="contained"
+                    onClick={() => {
+                      dispatch(setModalAddTowns());
+                    }}
                   >
                     {t("table.add")}
                   </Button>

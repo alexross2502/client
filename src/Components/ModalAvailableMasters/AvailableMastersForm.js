@@ -28,24 +28,22 @@ export function AvailableMastersForm(props) {
             time: userData[0][6],
           };
           Api.makeOrder(
-            userData[0][5], 
-            props.data.id, 
-            date,  
+            userData[0][5],
+            props.data.id,
+            date,
             userData[0][1],
             props.data.name,
             props.data.surname,
             props.data.rating,
             userData[0][0]
           );
-          
-          
+
           dispatch({
             type: "setOrderData",
-            payload: ['', '', '', '', '', '', '', ''],
+            payload: ["", "", "", "", "", "", "", ""],
           });
           dispatch(setModalMasters());
           dispatch(setOrderSuccessReducer());
-            
         }}
       >
         <span>
