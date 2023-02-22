@@ -9,13 +9,12 @@ import { useForm } from "react-hook-form";
 import { useState } from "react";
 import CloseIcon from "@mui/icons-material/Close";
 import { setModalAddClients } from "../../../redux/clientsReducer";
+import { setPageRerender } from "../../../redux/rerenderReducer";
 
-async function clientSave(name, email) {
+async function clientSave(atr) {
   let data = {};
-  data.name = name;
-  data.email = email;
-  data.createdAt = Date.now();
-  data.updatedAt = Date.now();
+  data.name = atr.name;
+  data.email = atr.email;
   return await request({ url: `/clients`, method: "post", data: data });
 }
 
@@ -66,7 +65,7 @@ const ClientSave = () => {
               </Typography>
             </Grid>
             <Grid item xs={1}>
-              <CloseIcon />
+              <CloseIcon onClick={() => dispatch(setModalAddClients())} />
             </Grid>
           </Grid>
 
@@ -79,11 +78,6 @@ const ClientSave = () => {
             name="name"
             {...register("name", {
               required: `${t("adminPopup.emptyField")}`,
-              pattern: {
-                value:
-                  /^([a-z0-9_-]+.)*[a-z0-9_-]+@[a-z0-9_-]+(.[a-z0-9_-]+)*.[a-z]{2,6}$/,
-                message: `${t("adminPopup.vrongFormat")}`,
-              },
             })}
           />
           <TextField
@@ -95,6 +89,11 @@ const ClientSave = () => {
             name="email"
             {...register("email", {
               required: `${t("adminPopup.emptyField")}`,
+              pattern: {
+                value:
+                  /^([a-z0-9_-]+.)*[a-z0-9_-]+@[a-z0-9_-]+(.[a-z0-9_-]+)*.[a-z]{2,6}$/,
+                message: `${t("adminPopup.vrongFormat")}`,
+              },
             })}
           />
           <Button
@@ -109,6 +108,10 @@ const ClientSave = () => {
             variant="contained"
             color="warning"
             type="submit"
+            onClick={async () => {
+              dispatch(setPageRerender());
+              dispatch(setModalAddClients());
+            }}
           >
             Добавить
           </Button>

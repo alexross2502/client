@@ -1,25 +1,26 @@
 import { request } from "../../axios-utils";
 import style from "../../../scale.module.css";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Box, Button, Grid, TextField, Typography } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import { useState } from "react";
 import CloseIcon from "@mui/icons-material/Close";
 import { setModalAddMasters } from "../../../redux/mastersReducer";
 import InputLabel from "@mui/material/InputLabel";
 import NativeSelect from "@mui/material/NativeSelect";
+import Api from "../api";
+import { setPageRerender } from "../../../redux/rerenderReducer";
 
-async function masterSave(name, surname, rating, town) {
+async function masterSave(atr) {
   let data = {};
-  data.name = name;
-  data.surname = surname;
-  data.rating = rating;
-  data.townName = town;
-  data.createdAt = Date.now();
-  data.updatedAt = Date.now();
+  console.log(atr);
+  data.name = atr.name;
+  data.surname = atr.surname;
+  data.rating = atr.rating;
+  data.townId = atr.town;
+  console.log(data);
   return await request({ url: `/masters`, method: "post", data: data });
 }
 
@@ -36,6 +37,16 @@ const MasterSave = () => {
   });
   //Открытие\закрытие модального окна
   const isActive = useSelector((state) => state.addMaster.isActive);
+  const rerender = useSelector((state) => state.rerender.isRerender);
+  const [townsList, setTownsList] = useState([]);
+
+  useEffect(() => {
+    let asyncFunc = async () => {
+      let towns = [...(await Api.getAll("towns"))];
+      setTownsList(towns);
+    };
+    asyncFunc();
+  }, [rerender]);
 
   return (
     <div
@@ -55,7 +66,7 @@ const MasterSave = () => {
           borderRadius={5}
           boxShadow={"5px 5px 10px #ccc"}
           sx={{
-            backgroundColor: "#a0a0a0",
+            backgroundColor: "#696969",
 
             ":hover": {
               boxShadow: "10px 10px 20px #ccc",
@@ -70,7 +81,7 @@ const MasterSave = () => {
               </Typography>
             </Grid>
             <Grid item xs={1}>
-              <CloseIcon />
+              <CloseIcon onClick={() => dispatch(setModalAddMasters())} />
             </Grid>
           </Grid>
 
@@ -83,11 +94,6 @@ const MasterSave = () => {
             name="name"
             {...register("name", {
               required: `${t("adminPopup.emptyField")}`,
-              pattern: {
-                value:
-                  /^([a-z0-9_-]+.)*[a-z0-9_-]+@[a-z0-9_-]+(.[a-z0-9_-]+)*.[a-z]{2,6}$/,
-                message: `${t("adminPopup.vrongFormat")}`,
-              },
             })}
           />
           <TextField
@@ -102,15 +108,18 @@ const MasterSave = () => {
             })}
           />
           <Grid item>
-            <InputLabel variant="standard" htmlFor="uncontrolled-native">
+            <InputLabel variant="standard" htmlFor="rating">
               Рейтинг
             </InputLabel>
             <NativeSelect
               inputProps={{
                 name: "rating",
-                id: "uncontrolled-native",
+                id: "rating",
               }}
               style={{ width: 200 }}
+              {...register("rating", {
+                required: true,
+              })}
             >
               <option value={1}>1</option>
               <option value={2}>2</option>
@@ -120,21 +129,24 @@ const MasterSave = () => {
             </NativeSelect>
           </Grid>
           <Grid item>
-            <InputLabel variant="standard" htmlFor="uncontrolled-native">
+            <InputLabel variant="standard" htmlFor="town">
               Город
             </InputLabel>
             <NativeSelect
               inputProps={{
                 name: "town",
-                id: "uncontrolled-native",
+                id: "town",
               }}
               style={{ width: 200 }}
+              {...register("town")}
             >
-              <option value={1}>1</option>
-              <option value={2}>2</option>
-              <option value={3}>3</option>
-              <option value={4}>4</option>
-              <option value={5}>5</option>
+              {townsList.map((el) => {
+                return (
+                  <option value={el.id} key={el.id}>
+                    {el.name}
+                  </option>
+                );
+              })}
             </NativeSelect>
           </Grid>
           <Button
@@ -149,6 +161,9 @@ const MasterSave = () => {
             variant="contained"
             color="warning"
             type="submit"
+            onClick={() => {
+              dispatch(setPageRerender());
+            }}
           >
             Добавить
           </Button>

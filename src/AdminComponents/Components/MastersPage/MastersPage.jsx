@@ -60,12 +60,12 @@ const MastersPage = () => {
                 <TableCell
                   sx={{ color: "white", fontWeight: 600, fintSize: "18px" }}
                 >
-                  {t("table.name")}
+                  ФИО
                 </TableCell>
                 <TableCell
                   sx={{ color: "white", fontWeight: 600, fintSize: "18px" }}
                 >
-                  {t("table.surname")}
+                  Город
                 </TableCell>
                 <TableCell
                   sx={{ color: "white", fontWeight: 600, fintSize: "18px" }}
@@ -91,8 +91,10 @@ const MastersPage = () => {
               {mastersList.map((el) => (
                 <TableRow sx={{ borderBottom: "solid 2px black" }}>
                   <TableCell>{el.id}</TableCell>
-                  <TableCell>{el.name}</TableCell>
-                  <TableCell>{el.surname}</TableCell>
+                  <TableCell>
+                    {el.name} {el.surname}
+                  </TableCell>
+                  <TableCell>{el.townId}</TableCell>
                   <TableCell>{el.rating}</TableCell>
                   <TableCell>
                     <IconButton
