@@ -1,7 +1,15 @@
 .active {
   scale: 1;
+  position: fixed;
+  top: 10%;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: rgba(0, 0, 0, 0.4);
+  height: 100%;
+  width: 100%;
 }
 
 .inactive {
   scale: 0;
+  position: absolute;
 }

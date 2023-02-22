@@ -1,7 +1,7 @@
 const setMasters = "setMasters";
 
 const defaultState = {
-  isActive: true,
+  isActive: false,
 };
 
 export default function modalMastersReducer(state = defaultState, action) {

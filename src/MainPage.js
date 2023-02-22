@@ -4,7 +4,6 @@ import Content from "./Components/Content/Content";
 import ModalAuthorization from "./Components/ModalAuthorization/ModalAuthorization";
 import ModalOrder from "./Components/ModalOrder/ModalOrder";
 import ModalAvailableMasters from "./Components/ModalAvailableMasters/ModalAvailableMasters";
-import ModalOrderSuccess from "./Components/ModalAvailableMasters/ModalOrderSuccess";
 
 const MainPage = () => {
   return (
@@ -15,7 +14,6 @@ const MainPage = () => {
         <ModalAuthorization />
         <ModalOrder />
         <ModalAvailableMasters />
-        <ModalOrderSuccess />
       </div>
     </div>
   );

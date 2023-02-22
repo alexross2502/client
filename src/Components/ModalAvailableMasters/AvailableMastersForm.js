@@ -1,5 +1,4 @@
 import React from "react";
-import style from "./ModalAvailableMasters.module.css";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { useSelector, useDispatch } from "react-redux";
@@ -21,7 +20,6 @@ export function AvailableMastersForm(props) {
   return (
     <form>
       <div
-        className={style.modal_item}
         onClick={() => {
           let date = {
             date: userData[0][3],

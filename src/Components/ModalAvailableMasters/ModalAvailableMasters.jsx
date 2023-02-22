@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import style from "./ModalAvailableMasters.module.css";
+import style from "../../scale.module.css";
 import { useSelector, useDispatch } from "react-redux";
 import { setModalMasters } from "../../redux/modalMastersReducer";
 import { useTranslation } from "react-i18next";
