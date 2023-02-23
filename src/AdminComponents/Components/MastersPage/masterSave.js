@@ -20,7 +20,7 @@ async function masterSave(atr) {
   data.surname = atr.surname;
   data.rating = atr.rating;
   data.townId = atr.town;
-  console.log(data);
+  console.log(atr);
   return await request({ url: `/masters`, method: "post", data: data });
 }
 

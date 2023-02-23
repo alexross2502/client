@@ -99,7 +99,7 @@ const MastersPage = () => {
                   <TableCell>
                     <IconButton
                       onClick={() => {
-                        Api.delete("masters", el.props.data.id);
+                        Api.delete("masters", el.id);
                         dispatch(setPageRerender());
                       }}
                     >

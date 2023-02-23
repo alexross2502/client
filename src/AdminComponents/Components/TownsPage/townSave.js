@@ -11,12 +11,12 @@ import CloseIcon from "@mui/icons-material/Close";
 import { setModalAddTowns } from "../../../redux/townsReducer";
 import InputLabel from "@mui/material/InputLabel";
 import NativeSelect from "@mui/material/NativeSelect";
+import Api from "../api";
+import { setPageRerender } from "../../../redux/rerenderReducer";
 
-async function townSave(name) {
+async function townSave(atr) {
   let data = {};
-  data.name = name;
-  data.createdAt = Date.now();
-  data.updatedAt = Date.now();
+  data.name = atr.name;
   return await request({ url: `/towns`, method: "post", data: data });
 }
 
@@ -71,7 +71,7 @@ const TownSave = () => {
               </Typography>
             </Grid>
             <Grid item xs={1}>
-              <CloseIcon />
+              <CloseIcon onClick={() => dispatch(setModalAddTowns())} />
             </Grid>
           </Grid>
 
@@ -84,11 +84,6 @@ const TownSave = () => {
             name="name"
             {...register("name", {
               required: `${t("adminPopup.emptyField")}`,
-              pattern: {
-                value:
-                  /^([a-z0-9_-]+.)*[a-z0-9_-]+@[a-z0-9_-]+(.[a-z0-9_-]+)*.[a-z]{2,6}$/,
-                message: `${t("adminPopup.vrongFormat")}`,
-              },
             })}
           />
 
@@ -104,6 +99,9 @@ const TownSave = () => {
             variant="contained"
             color="warning"
             type="submit"
+            onClick={() => {
+              dispatch(setPageRerender());
+            }}
           >
             Добавить
           </Button>

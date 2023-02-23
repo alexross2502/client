@@ -75,7 +75,11 @@ const ModalAuthorization = () => {
               </Typography>
             </Grid>
             <Grid item xs={1}>
-              <CloseIcon />
+              <CloseIcon
+                onClick={() => {
+                  dispatch(setModalActive());
+                }}
+              />
             </Grid>
           </Grid>
 

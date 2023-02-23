@@ -109,7 +109,11 @@ const ModalOrder = () => {
               </Typography>
             </Grid>
             <Grid item xs={1}>
-              <CloseIcon />
+              <CloseIcon
+                onClick={() => {
+                  dispatch(setModalOrder());
+                }}
+              />
             </Grid>
           </Grid>
           <TextField

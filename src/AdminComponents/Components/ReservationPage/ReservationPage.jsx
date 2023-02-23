@@ -9,7 +9,7 @@ import Api from "../api";
 import { setPageRerender } from "../../../redux/rerenderReducer";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { reservationSave } from "./reservationSave";
+import ReservationSave, { reservationSave } from "./reservationSave";
 import setHours from "date-fns/setHours";
 import setMinutes from "date-fns/setMinutes";
 import { Box } from "@mui/system";
@@ -24,6 +24,7 @@ import {
   IconButton,
 } from "@mui/material";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
+import { setModalAddReservations } from "../../../redux/reservationsReducer";
 
 const ReservationPage = () => {
   const { t } = useTranslation();
@@ -45,6 +46,7 @@ const ReservationPage = () => {
 
   return (
     <>
+      <ReservationSave />
       <Box height={70} />
       <Box sx={{ display: "flex" }}>
         <LeftSideMenu name={"reservation"} />
@@ -75,17 +77,17 @@ const ReservationPage = () => {
                 <TableCell
                   sx={{ color: "white", fontWeight: 600, fintSize: "18px" }}
                 >
-                  {t("table.master_id")}
+                  Мастер
                 </TableCell>
                 <TableCell
                   sx={{ color: "white", fontWeight: 600, fintSize: "18px" }}
                 >
-                  {t("table.towns_id")}
+                  Город
                 </TableCell>
                 <TableCell
                   sx={{ color: "white", fontWeight: 600, fintSize: "18px" }}
                 >
-                  {t("table.clientId")}
+                  Клиент
                 </TableCell>
                 <TableCell
                   sx={{ color: "white", fontWeight: 600, fintSize: "18px" }}
@@ -93,6 +95,9 @@ const ReservationPage = () => {
                   <Button
                     sx={{ marginLeft: "auto", background: "rgba(180,58,58,1)" }}
                     variant="contained"
+                    onClick={() => {
+                      dispatch(setModalAddReservations());
+                    }}
                   >
                     {t("table.add")}
                   </Button>
@@ -112,7 +117,7 @@ const ReservationPage = () => {
                   <TableCell>
                     <IconButton
                       onClick={() => {
-                        Api.delete("reservation", el.props.data.id);
+                        Api.delete("reservation", el.id);
                         dispatch(setPageRerender());
                       }}
                     >

@@ -83,7 +83,7 @@ const TownsPage = () => {
                   <TableCell>
                     <IconButton
                       onClick={() => {
-                        Api.delete("towns", el.props.data.id);
+                        Api.delete("towns", el.id);
                         dispatch(setPageRerender());
                       }}
                     >
