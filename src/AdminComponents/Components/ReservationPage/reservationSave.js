@@ -73,6 +73,7 @@ const ReservationSave = () => {
       let towns = [...(await Api.getAll("towns"))];
       setTownsList(towns);
       let clients = [...(await Api.getAll("clients"))];
+
       setClientsList(clients);
       let masters = [...(await Api.getAll("masters"))];
       setMastersList(masters);

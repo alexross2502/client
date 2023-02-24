@@ -1,7 +1,9 @@
 import axios from "axios";
 import { getToken } from "./token";
 
-const client = axios.create({ baseURL: "http://localhost:3306/api" });
+const client = axios.create({
+  baseURL: "https://server-cql5.onrender.com/api",
+});
 
 export const request = ({ ...option }) => {
   client.defaults.headers.common.Authorization = getToken();
@@ -11,7 +13,7 @@ export const request = ({ ...option }) => {
       document.location.href = "/";
       sessionStorage.removeItem("token");
       sessionStorage.removeItem("persist:main-root");
-      const response = axios.get("http://localhost:3306/api");
+      const response = axios.get("https://server-cql5.onrender.com/api");
       if (response.status === 200) {
         console.log("401");
         return error.config;
