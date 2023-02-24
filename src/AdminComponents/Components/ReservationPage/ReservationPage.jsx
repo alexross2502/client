@@ -121,13 +121,9 @@ const ReservationPage = () => {
                   <TableCell>{el.id}</TableCell>
                   <TableCell>{el.day}</TableCell>
                   <TableCell>{el.hours / 3600}</TableCell>
-                  <TableCell>{idList[`${el.master_id}`]}</TableCell>
-                  <TableCell>
-                    {typeof idList == Map ? idList.get(el.towns_id) : "Loading"}
-                  </TableCell>
-                  <TableCell>
-                    {typeof idList == Map ? idList.get(el.clientId) : "Loading"}
-                  </TableCell>
+                  <TableCell>{el.master_id}</TableCell>
+                  <TableCell>{el.towns_id}</TableCell>
+                  <TableCell>{el.clientId}</TableCell>
                   <TableCell>
                     <IconButton
                       onClick={() => {
