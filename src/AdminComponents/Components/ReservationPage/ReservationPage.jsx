@@ -64,11 +64,7 @@ const ReservationPage = () => {
                 >
                   {t("table.day")}
                 </TableCell>
-                <TableCell
-                  sx={{ color: "white", fontWeight: 600, fintSize: "18px" }}
-                >
-                  Время начала
-                </TableCell>
+
                 <TableCell
                   sx={{ color: "white", fontWeight: 600, fintSize: "18px" }}
                 >
@@ -109,8 +105,7 @@ const ReservationPage = () => {
                 <TableRow sx={{ borderBottom: "solid 2px black" }}>
                   <TableCell>{el.id}</TableCell>
                   <TableCell>{el.day}</TableCell>
-                  <TableCell>{el.startTime}</TableCell>
-                  <TableCell>{el.hours}</TableCell>
+                  <TableCell>{el.hours / 3600}</TableCell>
                   <TableCell>{el.master_id}</TableCell>
                   <TableCell>{el.towns_id}</TableCell>
                   <TableCell>{el.clientId}</TableCell>

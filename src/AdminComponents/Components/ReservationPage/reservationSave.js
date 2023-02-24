@@ -14,6 +14,7 @@ import Api from "../api";
 import { setPageRerender } from "../../../redux/rerenderReducer";
 import { makeStyles } from "@material-ui/core/styles";
 import MenuItem from "@mui/material/MenuItem";
+import moment from "moment";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -32,16 +33,19 @@ function toTimestamp(strDate) {
   var datum = Date.parse(strDate);
   return datum / 1000;
 }
+
 export async function reservationSave(atr) {
   let data = {};
   let day = atr.date.split("-");
   let time = `${atr.time.split(":")[0]}:00:00`;
   data.day = toTimestamp(`${day[0]} ${day[1]} ${day[2]} ${time}`);
+
   data.hours = atr.size * 3600;
   data.master_id = atr.master;
   data.towns_id = atr.town;
   data.clientId = atr.client;
   console.log(data);
+
   return await request({ url: `/reservation`, method: "post", data: data });
 }
 
@@ -122,7 +126,9 @@ const ReservationSave = () => {
                 id: "town",
               }}
               style={{ width: 200 }}
-              {...register("town")}
+              {...register("town", {
+                required: `${t("adminPopup.emptyField")}`,
+              })}
             >
               {townsList.map((el) => {
                 return (
@@ -143,7 +149,9 @@ const ReservationSave = () => {
                 id: "client",
               }}
               style={{ width: 200 }}
-              {...register("client")}
+              {...register("client", {
+                required: `${t("adminPopup.emptyField")}`,
+              })}
             >
               {clientsList.map((el) => {
                 return (
@@ -165,7 +173,9 @@ const ReservationSave = () => {
               InputLabelProps={{
                 shrink: true,
               }}
-              {...register("date")}
+              {...register("date", {
+                required: `${t("adminPopup.emptyField")}`,
+              })}
             />
           </Grid>
           <Grid item marginTop={3}>
@@ -181,7 +191,9 @@ const ReservationSave = () => {
               inputProps={{
                 step: 3600,
               }}
-              {...register("time")}
+              {...register("time", {
+                required: `${t("adminPopup.emptyField")}`,
+              })}
             />
           </Grid>
           <Grid item marginTop={3}>
@@ -194,7 +206,9 @@ const ReservationSave = () => {
                 id: "uncontrolled-native",
               }}
               style={{ width: 200 }}
-              {...register("size")}
+              {...register("size", {
+                required: `${t("adminPopup.emptyField")}`,
+              })}
             >
               <option value={1}>1</option>
               <option value={2}>2</option>
@@ -212,7 +226,9 @@ const ReservationSave = () => {
                 id: "master",
               }}
               style={{ width: 200 }}
-              {...register("master")}
+              {...register("master", {
+                required: `${t("adminPopup.emptyField")}`,
+              })}
             >
               {mastersList.map((el) => {
                 return (

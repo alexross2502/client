@@ -27,6 +27,7 @@ const MastersPage = () => {
   const dispatch = useDispatch();
   const rerender = useSelector((state) => state.rerender.isRerender);
   const [mastersList, setMastersList] = useState([]);
+  const [townsList, setTownsList] = useState([]);
 
   const isActive = useSelector((state) => state.addMaster.isActive);
 
@@ -34,6 +35,8 @@ const MastersPage = () => {
     let asyncFunc = async () => {
       let masters = [...(await Api.getAll("masters"))];
       setMastersList(masters);
+      let towns = [...(await Api.getAll("towns"))];
+      setTownsList(towns);
     };
     asyncFunc();
   }, [rerender]);

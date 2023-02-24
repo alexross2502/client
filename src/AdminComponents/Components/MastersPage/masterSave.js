@@ -107,7 +107,7 @@ const MasterSave = () => {
               required: `${t("adminPopup.emptyField")}`,
             })}
           />
-          <Grid item>
+          <Grid item marginTop={3}>
             <InputLabel variant="standard" htmlFor="rating">
               Рейтинг
             </InputLabel>
@@ -118,7 +118,7 @@ const MasterSave = () => {
               }}
               style={{ width: 200 }}
               {...register("rating", {
-                required: true,
+                required: `${t("adminPopup.emptyField")}`,
               })}
             >
               <option value={1}>1</option>
@@ -128,7 +128,7 @@ const MasterSave = () => {
               <option value={5}>5</option>
             </NativeSelect>
           </Grid>
-          <Grid item>
+          <Grid item marginTop={3}>
             <InputLabel variant="standard" htmlFor="town">
               Город
             </InputLabel>
@@ -138,7 +138,9 @@ const MasterSave = () => {
                 id: "town",
               }}
               style={{ width: 200 }}
-              {...register("town")}
+              {...register("town", {
+                required: `${t("adminPopup.emptyField")}`,
+              })}
             >
               {townsList.map((el) => {
                 return (

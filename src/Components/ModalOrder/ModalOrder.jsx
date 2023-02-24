@@ -53,12 +53,6 @@ const ModalOrder = () => {
     dispatch(setModalOrder());
   }
 
-  const [age, setAge] = React.useState("");
-
-  const handleChange = (event) => {
-    setAge(event.target.value);
-  };
-
   const [townsList, setTownsList] = useState([]);
   useEffect(() => {
     let asyncFunc = async () => {
@@ -68,20 +62,18 @@ const ModalOrder = () => {
     asyncFunc();
   }, [isActive]);
 
-  const townListItem = townsList.map((item) => {
-    return (
-      <option value={item.name} key={item.id}>
-        {item.name}
-      </option>
+  function submitFunction() {
+    console.log(
+      "Доделываю логику поиска свободных мастеров после рефакторинга базы"
     );
-  });
+  }
 
   return (
     <div
       onClick={(e) => e.stopPropagation()}
       className={isActive ? `${style.active}` : `${style.inactive}`}
     >
-      <form>
+      <form onSubmit={handleSubmit(submitFunction)}>
         <Box
           display="flex"
           flexDirection={"column"}
@@ -104,7 +96,7 @@ const ModalOrder = () => {
           <Grid container>
             <Grid item xs={1}></Grid>
             <Grid item xs={10}>
-              <Typography variant="h2" padding={3} textAlign="center">
+              <Typography variant="h3" padding={3} textAlign="center">
                 Заказать ремонт
               </Typography>
             </Grid>
@@ -143,30 +135,37 @@ const ModalOrder = () => {
               },
             })}
           />
-          <Grid item>
-            <InputLabel variant="standard" htmlFor="uncontrolled-native">
+          <Grid item marginTop={3}>
+            <InputLabel variant="standard" htmlFor="town">
               Город
             </InputLabel>
             <NativeSelect
               inputProps={{
-                name: "age",
-                id: "uncontrolled-native",
+                name: "town",
+                id: "town",
               }}
               style={{ width: 200 }}
+              {...register("town", {
+                required: `${t("adminPopup.emptyField")}`,
+              })}
             >
-              <option value={10}>Ten</option>
-              <option value={20}>Twenty</option>
-              <option value={30}>Thirty</option>
+              {townsList.map((el) => {
+                return (
+                  <option value={el.id} key={el.id}>
+                    {el.name}
+                  </option>
+                );
+              })}
             </NativeSelect>
           </Grid>
-          <Grid item>
-            <InputLabel variant="standard" htmlFor="uncontrolled-native">
+          <Grid item marginTop={3}>
+            <InputLabel variant="standard" htmlFor="size">
               Размер часов
             </InputLabel>
             <NativeSelect
               inputProps={{
-                name: "age",
-                id: "uncontrolled-native",
+                name: "size",
+                id: "size",
               }}
               style={{ width: 200 }}
             >
@@ -191,7 +190,7 @@ const ModalOrder = () => {
             id="time"
             label="Время"
             type="time"
-            defaultValue="07:30"
+            defaultValue="09:00"
             className={classes.textField}
             InputLabelProps={{
               shrink: true,
