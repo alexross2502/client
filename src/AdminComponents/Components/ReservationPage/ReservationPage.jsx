@@ -31,26 +31,11 @@ const ReservationPage = () => {
   const dispatch = useDispatch();
   const rerender = useSelector((state) => state.rerender.isRerender);
   const [reservationList, setReservationList] = useState([]);
-  const [idList, setIdList] = useState([]);
 
   useEffect(() => {
     let asyncFunc = async () => {
-      let myMap = new Map();
       let reservation = [...(await Api.getAll("reservation"))];
       setReservationList(reservation);
-      let towns = [...(await Api.getAll("towns"))];
-      towns.map((el) => {
-        myMap.set(el.id, el.name);
-      });
-      let clients = [...(await Api.getAll("clients"))];
-      clients.map((el) => {
-        myMap.set(el.id, el.name);
-      });
-      let masters = [...(await Api.getAll("masters"))];
-      masters.map((el) => {
-        myMap.set(el.id, `${el.name} ${el.surname}`);
-      });
-      setIdList(myMap);
     };
     asyncFunc();
   }, [rerender]);
