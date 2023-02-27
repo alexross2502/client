@@ -22,6 +22,9 @@ import {
 } from "@mui/material";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import { setModalAddClients } from "../../../redux/clientsReducer";
+import { DataGrid } from "@mui/x-data-grid";
+import TableContainer from "@mui/material/TableContainer";
+import Paper from "@mui/material/Paper";
 
 const ClientPage = () => {
   const isActive = useSelector((state) => state.addClient.isActive);
@@ -50,29 +53,15 @@ const ClientPage = () => {
       <Box sx={{ display: "flex" }}>
         <LeftSideMenu name={"clients"} />
 
-        <Box sx={{ height: 520, width: "100%" }}>
-          <Table sx={{ width: "100%" }}>
-            <TableHead>
-              <TableRow sx={{ background: "black", height: "40px" }}>
-                <TableCell
-                  sx={{ color: "white", fontWeight: 600, fintSize: "18px" }}
-                >
-                  {t("table.id")}
-                </TableCell>
-                <TableCell
-                  sx={{ color: "white", fontWeight: 600, fintSize: "18px" }}
-                >
-                  {t("table.name")}
-                </TableCell>
-                <TableCell
-                  sx={{ color: "white", fontWeight: 600, fintSize: "18px" }}
-                >
-                  {t("table.email")}
-                </TableCell>
+        <TableContainer component={Paper}>
+          <Table sx={{ minWidth: 650 }} aria-label="simple table">
+            <TableHead sx={{ background: "#a1a1a1" }}>
+              <TableRow>
+                <TableCell>Номер клиента</TableCell>
+                <TableCell align="left">Имя</TableCell>
+                <TableCell align="left">Почта</TableCell>
 
-                <TableCell
-                  sx={{ color: "white", fontWeight: 600, fintSize: "18px" }}
-                >
+                <TableCell align="right">
                   <Button
                     sx={{ marginLeft: "auto", background: "rgba(180,58,58,1)" }}
                     variant="contained"
@@ -86,16 +75,21 @@ const ClientPage = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {clientsList.map((el) => (
-                <TableRow sx={{ borderBottom: "solid 2px black" }}>
-                  <TableCell>{el.id}</TableCell>
-                  <TableCell>{el.name}</TableCell>
-                  <TableCell>{el.email}</TableCell>
+              {clientsList.map((row) => (
+                <TableRow
+                  key={row.id}
+                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                >
+                  <TableCell component="th" scope="row">
+                    {row.id}
+                  </TableCell>
 
-                  <TableCell>
+                  <TableCell align="left">{row.name}</TableCell>
+                  <TableCell align="left">{row.email}</TableCell>
+                  <TableCell align="right">
                     <IconButton
                       onClick={() => {
-                        Api.delete("clients", el.id);
+                        Api.delete("reservation", row.id);
                         dispatch(setPageRerender());
                       }}
                     >
@@ -106,7 +100,7 @@ const ClientPage = () => {
               ))}
             </TableBody>
           </Table>
-        </Box>
+        </TableContainer>
       </Box>
     </>
   );

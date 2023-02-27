@@ -21,6 +21,9 @@ import {
 } from "@mui/material";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import { setModalAddMasters } from "../../../redux/mastersReducer";
+import { DataGrid } from "@mui/x-data-grid";
+import TableContainer from "@mui/material/TableContainer";
+import Paper from "@mui/material/Paper";
 
 const MastersPage = () => {
   const { t } = useTranslation();
@@ -51,33 +54,17 @@ const MastersPage = () => {
       <Box height={70} />
       <Box sx={{ display: "flex" }}>
         <LeftSideMenu name={"masters"} />
-        <Box sx={{ height: 520, width: "100%" }}>
-          <Table sx={{ width: "100%" }}>
-            <TableHead>
-              <TableRow sx={{ background: "black", height: "40px" }}>
-                <TableCell
-                  sx={{ color: "white", fontWeight: 600, fintSize: "18px" }}
-                >
-                  {t("table.id")}
-                </TableCell>
-                <TableCell
-                  sx={{ color: "white", fontWeight: 600, fintSize: "18px" }}
-                >
-                  ФИО
-                </TableCell>
-                <TableCell
-                  sx={{ color: "white", fontWeight: 600, fintSize: "18px" }}
-                >
-                  Город
-                </TableCell>
-                <TableCell
-                  sx={{ color: "white", fontWeight: 600, fintSize: "18px" }}
-                >
-                  {t("table.rating")}
-                </TableCell>
-                <TableCell
-                  sx={{ color: "white", fontWeight: 600, fintSize: "18px" }}
-                >
+
+        <TableContainer component={Paper}>
+          <Table sx={{ minWidth: 650 }} aria-label="simple table">
+            <TableHead sx={{ background: "#a1a1a1" }}>
+              <TableRow>
+                <TableCell>Номер мастера</TableCell>
+                <TableCell align="left">ФИО</TableCell>
+                <TableCell align="left">Город</TableCell>
+                <TableCell align="left">Рейтинг</TableCell>
+
+                <TableCell align="right">
                   <Button
                     sx={{ marginLeft: "auto", background: "rgba(180,58,58,1)" }}
                     variant="contained"
@@ -91,18 +78,24 @@ const MastersPage = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {mastersList.map((el) => (
-                <TableRow sx={{ borderBottom: "solid 2px black" }}>
-                  <TableCell>{el.id}</TableCell>
-                  <TableCell>
-                    {el.name} {el.surname}
+              {mastersList.map((row) => (
+                <TableRow
+                  key={row.id}
+                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                >
+                  <TableCell component="th" scope="row">
+                    {row.id}
                   </TableCell>
-                  <TableCell>{el.townId}</TableCell>
-                  <TableCell>{el.rating}</TableCell>
-                  <TableCell>
+                  <TableCell align="left">
+                    {row.name} {row.surname}
+                  </TableCell>
+
+                  <TableCell align="left">{row.townId}</TableCell>
+                  <TableCell align="left">{row.rating}</TableCell>
+                  <TableCell align="right">
                     <IconButton
                       onClick={() => {
-                        Api.delete("masters", el.id);
+                        Api.delete("reservation", row.id);
                         dispatch(setPageRerender());
                       }}
                     >
@@ -113,7 +106,7 @@ const MastersPage = () => {
               ))}
             </TableBody>
           </Table>
-        </Box>
+        </TableContainer>
       </Box>
     </>
   );

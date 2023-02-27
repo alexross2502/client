@@ -21,6 +21,9 @@ import {
 } from "@mui/material";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import { setModalAddTowns } from "../../../redux/townsReducer";
+import { DataGrid } from "@mui/x-data-grid";
+import TableContainer from "@mui/material/TableContainer";
+import Paper from "@mui/material/Paper";
 
 const TownsPage = () => {
   const { t } = useTranslation();
@@ -46,23 +49,14 @@ const TownsPage = () => {
       <Box height={70} />
       <Box sx={{ display: "flex" }}>
         <LeftSideMenu name={"towns"} />
-        <Box sx={{ height: 520, width: "100%" }}>
-          <Table sx={{ width: "100%" }}>
-            <TableHead>
-              <TableRow sx={{ background: "black", height: "40px" }}>
-                <TableCell
-                  sx={{ color: "white", fontWeight: 600, fintSize: "18px" }}
-                >
-                  {t("table.id")}
-                </TableCell>
-                <TableCell
-                  sx={{ color: "white", fontWeight: 600, fintSize: "18px" }}
-                >
-                  {t("table.townName")}
-                </TableCell>
-                <TableCell
-                  sx={{ color: "white", fontWeight: 600, fintSize: "18px" }}
-                >
+
+        <TableContainer component={Paper}>
+          <Table sx={{ minWidth: 650 }} aria-label="simple table">
+            <TableHead sx={{ background: "#a1a1a1" }}>
+              <TableRow>
+                <TableCell>Номер города</TableCell>
+                <TableCell align="left">Имя</TableCell>
+                <TableCell align="right">
                   <Button
                     sx={{ marginLeft: "auto", background: "rgba(180,58,58,1)" }}
                     variant="contained"
@@ -76,14 +70,19 @@ const TownsPage = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {townsList.map((el) => (
-                <TableRow sx={{ borderBottom: "solid 2px black" }}>
-                  <TableCell>{el.id}</TableCell>
-                  <TableCell>{el.name}</TableCell>
-                  <TableCell>
+              {townsList.map((row) => (
+                <TableRow
+                  key={row.id}
+                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                >
+                  <TableCell component="th" scope="row">
+                    {row.id}
+                  </TableCell>
+                  <TableCell align="left">{row.name}</TableCell>
+                  <TableCell align="right">
                     <IconButton
                       onClick={() => {
-                        Api.delete("towns", el.id);
+                        Api.delete("towns", row.id);
                         dispatch(setPageRerender());
                       }}
                     >
@@ -94,7 +93,7 @@ const TownsPage = () => {
               ))}
             </TableBody>
           </Table>
-        </Box>
+        </TableContainer>
       </Box>
     </>
   );
