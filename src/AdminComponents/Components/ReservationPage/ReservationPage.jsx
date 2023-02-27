@@ -1,6 +1,5 @@
 import { useTranslation } from "react-i18next";
 import style from "../../AdminPage.module.css";
-import { FormButton } from "../FormButton";
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { LeftSideMenu } from "../../LeftSideMenu.jsx";
@@ -31,6 +30,9 @@ import TableContainer from "@mui/material/TableContainer";
 import Paper from "@mui/material/Paper";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import { useClipboard } from "use-clipboard-copy";
+import DoneIcon from "@mui/icons-material/Done";
+import DeleteModal from "../DeleteModal";
+import { setModalDelete } from "../../../redux/deleteReducer";
 
 const ReservationPage = () => {
   const { t } = useTranslation();
@@ -38,6 +40,8 @@ const ReservationPage = () => {
   const rerender = useSelector((state) => state.rerender.isRerender);
   const [reservationList, setReservationList] = useState([]);
   const clipboard = useClipboard();
+  const [copyDone, setCopyDone] = useState(false);
+  const [itemForRemove, setItemForRemove] = useState([]);
 
   useEffect(() => {
     let asyncFunc = async () => {
@@ -53,6 +57,7 @@ const ReservationPage = () => {
 
   return (
     <>
+      <DeleteModal props={itemForRemove} />
       <ReservationSave />
       <Box height={70} />
       <Box sx={{ display: "flex" }}>
@@ -64,6 +69,7 @@ const ReservationPage = () => {
               <TableRow>
                 <TableCell>Номер резерва</TableCell>
                 <TableCell align="left">День</TableCell>
+                <TableCell align="left">Размер</TableCell>
                 <TableCell align="left">Часы</TableCell>
                 <TableCell align="left">Мастер</TableCell>
                 <TableCell align="left">Город</TableCell>
@@ -91,13 +97,22 @@ const ReservationPage = () => {
                     <Typography className={style.clue} data-clue={`${row.id}`}>
                       {row.id.slice(0, 15) + "..."}
                     </Typography>
-                    <ContentCopyIcon
-                      onClick={() => {
-                        clipboard.copy(row.id);
-                      }}
-                    ></ContentCopyIcon>
+                    {!copyDone ? (
+                      <ContentCopyIcon
+                        onClick={() => {
+                          clipboard.copy(row.id);
+                          setCopyDone(true);
+                          setTimeout(() => {
+                            setCopyDone(false);
+                          }, 1500);
+                        }}
+                      ></ContentCopyIcon>
+                    ) : (
+                      <DoneIcon />
+                    )}
                   </TableCell>
                   <TableCell align="left">{row.day}</TableCell>
+                  <TableCell align="left">{row.size}</TableCell>
                   <TableCell align="left">{row.hours}</TableCell>
                   <TableCell align="left">{row.master_id}</TableCell>
                   <TableCell align="left">{row.towns_id}</TableCell>
@@ -105,7 +120,8 @@ const ReservationPage = () => {
                   <TableCell align="right">
                     <IconButton
                       onClick={() => {
-                        Api.delete("reservation", row.id);
+                        setItemForRemove([row.id, "reservation"]);
+                        dispatch(setModalDelete());
                         dispatch(setPageRerender());
                       }}
                     >
