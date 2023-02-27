@@ -22,18 +22,22 @@ import {
   TableBody,
   Button,
   IconButton,
+  Typography,
 } from "@mui/material";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import { setModalAddReservations } from "../../../redux/reservationsReducer";
 import { DataGrid } from "@mui/x-data-grid";
 import TableContainer from "@mui/material/TableContainer";
 import Paper from "@mui/material/Paper";
+import ContentCopyIcon from "@mui/icons-material/ContentCopy";
+import { useClipboard } from "use-clipboard-copy";
 
 const ReservationPage = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const rerender = useSelector((state) => state.rerender.isRerender);
   const [reservationList, setReservationList] = useState([]);
+  const clipboard = useClipboard();
 
   useEffect(() => {
     let asyncFunc = async () => {
@@ -84,7 +88,14 @@ const ReservationPage = () => {
                   sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                 >
                   <TableCell component="th" scope="row">
-                    {row.id}
+                    <Typography className={style.clue} data-clue={`${row.id}`}>
+                      {row.id.slice(0, 15) + "..."}
+                    </Typography>
+                    <ContentCopyIcon
+                      onClick={() => {
+                        clipboard.copy(row.id);
+                      }}
+                    ></ContentCopyIcon>
                   </TableCell>
                   <TableCell align="left">{row.day}</TableCell>
                   <TableCell align="left">{row.hours}</TableCell>

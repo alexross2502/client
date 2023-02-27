@@ -18,12 +18,15 @@ import {
   TableRow,
   TableBody,
   IconButton,
+  Typography,
 } from "@mui/material";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import { setModalAddMasters } from "../../../redux/mastersReducer";
 import { DataGrid } from "@mui/x-data-grid";
 import TableContainer from "@mui/material/TableContainer";
 import Paper from "@mui/material/Paper";
+import ContentCopyIcon from "@mui/icons-material/ContentCopy";
+import { useClipboard } from "use-clipboard-copy";
 
 const MastersPage = () => {
   const { t } = useTranslation();
@@ -31,6 +34,7 @@ const MastersPage = () => {
   const rerender = useSelector((state) => state.rerender.isRerender);
   const [mastersList, setMastersList] = useState([]);
   const [townsList, setTownsList] = useState([]);
+  const clipboard = useClipboard();
 
   const isActive = useSelector((state) => state.addMaster.isActive);
 
@@ -84,7 +88,14 @@ const MastersPage = () => {
                   sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                 >
                   <TableCell component="th" scope="row">
-                    {row.id}
+                    <Typography className={style.clue} data-clue={`${row.id}`}>
+                      {row.id.slice(0, 15) + "..."}
+                    </Typography>
+                    <ContentCopyIcon
+                      onClick={() => {
+                        clipboard.copy(row.id);
+                      }}
+                    ></ContentCopyIcon>
                   </TableCell>
                   <TableCell align="left">
                     {row.name} {row.surname}

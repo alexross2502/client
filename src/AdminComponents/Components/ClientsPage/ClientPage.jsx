@@ -25,6 +25,8 @@ import { setModalAddClients } from "../../../redux/clientsReducer";
 import { DataGrid } from "@mui/x-data-grid";
 import TableContainer from "@mui/material/TableContainer";
 import Paper from "@mui/material/Paper";
+import ContentCopyIcon from "@mui/icons-material/ContentCopy";
+import { useClipboard } from "use-clipboard-copy";
 
 const ClientPage = () => {
   const isActive = useSelector((state) => state.addClient.isActive);
@@ -33,6 +35,7 @@ const ClientPage = () => {
   const dispatch = useDispatch();
   const rerender = useSelector((state) => state.rerender.isRerender);
   const [clientsList, setClientsList] = useState([]);
+  const clipboard = useClipboard();
 
   useEffect(() => {
     let asyncFunc = async () => {
@@ -81,7 +84,14 @@ const ClientPage = () => {
                   sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                 >
                   <TableCell component="th" scope="row">
-                    {row.id}
+                    <Typography className={style.clue} data-clue={`${row.id}`}>
+                      {row.id.slice(0, 15) + "..."}
+                    </Typography>
+                    <ContentCopyIcon
+                      onClick={() => {
+                        clipboard.copy(row.id);
+                      }}
+                    ></ContentCopyIcon>
                   </TableCell>
 
                   <TableCell align="left">{row.name}</TableCell>

@@ -18,18 +18,23 @@ import {
   Button,
   TableBody,
   IconButton,
+  Typography,
 } from "@mui/material";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import { setModalAddTowns } from "../../../redux/townsReducer";
 import { DataGrid } from "@mui/x-data-grid";
 import TableContainer from "@mui/material/TableContainer";
 import Paper from "@mui/material/Paper";
+import ContentCopyIcon from "@mui/icons-material/ContentCopy";
+import { useClipboard } from "use-clipboard-copy";
+import DoneIcon from "@mui/icons-material/Done";
 
 const TownsPage = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const rerender = useSelector((state) => state.rerender.isRerender);
   const [townsList, setTownsList] = useState([]);
+  const clipboard = useClipboard();
 
   useEffect(() => {
     let asyncFunc = async () => {
@@ -76,7 +81,15 @@ const TownsPage = () => {
                   sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                 >
                   <TableCell component="th" scope="row">
-                    {row.id}
+                    <Typography className={style.clue} data-clue={`${row.id}`}>
+                      {row.id.slice(0, 15) + "..."}
+                    </Typography>
+
+                    <ContentCopyIcon
+                      onClick={() => {
+                        clipboard.copy(row.id);
+                      }}
+                    ></ContentCopyIcon>
                   </TableCell>
                   <TableCell align="left">{row.name}</TableCell>
                   <TableCell align="right">
