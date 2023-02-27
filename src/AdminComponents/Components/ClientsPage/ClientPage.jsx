@@ -1,6 +1,5 @@
 import { useTranslation } from "react-i18next";
 import style from "../../AdminPage.module.css";
-import { FormButton } from "../FormButton";
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import ClientSave from "./clientSave";
@@ -25,6 +24,11 @@ import { setModalAddClients } from "../../../redux/clientsReducer";
 import { DataGrid } from "@mui/x-data-grid";
 import TableContainer from "@mui/material/TableContainer";
 import Paper from "@mui/material/Paper";
+import ContentCopyIcon from "@mui/icons-material/ContentCopy";
+import { useClipboard } from "use-clipboard-copy";
+import DoneIcon from "@mui/icons-material/Done";
+import DeleteModal from "../DeleteModal";
+import { setModalDelete } from "../../../redux/deleteReducer";
 
 const ClientPage = () => {
   const isActive = useSelector((state) => state.addClient.isActive);
@@ -33,6 +37,9 @@ const ClientPage = () => {
   const dispatch = useDispatch();
   const rerender = useSelector((state) => state.rerender.isRerender);
   const [clientsList, setClientsList] = useState([]);
+  const clipboard = useClipboard();
+  const [copyDone, setCopyDone] = useState(false);
+  const [itemForRemove, setItemForRemove] = useState([]);
 
   useEffect(() => {
     let asyncFunc = async () => {
@@ -48,6 +55,7 @@ const ClientPage = () => {
 
   return (
     <>
+      <DeleteModal props={itemForRemove} />
       <ClientSave />
       <Box height={70} />
       <Box sx={{ display: "flex" }}>
@@ -81,7 +89,22 @@ const ClientPage = () => {
                   sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                 >
                   <TableCell component="th" scope="row">
-                    {row.id}
+                    <Typography className={style.clue} data-clue={`${row.id}`}>
+                      {row.id.slice(0, 15) + "..."}
+                    </Typography>
+                    {!copyDone ? (
+                      <ContentCopyIcon
+                        onClick={() => {
+                          clipboard.copy(row.id);
+                          setCopyDone(true);
+                          setTimeout(() => {
+                            setCopyDone(false);
+                          }, 1500);
+                        }}
+                      ></ContentCopyIcon>
+                    ) : (
+                      <DoneIcon />
+                    )}
                   </TableCell>
 
                   <TableCell align="left">{row.name}</TableCell>
@@ -89,7 +112,8 @@ const ClientPage = () => {
                   <TableCell align="right">
                     <IconButton
                       onClick={() => {
-                        Api.delete("reservation", row.id);
+                        setItemForRemove([row.id, "clients"]);
+                        dispatch(setModalDelete());
                         dispatch(setPageRerender());
                       }}
                     >

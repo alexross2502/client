@@ -1,6 +1,5 @@
 import { useTranslation } from "react-i18next";
 import style from "../../AdminPage.module.css";
-import { FormButton } from "../FormButton";
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import MasterSave from "./masterSave";
@@ -18,12 +17,18 @@ import {
   TableRow,
   TableBody,
   IconButton,
+  Typography,
 } from "@mui/material";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import { setModalAddMasters } from "../../../redux/mastersReducer";
 import { DataGrid } from "@mui/x-data-grid";
 import TableContainer from "@mui/material/TableContainer";
 import Paper from "@mui/material/Paper";
+import ContentCopyIcon from "@mui/icons-material/ContentCopy";
+import { useClipboard } from "use-clipboard-copy";
+import DoneIcon from "@mui/icons-material/Done";
+import DeleteModal from "../DeleteModal";
+import { setModalDelete } from "../../../redux/deleteReducer";
 
 const MastersPage = () => {
   const { t } = useTranslation();
@@ -31,6 +36,9 @@ const MastersPage = () => {
   const rerender = useSelector((state) => state.rerender.isRerender);
   const [mastersList, setMastersList] = useState([]);
   const [townsList, setTownsList] = useState([]);
+  const clipboard = useClipboard();
+  const [copyDone, setCopyDone] = useState(false);
+  const [itemForRemove, setItemForRemove] = useState([]);
 
   const isActive = useSelector((state) => state.addMaster.isActive);
 
@@ -50,6 +58,7 @@ const MastersPage = () => {
 
   return (
     <>
+      <DeleteModal props={itemForRemove} />
       <MasterSave />
       <Box height={70} />
       <Box sx={{ display: "flex" }}>
@@ -84,7 +93,22 @@ const MastersPage = () => {
                   sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                 >
                   <TableCell component="th" scope="row">
-                    {row.id}
+                    <Typography className={style.clue} data-clue={`${row.id}`}>
+                      {row.id.slice(0, 15) + "..."}
+                    </Typography>
+                    {!copyDone ? (
+                      <ContentCopyIcon
+                        onClick={() => {
+                          clipboard.copy(row.id);
+                          setCopyDone(true);
+                          setTimeout(() => {
+                            setCopyDone(false);
+                          }, 1500);
+                        }}
+                      ></ContentCopyIcon>
+                    ) : (
+                      <DoneIcon />
+                    )}
                   </TableCell>
                   <TableCell align="left">
                     {row.name} {row.surname}
@@ -95,7 +119,8 @@ const MastersPage = () => {
                   <TableCell align="right">
                     <IconButton
                       onClick={() => {
-                        Api.delete("reservation", row.id);
+                        setItemForRemove([row.id, "masters"]);
+                        dispatch(setModalDelete());
                         dispatch(setPageRerender());
                       }}
                     >
