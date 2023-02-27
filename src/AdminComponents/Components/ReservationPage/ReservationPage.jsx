@@ -25,6 +25,9 @@ import {
 } from "@mui/material";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import { setModalAddReservations } from "../../../redux/reservationsReducer";
+import { DataGrid } from "@mui/x-data-grid";
+import TableContainer from "@mui/material/TableContainer";
+import Paper from "@mui/material/Paper";
 
 const ReservationPage = () => {
   const { t } = useTranslation();
@@ -50,44 +53,18 @@ const ReservationPage = () => {
       <Box height={70} />
       <Box sx={{ display: "flex" }}>
         <LeftSideMenu name={"reservation"} />
-        <Box sx={{ height: 520, width: "100%" }}>
-          <Table sx={{ width: "100%" }}>
-            <TableHead>
-              <TableRow sx={{ background: "black", height: "40px" }}>
-                <TableCell
-                  sx={{ color: "white", fontWeight: 600, fintSize: "18px" }}
-                >
-                  {t("table.id")}
-                </TableCell>
-                <TableCell
-                  sx={{ color: "white", fontWeight: 600, fintSize: "18px" }}
-                >
-                  {t("table.day")}
-                </TableCell>
 
-                <TableCell
-                  sx={{ color: "white", fontWeight: 600, fintSize: "18px" }}
-                >
-                  {t("table.hours")}
-                </TableCell>
-                <TableCell
-                  sx={{ color: "white", fontWeight: 600, fintSize: "18px" }}
-                >
-                  Мастер
-                </TableCell>
-                <TableCell
-                  sx={{ color: "white", fontWeight: 600, fintSize: "18px" }}
-                >
-                  Город
-                </TableCell>
-                <TableCell
-                  sx={{ color: "white", fontWeight: 600, fintSize: "18px" }}
-                >
-                  Клиент
-                </TableCell>
-                <TableCell
-                  sx={{ color: "white", fontWeight: 600, fintSize: "18px" }}
-                >
+        <TableContainer component={Paper}>
+          <Table sx={{ minWidth: 650 }} aria-label="simple table">
+            <TableHead sx={{ background: "#a1a1a1" }}>
+              <TableRow>
+                <TableCell>Номер резерва</TableCell>
+                <TableCell align="left">День</TableCell>
+                <TableCell align="left">Часы</TableCell>
+                <TableCell align="left">Мастер</TableCell>
+                <TableCell align="left">Город</TableCell>
+                <TableCell align="left">Клиент</TableCell>
+                <TableCell align="right">
                   <Button
                     sx={{ marginLeft: "auto", background: "rgba(180,58,58,1)" }}
                     variant="contained"
@@ -101,18 +78,23 @@ const ReservationPage = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {reservationList.map((el) => (
-                <TableRow sx={{ borderBottom: "solid 2px black" }}>
-                  <TableCell>{el.id}</TableCell>
-                  <TableCell>{el.day}</TableCell>
-                  <TableCell>{el.hours / 3600}</TableCell>
-                  <TableCell>{el.master_id}</TableCell>
-                  <TableCell>{el.towns_id}</TableCell>
-                  <TableCell>{el.clientId}</TableCell>
-                  <TableCell>
+              {reservationList.map((row) => (
+                <TableRow
+                  key={row.id}
+                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                >
+                  <TableCell component="th" scope="row">
+                    {row.id}
+                  </TableCell>
+                  <TableCell align="left">{row.day}</TableCell>
+                  <TableCell align="left">{row.hours}</TableCell>
+                  <TableCell align="left">{row.master_id}</TableCell>
+                  <TableCell align="left">{row.towns_id}</TableCell>
+                  <TableCell align="left">{row.clientId}</TableCell>
+                  <TableCell align="right">
                     <IconButton
                       onClick={() => {
-                        Api.delete("reservation", el.id);
+                        Api.delete("reservation", row.id);
                         dispatch(setPageRerender());
                       }}
                     >
@@ -123,7 +105,7 @@ const ReservationPage = () => {
               ))}
             </TableBody>
           </Table>
-        </Box>
+        </TableContainer>
       </Box>
     </>
   );
