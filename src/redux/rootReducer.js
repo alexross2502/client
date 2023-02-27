@@ -14,6 +14,10 @@ import { PersistConfig, persistReducer } from "redux-persist";
 import sessionStorage from "redux-persist/es/storage/session";
 
 import persistStore from "redux-persist/es/persistStore";
+import modalAddMastersReducer from "./mastersReducer";
+import modalAddReservationsReducer from "./reservationsReducer";
+import modalAddClientsReducer from "./clientsReducer";
+import modalAddTownsReducer from "./townsReducer";
 
 const rootReducer = combineReducers({
   modalWindow: modalWindowReducer,
@@ -24,19 +28,20 @@ const rootReducer = combineReducers({
   availableMasters: availableMastersReducer,
   orderData: orderDataReducer,
   orderSuccess: orderSuccessReducer,
+  addMaster: modalAddMastersReducer,
+  addReservation: modalAddReservationsReducer,
+  addClient: modalAddClientsReducer,
+  addTown: modalAddTownsReducer,
 });
 
 const persistConfig = {
-  key: 'main-root',
+  key: "main-root",
   storage: sessionStorage,
-  whitelist: ['authorization']
-}
+  whitelist: ["authorization"],
+};
 
-const persistedReducer = persistReducer(persistConfig, rootReducer)
+const persistedReducer = persistReducer(persistConfig, rootReducer);
 
-export const store = createStore(
-  persistedReducer,
-  applyMiddleware(thunk)
-);
+export const store = createStore(persistedReducer, applyMiddleware(thunk));
 
-export const Persistor = persistStore(store)
+export const Persistor = persistStore(store);

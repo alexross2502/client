@@ -1,13 +1,17 @@
 import { useTranslation } from "react-i18next";
 import style from "../../AdminPage.module.css";
-import { LeftSideMenu } from "../../LeftSideMenu.jsx";
 import { FormButton } from "../FormButton";
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import TownSave, { townSave } from "./townSave";
+import { LeftSideMenu } from "../../LeftSideMenu.jsx";
 import { useForm } from "react-hook-form";
 import Api from "../api";
 import { setPageRerender } from "../../../redux/rerenderReducer";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import ReservationSave, { reservationSave } from "./reservationSave";
+import setHours from "date-fns/setHours";
+import setMinutes from "date-fns/setMinutes";
 import { Box } from "@mui/system";
 import {
   Grid,
@@ -15,23 +19,23 @@ import {
   TableCell,
   TableHead,
   TableRow,
-  Button,
   TableBody,
+  Button,
   IconButton,
 } from "@mui/material";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
-import { setModalAddTowns } from "../../../redux/townsReducer";
+import { setModalAddReservations } from "../../../redux/reservationsReducer";
 
-const TownsPage = () => {
+const ReservationPage = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const rerender = useSelector((state) => state.rerender.isRerender);
-  const [townsList, setTownsList] = useState([]);
+  const [reservationList, setReservationList] = useState([]);
 
   useEffect(() => {
     let asyncFunc = async () => {
-      let towns = [...(await Api.getAll("towns"))];
-      setTownsList(towns);
+      let reservation = [...(await Api.getAll("reservation"))];
+      setReservationList(reservation);
     };
     asyncFunc();
   }, [rerender]);
@@ -42,10 +46,10 @@ const TownsPage = () => {
 
   return (
     <>
-      <TownSave />
+      <ReservationSave />
       <Box height={70} />
       <Box sx={{ display: "flex" }}>
-        <LeftSideMenu name={"towns"} />
+        <LeftSideMenu name={"reservation"} />
         <Box sx={{ height: 520, width: "100%" }}>
           <Table sx={{ width: "100%" }}>
             <TableHead>
@@ -58,7 +62,28 @@ const TownsPage = () => {
                 <TableCell
                   sx={{ color: "white", fontWeight: 600, fintSize: "18px" }}
                 >
-                  {t("table.townName")}
+                  {t("table.day")}
+                </TableCell>
+
+                <TableCell
+                  sx={{ color: "white", fontWeight: 600, fintSize: "18px" }}
+                >
+                  {t("table.hours")}
+                </TableCell>
+                <TableCell
+                  sx={{ color: "white", fontWeight: 600, fintSize: "18px" }}
+                >
+                  Мастер
+                </TableCell>
+                <TableCell
+                  sx={{ color: "white", fontWeight: 600, fintSize: "18px" }}
+                >
+                  Город
+                </TableCell>
+                <TableCell
+                  sx={{ color: "white", fontWeight: 600, fintSize: "18px" }}
+                >
+                  Клиент
                 </TableCell>
                 <TableCell
                   sx={{ color: "white", fontWeight: 600, fintSize: "18px" }}
@@ -67,7 +92,7 @@ const TownsPage = () => {
                     sx={{ marginLeft: "auto", background: "rgba(180,58,58,1)" }}
                     variant="contained"
                     onClick={() => {
-                      dispatch(setModalAddTowns());
+                      dispatch(setModalAddReservations());
                     }}
                   >
                     {t("table.add")}
@@ -76,14 +101,18 @@ const TownsPage = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {townsList.map((el) => (
+              {reservationList.map((el) => (
                 <TableRow sx={{ borderBottom: "solid 2px black" }}>
                   <TableCell>{el.id}</TableCell>
-                  <TableCell>{el.name}</TableCell>
+                  <TableCell>{el.day}</TableCell>
+                  <TableCell>{el.hours / 3600}</TableCell>
+                  <TableCell>{el.master_id}</TableCell>
+                  <TableCell>{el.towns_id}</TableCell>
+                  <TableCell>{el.clientId}</TableCell>
                   <TableCell>
                     <IconButton
                       onClick={() => {
-                        Api.delete("towns", el.id);
+                        Api.delete("reservation", el.id);
                         dispatch(setPageRerender());
                       }}
                     >
@@ -100,4 +129,4 @@ const TownsPage = () => {
   );
 };
 
-export default TownsPage;
+export default ReservationPage;

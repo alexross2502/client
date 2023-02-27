@@ -1,10 +1,10 @@
 import { useTranslation } from "react-i18next";
 import style from "../../AdminPage.module.css";
-import { LeftSideMenu } from "../../LeftSideMenu.jsx";
 import { FormButton } from "../FormButton";
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import TownSave, { townSave } from "./townSave";
+import ClientSave from "./clientSave";
+import { LeftSideMenu } from "../../LeftSideMenu.jsx";
 import { useForm } from "react-hook-form";
 import Api from "../api";
 import { setPageRerender } from "../../../redux/rerenderReducer";
@@ -18,20 +18,23 @@ import {
   Button,
   TableBody,
   IconButton,
+  Typography,
 } from "@mui/material";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
-import { setModalAddTowns } from "../../../redux/townsReducer";
+import { setModalAddClients } from "../../../redux/clientsReducer";
 
-const TownsPage = () => {
+const ClientPage = () => {
+  const isActive = useSelector((state) => state.addClient.isActive);
+
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const rerender = useSelector((state) => state.rerender.isRerender);
-  const [townsList, setTownsList] = useState([]);
+  const [clientsList, setClientsList] = useState([]);
 
   useEffect(() => {
     let asyncFunc = async () => {
-      let towns = [...(await Api.getAll("towns"))];
-      setTownsList(towns);
+      let clients = [...(await Api.getAll("clients"))];
+      setClientsList(clients);
     };
     asyncFunc();
   }, [rerender]);
@@ -42,10 +45,11 @@ const TownsPage = () => {
 
   return (
     <>
-      <TownSave />
+      <ClientSave />
       <Box height={70} />
       <Box sx={{ display: "flex" }}>
-        <LeftSideMenu name={"towns"} />
+        <LeftSideMenu name={"clients"} />
+
         <Box sx={{ height: 520, width: "100%" }}>
           <Table sx={{ width: "100%" }}>
             <TableHead>
@@ -58,8 +62,14 @@ const TownsPage = () => {
                 <TableCell
                   sx={{ color: "white", fontWeight: 600, fintSize: "18px" }}
                 >
-                  {t("table.townName")}
+                  {t("table.name")}
                 </TableCell>
+                <TableCell
+                  sx={{ color: "white", fontWeight: 600, fintSize: "18px" }}
+                >
+                  {t("table.email")}
+                </TableCell>
+
                 <TableCell
                   sx={{ color: "white", fontWeight: 600, fintSize: "18px" }}
                 >
@@ -67,7 +77,7 @@ const TownsPage = () => {
                     sx={{ marginLeft: "auto", background: "rgba(180,58,58,1)" }}
                     variant="contained"
                     onClick={() => {
-                      dispatch(setModalAddTowns());
+                      dispatch(setModalAddClients());
                     }}
                   >
                     {t("table.add")}
@@ -76,14 +86,16 @@ const TownsPage = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {townsList.map((el) => (
+              {clientsList.map((el) => (
                 <TableRow sx={{ borderBottom: "solid 2px black" }}>
                   <TableCell>{el.id}</TableCell>
                   <TableCell>{el.name}</TableCell>
+                  <TableCell>{el.email}</TableCell>
+
                   <TableCell>
                     <IconButton
                       onClick={() => {
-                        Api.delete("towns", el.id);
+                        Api.delete("clients", el.id);
                         dispatch(setPageRerender());
                       }}
                     >
@@ -100,4 +112,4 @@ const TownsPage = () => {
   );
 };
 
-export default TownsPage;
+export default ClientPage;

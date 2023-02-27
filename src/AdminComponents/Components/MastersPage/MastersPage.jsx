@@ -1,10 +1,10 @@
 import { useTranslation } from "react-i18next";
 import style from "../../AdminPage.module.css";
-import { LeftSideMenu } from "../../LeftSideMenu.jsx";
 import { FormButton } from "../FormButton";
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import TownSave, { townSave } from "./townSave";
+import MasterSave from "./masterSave";
+import { LeftSideMenu } from "../../LeftSideMenu.jsx";
 import { useForm } from "react-hook-form";
 import Api from "../api";
 import { setPageRerender } from "../../../redux/rerenderReducer";
@@ -14,22 +14,27 @@ import {
   Table,
   TableCell,
   TableHead,
-  TableRow,
   Button,
+  TableRow,
   TableBody,
   IconButton,
 } from "@mui/material";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
-import { setModalAddTowns } from "../../../redux/townsReducer";
+import { setModalAddMasters } from "../../../redux/mastersReducer";
 
-const TownsPage = () => {
+const MastersPage = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const rerender = useSelector((state) => state.rerender.isRerender);
+  const [mastersList, setMastersList] = useState([]);
   const [townsList, setTownsList] = useState([]);
+
+  const isActive = useSelector((state) => state.addMaster.isActive);
 
   useEffect(() => {
     let asyncFunc = async () => {
+      let masters = [...(await Api.getAll("masters"))];
+      setMastersList(masters);
       let towns = [...(await Api.getAll("towns"))];
       setTownsList(towns);
     };
@@ -42,10 +47,10 @@ const TownsPage = () => {
 
   return (
     <>
-      <TownSave />
+      <MasterSave />
       <Box height={70} />
       <Box sx={{ display: "flex" }}>
-        <LeftSideMenu name={"towns"} />
+        <LeftSideMenu name={"masters"} />
         <Box sx={{ height: 520, width: "100%" }}>
           <Table sx={{ width: "100%" }}>
             <TableHead>
@@ -58,7 +63,17 @@ const TownsPage = () => {
                 <TableCell
                   sx={{ color: "white", fontWeight: 600, fintSize: "18px" }}
                 >
-                  {t("table.townName")}
+                  ФИО
+                </TableCell>
+                <TableCell
+                  sx={{ color: "white", fontWeight: 600, fintSize: "18px" }}
+                >
+                  Город
+                </TableCell>
+                <TableCell
+                  sx={{ color: "white", fontWeight: 600, fintSize: "18px" }}
+                >
+                  {t("table.rating")}
                 </TableCell>
                 <TableCell
                   sx={{ color: "white", fontWeight: 600, fintSize: "18px" }}
@@ -67,7 +82,7 @@ const TownsPage = () => {
                     sx={{ marginLeft: "auto", background: "rgba(180,58,58,1)" }}
                     variant="contained"
                     onClick={() => {
-                      dispatch(setModalAddTowns());
+                      dispatch(setModalAddMasters());
                     }}
                   >
                     {t("table.add")}
@@ -76,14 +91,18 @@ const TownsPage = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {townsList.map((el) => (
+              {mastersList.map((el) => (
                 <TableRow sx={{ borderBottom: "solid 2px black" }}>
                   <TableCell>{el.id}</TableCell>
-                  <TableCell>{el.name}</TableCell>
+                  <TableCell>
+                    {el.name} {el.surname}
+                  </TableCell>
+                  <TableCell>{el.townId}</TableCell>
+                  <TableCell>{el.rating}</TableCell>
                   <TableCell>
                     <IconButton
                       onClick={() => {
-                        Api.delete("towns", el.id);
+                        Api.delete("masters", el.id);
                         dispatch(setPageRerender());
                       }}
                     >
@@ -100,4 +119,4 @@ const TownsPage = () => {
   );
 };
 
-export default TownsPage;
+export default MastersPage;
