@@ -10,6 +10,7 @@ import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useState } from "react";
 import CloseIcon from "@mui/icons-material/Close";
+import VisibilityIcon from "@mui/icons-material/Visibility";
 
 const ModalAuthorization = () => {
   const dispatch = useDispatch();
@@ -35,11 +36,16 @@ const ModalAuthorization = () => {
     let response = await authCheck(data);
     if (response.availability == true) {
       dispatch(setAuthorized());
-      navigate("/clients");
+      navigate("/reservation");
     } else {
       reset();
       setAuthData(`${t("adminPopup.vrongAuth")}`);
     }
+  }
+  ///Глазик в пароле
+  let [passwordType, setPasswordType] = useState("password");
+  function changePasswordType() {
+    dispatch(setPasswordType(passwordType == "password" ? "text" : "password"));
   }
 
   return (
@@ -99,17 +105,28 @@ const ModalAuthorization = () => {
               },
             })}
           />
-          <TextField
-            margin="normal"
-            type={"password"}
-            variant="outlined"
-            placeholder="Пароль"
-            sx={{ backgroundColor: "white" }}
-            name="password"
-            {...register("password", {
-              required: `${t("adminPopup.emptyField")}`,
-            })}
-          />
+
+          <Box>
+            <TextField
+              margin="normal"
+              type={passwordType}
+              variant="outlined"
+              placeholder="Пароль"
+              sx={{ backgroundColor: "white" }}
+              name="password"
+              {...register("password", {
+                required: `${t("adminPopup.emptyField")}`,
+              })}
+            ></TextField>
+
+            <VisibilityIcon
+              sx={{ position: "absolute", marginTop: "30px" }}
+              onClick={() => {
+                changePasswordType();
+              }}
+            ></VisibilityIcon>
+          </Box>
+
           <Button
             sx={{
               background: "rgba(180,58,58,1)",

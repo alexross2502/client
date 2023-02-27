@@ -15,8 +15,8 @@ import Api from "../api";
 import { setPageRerender } from "../../../redux/rerenderReducer";
 
 async function townSave(atr) {
-  let data = {};
-  data.name = atr.name;
+  let data = { ...atr };
+
   return await request({ url: `/towns`, method: "post", data: data });
 }
 

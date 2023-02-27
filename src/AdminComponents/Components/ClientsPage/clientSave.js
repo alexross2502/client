@@ -12,9 +12,8 @@ import { setModalAddClients } from "../../../redux/clientsReducer";
 import { setPageRerender } from "../../../redux/rerenderReducer";
 
 async function clientSave(atr) {
-  let data = {};
-  data.name = atr.name;
-  data.email = atr.email;
+  let data = { ...atr };
+
   return await request({ url: `/clients`, method: "post", data: data });
 }
 

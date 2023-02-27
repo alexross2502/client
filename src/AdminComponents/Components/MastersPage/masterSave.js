@@ -14,13 +14,8 @@ import Api from "../api";
 import { setPageRerender } from "../../../redux/rerenderReducer";
 
 async function masterSave(atr) {
-  let data = {};
-  console.log(atr);
-  data.name = atr.name;
-  data.surname = atr.surname;
-  data.rating = atr.rating;
-  data.townId = atr.town;
-  console.log(atr);
+  let data = { ...atr };
+
   return await request({ url: `/masters`, method: "post", data: data });
 }
 
@@ -129,16 +124,16 @@ const MasterSave = () => {
             </NativeSelect>
           </Grid>
           <Grid item marginTop={3}>
-            <InputLabel variant="standard" htmlFor="town">
+            <InputLabel variant="standard" htmlFor="townId">
               Город
             </InputLabel>
             <NativeSelect
               inputProps={{
-                name: "town",
-                id: "town",
+                name: "townId",
+                id: "townId",
               }}
               style={{ width: 200 }}
-              {...register("town", {
+              {...register("townId", {
                 required: `${t("adminPopup.emptyField")}`,
               })}
             >
