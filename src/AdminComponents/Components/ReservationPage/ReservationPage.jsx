@@ -39,6 +39,9 @@ const ReservationPage = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const rerender = useSelector((state) => state.rerender.isRerender);
+  const [clientsList, setClientsList] = useState([]);
+  const [mastersList, setMastersList] = useState([]);
+  const [townsList, setTownsList] = useState([]);
   const [reservationList, setReservationList] = useState();
   const clipboard = useClipboard();
   const [copyDone, setCopyDone] = useState(false);
@@ -46,6 +49,12 @@ const ReservationPage = () => {
 
   useEffect(() => {
     let asyncFunc = async () => {
+      let clients = [...(await Api.getAll("clients"))];
+      setClientsList(clients);
+      let masters = [...(await Api.getAll("masters"))];
+      setMastersList(masters);
+      let towns = [...(await Api.getAll("towns"))];
+      setTownsList(towns);
       let reservation = [...(await Api.getAll("reservation"))];
       setReservationList(reservation);
     };
@@ -55,6 +64,19 @@ const ReservationPage = () => {
   const { handleSubmit, register } = useForm({
     mode: "onBlur",
   });
+
+  //Объект для отображения имен городов, клиентов, мастеров, а не айдишников
+  let IdToName = {};
+  townsList.forEach((el) => {
+    IdToName[el.id] = el?.name;
+  });
+  clientsList.forEach((el) => {
+    IdToName[el.id] = el?.name;
+  });
+  mastersList.forEach((el) => {
+    IdToName[el.id] = el?.name;
+  });
+  ////////////////////////////////////////
 
   return (
     <>
@@ -134,9 +156,11 @@ const ReservationPage = () => {
                     <TableCell align="left">{row.day}</TableCell>
                     <TableCell align="left">{row.size}</TableCell>
                     <TableCell align="left">{row.hours}</TableCell>
-                    <TableCell align="left">{row.master_id}</TableCell>
-                    <TableCell align="left">{row.towns_id}</TableCell>
-                    <TableCell align="left">{row.clientId}</TableCell>
+                    <TableCell align="left">
+                      {IdToName[row.master_id]}
+                    </TableCell>
+                    <TableCell align="left">{IdToName[row.towns_id]}</TableCell>
+                    <TableCell align="left">{IdToName[row.clientId]}</TableCell>
                     <TableCell align="right">
                       <IconButton
                         onClick={() => {

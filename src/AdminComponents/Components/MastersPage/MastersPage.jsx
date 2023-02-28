@@ -45,10 +45,10 @@ const MastersPage = () => {
 
   useEffect(() => {
     let asyncFunc = async () => {
-      let masters = [...(await Api.getAll("masters"))];
-      setMastersList(masters);
       let towns = [...(await Api.getAll("towns"))];
       setTownsList(towns);
+      let masters = [...(await Api.getAll("masters"))];
+      setMastersList(masters);
     };
     asyncFunc();
   }, [rerender]);
@@ -56,6 +56,13 @@ const MastersPage = () => {
   const { handleSubmit, register } = useForm({
     mode: "onBlur",
   });
+
+  //Объект для отображения имен городов, а не айдишников
+  let townsIdToName = {};
+  townsList.forEach((el) => {
+    townsIdToName[el.id] = el?.name;
+  });
+  ////////////////////////////////////////
 
   return (
     <>
@@ -134,7 +141,9 @@ const MastersPage = () => {
                       {row.name} {row.surname}
                     </TableCell>
 
-                    <TableCell align="left">{row.townId}</TableCell>
+                    <TableCell align="left">
+                      {townsIdToName[row.townId]}
+                    </TableCell>
                     <TableCell align="left">{row.rating}</TableCell>
                     <TableCell align="right">
                       <IconButton

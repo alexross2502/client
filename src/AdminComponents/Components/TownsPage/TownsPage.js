@@ -47,7 +47,7 @@ const TownsPage = () => {
     };
     asyncFunc();
   }, [rerender]);
-  console.log(townsList);
+
   const { handleSubmit, register } = useForm({
     mode: "onBlur",
   });
