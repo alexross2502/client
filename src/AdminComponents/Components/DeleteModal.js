@@ -79,6 +79,7 @@ const DeleteModal = (props) => {
                 let [id, url] = props.props;
                 Api.delete(url, id);
                 dispatch(setPageRerender());
+                dispatch(setModalDelete());
               }}
             >
               Да

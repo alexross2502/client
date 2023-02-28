@@ -109,6 +109,7 @@ const ClientSave = () => {
             type="submit"
             onClick={async () => {
               dispatch(setPageRerender());
+              dispatch(setModalAddClients());
             }}
           >
             Добавить

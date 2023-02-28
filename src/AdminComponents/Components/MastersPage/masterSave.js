@@ -160,6 +160,7 @@ const MasterSave = () => {
             type="submit"
             onClick={() => {
               dispatch(setPageRerender());
+              dispatch(setModalAddMasters());
             }}
           >
             Добавить

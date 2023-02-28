@@ -101,6 +101,7 @@ const TownSave = () => {
             type="submit"
             onClick={() => {
               dispatch(setPageRerender());
+              dispatch(setModalAddTowns());
             }}
           >
             Добавить

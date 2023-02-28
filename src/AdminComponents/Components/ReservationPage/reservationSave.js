@@ -254,6 +254,7 @@ const ReservationSave = () => {
             type="submit"
             onClick={() => {
               dispatch(setPageRerender());
+              dispatch(setModalAddReservations());
             }}
           >
             Добавить
