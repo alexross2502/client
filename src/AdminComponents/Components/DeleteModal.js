@@ -77,7 +77,6 @@ const DeleteModal = (props) => {
               color="warning"
               onClick={() => {
                 let [id, url] = props.props;
-
                 Api.delete(url, id);
                 dispatch(setPageRerender());
               }}

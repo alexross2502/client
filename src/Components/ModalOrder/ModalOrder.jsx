@@ -168,9 +168,9 @@ const ModalOrder = () => {
               }}
               style={{ width: 200 }}
             >
-              <option value={1}>1</option>
-              <option value={2}>2</option>
-              <option value={3}>3</option>
+              <option value={"Маленький"}>Маленький</option>
+              <option value={"Средний"}>Средний</option>
+              <option value={"Большой"}>Большой</option>
             </NativeSelect>
           </Grid>
 
