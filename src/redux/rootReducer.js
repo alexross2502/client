@@ -19,6 +19,7 @@ import modalAddReservationsReducer from "./reservationsReducer";
 import modalAddClientsReducer from "./clientsReducer";
 import modalAddTownsReducer from "./townsReducer";
 import modalDeleteReducer from "./deleteReducer";
+import RemoveAndAddModalReducer from "./RemoveAndAddModalReducer";
 
 const rootReducer = combineReducers({
   modalWindow: modalWindowReducer,
@@ -34,6 +35,7 @@ const rootReducer = combineReducers({
   addClient: modalAddClientsReducer,
   addTown: modalAddTownsReducer,
   delete: modalDeleteReducer,
+  removeAndAdd: RemoveAndAddModalReducer,
 });
 
 const persistConfig = {

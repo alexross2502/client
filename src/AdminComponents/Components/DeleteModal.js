@@ -13,6 +13,7 @@ import NativeSelect from "@mui/material/NativeSelect";
 import Api from "./api";
 import { setPageRerender } from "../../redux/rerenderReducer";
 import { setModalDelete } from "../../redux/deleteReducer";
+import { setRemoveAndAddModal } from "../../redux/RemoveAndAddModalReducer";
 
 const DeleteModal = (props) => {
   const dispatch = useDispatch();
@@ -77,8 +78,16 @@ const DeleteModal = (props) => {
               color="warning"
               onClick={() => {
                 let [id, url] = props.props;
-                Api.delete(url, id);
-                dispatch(setPageRerender());
+                Api.delete(url, id).then((res) => {
+                  if (res.message == undefined) {
+                    dispatch(setPageRerender());
+                    dispatch(setRemoveAndAddModal(true));
+                    setTimeout(() => {
+                      dispatch(setRemoveAndAddModal(false));
+                    }, 1000);
+                  }
+                  dispatch(setModalDelete());
+                });
               }}
             >
               Да

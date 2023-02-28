@@ -29,12 +29,14 @@ import { useClipboard } from "use-clipboard-copy";
 import DoneIcon from "@mui/icons-material/Done";
 import DeleteModal from "../DeleteModal";
 import { setModalDelete } from "../../../redux/deleteReducer";
+import { Watch } from "react-loader-spinner";
+import RemoveAndAddModal from "../../RemoveAndAddModal";
 
 const TownsPage = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const rerender = useSelector((state) => state.rerender.isRerender);
-  const [townsList, setTownsList] = useState([]);
+  const [townsList, setTownsList] = useState();
   const clipboard = useClipboard();
   const [copyDone, setCopyDone] = useState(false);
   const [itemForRemove, setItemForRemove] = useState([]);
@@ -79,47 +81,68 @@ const TownsPage = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {townsList.map((row) => (
-                <TableRow
-                  key={row.id}
-                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+              {townsList == undefined ? (
+                <Grid
+                  sx={{ position: "absolute", left: "50%", marginTop: "20px" }}
                 >
-                  <TableCell component="th" scope="row">
-                    <Typography className={style.clue} data-clue={`${row.id}`}>
-                      {row.id.slice(0, 15) + "..."}
-                    </Typography>
-                    {!copyDone ? (
-                      <ContentCopyIcon
+                  <Watch
+                    height="80"
+                    width="80"
+                    radius="48"
+                    color="#4fa94d"
+                    ariaLabel="watch-loading"
+                    wrapperStyle={{}}
+                    wrapperClassName=""
+                    visible={true}
+                  />
+                </Grid>
+              ) : (
+                townsList?.map((row) => (
+                  <TableRow
+                    key={row.id}
+                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                  >
+                    <TableCell component="th" scope="row">
+                      <Typography
+                        className={style.clue}
+                        data-clue={`${row.id}`}
+                      >
+                        {row.id.slice(0, 15) + "..."}
+                      </Typography>
+                      {!copyDone ? (
+                        <ContentCopyIcon
+                          onClick={() => {
+                            clipboard.copy(row.id);
+                            setCopyDone(true);
+                            setTimeout(() => {
+                              setCopyDone(false);
+                            }, 1500);
+                          }}
+                        ></ContentCopyIcon>
+                      ) : (
+                        <DoneIcon />
+                      )}
+                    </TableCell>
+                    <TableCell align="left">{row.name}</TableCell>
+                    <TableCell align="right">
+                      <IconButton
                         onClick={() => {
-                          clipboard.copy(row.id);
-                          setCopyDone(true);
-                          setTimeout(() => {
-                            setCopyDone(false);
-                          }, 1500);
+                          setItemForRemove([row.id, "towns"]);
+                          dispatch(setModalDelete());
+                          dispatch(setPageRerender());
                         }}
-                      ></ContentCopyIcon>
-                    ) : (
-                      <DoneIcon />
-                    )}
-                  </TableCell>
-                  <TableCell align="left">{row.name}</TableCell>
-                  <TableCell align="right">
-                    <IconButton
-                      onClick={() => {
-                        setItemForRemove([row.id, "towns"]);
-                        dispatch(setModalDelete());
-                        dispatch(setPageRerender());
-                      }}
-                    >
-                      <DeleteForeverIcon></DeleteForeverIcon>
-                    </IconButton>
-                  </TableCell>
-                </TableRow>
-              ))}
+                      >
+                        <DeleteForeverIcon></DeleteForeverIcon>
+                      </IconButton>
+                    </TableCell>
+                  </TableRow>
+                ))
+              )}
             </TableBody>
           </Table>
         </TableContainer>
       </Box>
+      <RemoveAndAddModal />
     </>
   );
 };

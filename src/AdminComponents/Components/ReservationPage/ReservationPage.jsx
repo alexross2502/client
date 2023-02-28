@@ -33,18 +33,29 @@ import { useClipboard } from "use-clipboard-copy";
 import DoneIcon from "@mui/icons-material/Done";
 import DeleteModal from "../DeleteModal";
 import { setModalDelete } from "../../../redux/deleteReducer";
+import { Watch } from "react-loader-spinner";
+import RemoveAndAddModal from "../../RemoveAndAddModal";
 
 const ReservationPage = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const rerender = useSelector((state) => state.rerender.isRerender);
-  const [reservationList, setReservationList] = useState([]);
+  const [clientsList, setClientsList] = useState([]);
+  const [mastersList, setMastersList] = useState([]);
+  const [townsList, setTownsList] = useState([]);
+  const [reservationList, setReservationList] = useState();
   const clipboard = useClipboard();
   const [copyDone, setCopyDone] = useState(false);
   const [itemForRemove, setItemForRemove] = useState([]);
 
   useEffect(() => {
     let asyncFunc = async () => {
+      let clients = [...(await Api.getAll("clients"))];
+      setClientsList(clients);
+      let masters = [...(await Api.getAll("masters"))];
+      setMastersList(masters);
+      let towns = [...(await Api.getAll("towns"))];
+      setTownsList(towns);
       let reservation = [...(await Api.getAll("reservation"))];
       setReservationList(reservation);
     };
@@ -54,6 +65,19 @@ const ReservationPage = () => {
   const { handleSubmit, register } = useForm({
     mode: "onBlur",
   });
+
+  //Объект для отображения имен городов, клиентов, мастеров, а не айдишников
+  let IdToName = {};
+  townsList.forEach((el) => {
+    IdToName[el.id] = el?.name;
+  });
+  clientsList.forEach((el) => {
+    IdToName[el.id] = el?.name;
+  });
+  mastersList.forEach((el) => {
+    IdToName[el.id] = el?.name;
+  });
+  ////////////////////////////////////////
 
   return (
     <>
@@ -88,52 +112,75 @@ const ReservationPage = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {reservationList.map((row) => (
-                <TableRow
-                  key={row.id}
-                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+              {reservationList == undefined ? (
+                <Grid
+                  sx={{ position: "absolute", left: "50%", marginTop: "20px" }}
                 >
-                  <TableCell component="th" scope="row">
-                    <Typography className={style.clue} data-clue={`${row.id}`}>
-                      {row.id.slice(0, 15) + "..."}
-                    </Typography>
-                    {!copyDone ? (
-                      <ContentCopyIcon
+                  <Watch
+                    height="80"
+                    width="80"
+                    radius="48"
+                    color="#4fa94d"
+                    ariaLabel="watch-loading"
+                    wrapperStyle={{}}
+                    wrapperClassName=""
+                    visible={true}
+                  />
+                </Grid>
+              ) : (
+                reservationList.map((row) => (
+                  <TableRow
+                    key={row.id}
+                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                  >
+                    <TableCell component="th" scope="row">
+                      <Typography
+                        className={style.clue}
+                        data-clue={`${row.id}`}
+                      >
+                        {row.id.slice(0, 15) + "..."}
+                      </Typography>
+                      {!copyDone ? (
+                        <ContentCopyIcon
+                          onClick={() => {
+                            clipboard.copy(row.id);
+                            setCopyDone(true);
+                            setTimeout(() => {
+                              setCopyDone(false);
+                            }, 1500);
+                          }}
+                        ></ContentCopyIcon>
+                      ) : (
+                        <DoneIcon />
+                      )}
+                    </TableCell>
+                    <TableCell align="left">{row.day}</TableCell>
+                    <TableCell align="left">{row.size}</TableCell>
+                    <TableCell align="left">{row.hours}</TableCell>
+                    <TableCell align="left">
+                      {IdToName[row.master_id]}
+                    </TableCell>
+                    <TableCell align="left">{IdToName[row.towns_id]}</TableCell>
+                    <TableCell align="left">{IdToName[row.clientId]}</TableCell>
+                    <TableCell align="right">
+                      <IconButton
                         onClick={() => {
-                          clipboard.copy(row.id);
-                          setCopyDone(true);
-                          setTimeout(() => {
-                            setCopyDone(false);
-                          }, 1500);
+                          setItemForRemove([row.id, "reservation"]);
+                          dispatch(setModalDelete());
+                          dispatch(setPageRerender());
                         }}
-                      ></ContentCopyIcon>
-                    ) : (
-                      <DoneIcon />
-                    )}
-                  </TableCell>
-                  <TableCell align="left">{row.day}</TableCell>
-                  <TableCell align="left">{row.size}</TableCell>
-                  <TableCell align="left">{row.hours}</TableCell>
-                  <TableCell align="left">{row.master_id}</TableCell>
-                  <TableCell align="left">{row.towns_id}</TableCell>
-                  <TableCell align="left">{row.clientId}</TableCell>
-                  <TableCell align="right">
-                    <IconButton
-                      onClick={() => {
-                        setItemForRemove([row.id, "reservation"]);
-                        dispatch(setModalDelete());
-                        dispatch(setPageRerender());
-                      }}
-                    >
-                      <DeleteForeverIcon></DeleteForeverIcon>
-                    </IconButton>
-                  </TableCell>
-                </TableRow>
-              ))}
+                      >
+                        <DeleteForeverIcon></DeleteForeverIcon>
+                      </IconButton>
+                    </TableCell>
+                  </TableRow>
+                ))
+              )}
             </TableBody>
           </Table>
         </TableContainer>
       </Box>
+      <RemoveAndAddModal />
     </>
   );
 };

@@ -29,12 +29,14 @@ import { useClipboard } from "use-clipboard-copy";
 import DoneIcon from "@mui/icons-material/Done";
 import DeleteModal from "../DeleteModal";
 import { setModalDelete } from "../../../redux/deleteReducer";
+import { Watch } from "react-loader-spinner";
+import RemoveAndAddModal from "../../RemoveAndAddModal";
 
 const MastersPage = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const rerender = useSelector((state) => state.rerender.isRerender);
-  const [mastersList, setMastersList] = useState([]);
+  const [mastersList, setMastersList] = useState();
   const [townsList, setTownsList] = useState([]);
   const clipboard = useClipboard();
   const [copyDone, setCopyDone] = useState(false);
@@ -44,10 +46,10 @@ const MastersPage = () => {
 
   useEffect(() => {
     let asyncFunc = async () => {
-      let masters = [...(await Api.getAll("masters"))];
-      setMastersList(masters);
       let towns = [...(await Api.getAll("towns"))];
       setTownsList(towns);
+      let masters = [...(await Api.getAll("masters"))];
+      setMastersList(masters);
     };
     asyncFunc();
   }, [rerender]);
@@ -55,6 +57,13 @@ const MastersPage = () => {
   const { handleSubmit, register } = useForm({
     mode: "onBlur",
   });
+
+  //Объект для отображения имен городов, а не айдишников
+  let townsIdToName = {};
+  townsList.forEach((el) => {
+    townsIdToName[el.id] = el?.name;
+  });
+  ////////////////////////////////////////
 
   return (
     <>
@@ -87,52 +96,75 @@ const MastersPage = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {mastersList.map((row) => (
-                <TableRow
-                  key={row.id}
-                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+              {mastersList == undefined ? (
+                <Grid
+                  sx={{ position: "absolute", left: "50%", marginTop: "20px" }}
                 >
-                  <TableCell component="th" scope="row">
-                    <Typography className={style.clue} data-clue={`${row.id}`}>
-                      {row.id.slice(0, 15) + "..."}
-                    </Typography>
-                    {!copyDone ? (
-                      <ContentCopyIcon
-                        onClick={() => {
-                          clipboard.copy(row.id);
-                          setCopyDone(true);
-                          setTimeout(() => {
-                            setCopyDone(false);
-                          }, 1500);
-                        }}
-                      ></ContentCopyIcon>
-                    ) : (
-                      <DoneIcon />
-                    )}
-                  </TableCell>
-                  <TableCell align="left">
-                    {row.name} {row.surname}
-                  </TableCell>
+                  <Watch
+                    height="80"
+                    width="80"
+                    radius="48"
+                    color="#4fa94d"
+                    ariaLabel="watch-loading"
+                    wrapperStyle={{}}
+                    wrapperClassName=""
+                    visible={true}
+                  />
+                </Grid>
+              ) : (
+                mastersList.map((row) => (
+                  <TableRow
+                    key={row.id}
+                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                  >
+                    <TableCell component="th" scope="row">
+                      <Typography
+                        className={style.clue}
+                        data-clue={`${row.id}`}
+                      >
+                        {row.id.slice(0, 15) + "..."}
+                      </Typography>
+                      {!copyDone ? (
+                        <ContentCopyIcon
+                          onClick={() => {
+                            clipboard.copy(row.id);
+                            setCopyDone(true);
+                            setTimeout(() => {
+                              setCopyDone(false);
+                            }, 1500);
+                          }}
+                        ></ContentCopyIcon>
+                      ) : (
+                        <DoneIcon />
+                      )}
+                    </TableCell>
+                    <TableCell align="left">
+                      {row.name} {row.surname}
+                    </TableCell>
 
-                  <TableCell align="left">{row.townId}</TableCell>
-                  <TableCell align="left">{row.rating}</TableCell>
-                  <TableCell align="right">
-                    <IconButton
-                      onClick={() => {
-                        setItemForRemove([row.id, "masters"]);
-                        dispatch(setModalDelete());
-                        dispatch(setPageRerender());
-                      }}
-                    >
-                      <DeleteForeverIcon></DeleteForeverIcon>
-                    </IconButton>
-                  </TableCell>
-                </TableRow>
-              ))}
+                    <TableCell align="left">
+                      {townsIdToName[row.townId]}
+                    </TableCell>
+                    <TableCell align="left">{row.rating}</TableCell>
+                    <TableCell align="right">
+                      <IconButton
+                        onClick={() => {
+                          setItemForRemove([row.id, "masters"]);
+                          dispatch(setModalDelete());
+                          dispatch(setPageRerender());
+                        }}
+                      >
+                        <DeleteForeverIcon></DeleteForeverIcon>
+                      </IconButton>
+                    </TableCell>
+                  </TableRow>
+                ))
+              )}
             </TableBody>
           </Table>
         </TableContainer>
       </Box>
+      <RemoveAndAddModal />
     </>
   );
 };

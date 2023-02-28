@@ -12,12 +12,7 @@ import InputLabel from "@mui/material/InputLabel";
 import NativeSelect from "@mui/material/NativeSelect";
 import Api from "../api";
 import { setPageRerender } from "../../../redux/rerenderReducer";
-
-async function masterSave(atr) {
-  let data = { ...atr };
-
-  return await request({ url: `/masters`, method: "post", data: data });
-}
+import { setRemoveAndAddModal } from "../../../redux/RemoveAndAddModalReducer";
 
 const MasterSave = () => {
   const dispatch = useDispatch();
@@ -42,6 +37,24 @@ const MasterSave = () => {
     };
     asyncFunc();
   }, [rerender]);
+
+  /////Сохранение нового мастера
+  async function masterSave(atr) {
+    let data = { ...atr };
+
+    await request({ url: `/masters`, method: "post", data: data }).then(
+      (res) => {
+        if (res.message == undefined) {
+          dispatch(setPageRerender());
+          dispatch(setRemoveAndAddModal(true));
+          setTimeout(() => {
+            dispatch(setRemoveAndAddModal(false));
+          }, 1000);
+        }
+      }
+    );
+  }
+  ///////////
 
   return (
     <div
@@ -160,6 +173,7 @@ const MasterSave = () => {
             type="submit"
             onClick={() => {
               dispatch(setPageRerender());
+              dispatch(setModalAddMasters());
             }}
           >
             Добавить

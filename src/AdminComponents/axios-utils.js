@@ -2,7 +2,8 @@ import axios from "axios";
 import { getToken } from "./token";
 
 const client = axios.create({
-  baseURL: "https://server-cql5.onrender.com/api",
+  //baseURL: "https://server-cql5.onrender.com/api",
+  baseURL: "http://localhost:3306/api",
 });
 
 export const request = ({ ...option }) => {
@@ -16,6 +17,7 @@ export const request = ({ ...option }) => {
       const response = axios.get("https://server-cql5.onrender.com/api");
       if (response.status === 200) {
         console.log("401");
+
         return error.config;
       }
     }

@@ -3,15 +3,18 @@ import { request } from "../axios-utils";
 const Api = {};
 
 Api.getAll = async function (url) {
-  return await request({url: `/${url}`})
-}
+  return await request({ url: `/${url}` });
+};
 
 Api.delete = async function (url, id) {
-  return await request({url: `/${url}/${id}`, method: 'delete'})
+  return await request({ url: `/${url}/${id}`, method: "delete" });
 };
 
 Api.getAvailable = async function (url, id) {
-  return await request({url: `/${url}/${id}`, method: 'get'})
+  return await request({
+    url: `/${url}/${id}`,
+    method: "get",
+  });
 };
 
 Api.mastersCheck = async function checkMasters(date, town, townName) {
@@ -19,10 +22,23 @@ Api.mastersCheck = async function checkMasters(date, town, townName) {
   data.date = date;
   data.town = town;
   data.townName = townName;
-  return await request({url: `/reservation/available`, method: 'post', data: data})
+  return await request({
+    url: `/reservation/available`,
+    method: "post",
+    data: data,
+  });
 };
 
-Api.makeOrder = async function orderMake(town, master, date, recipient, name, surname, rating, clientName) {
+Api.makeOrder = async function orderMake(
+  town,
+  master,
+  date,
+  recipient,
+  name,
+  surname,
+  rating,
+  clientName
+) {
   let data = {};
   data.recipient = recipient;
   data.name = name;
@@ -31,7 +47,7 @@ Api.makeOrder = async function orderMake(town, master, date, recipient, name, su
   data.towns_id = String(town);
   data.master_id = String(master);
   data.day = date.date;
-  data.clientName = clientName
+  data.clientName = clientName;
 
   let hours;
   if (date.time[1] - date.time[0] == 1) {
@@ -43,8 +59,11 @@ Api.makeOrder = async function orderMake(town, master, date, recipient, name, su
   }
   data.hours = hours;
 
-  return await request({url: `/reservation/order`, method: 'post', data: data})
+  return await request({
+    url: `/reservation/order`,
+    method: "post",
+    data: data,
+  });
 };
-
 
 export default Api;

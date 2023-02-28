@@ -29,6 +29,8 @@ import { useClipboard } from "use-clipboard-copy";
 import DoneIcon from "@mui/icons-material/Done";
 import DeleteModal from "../DeleteModal";
 import { setModalDelete } from "../../../redux/deleteReducer";
+import { Watch } from "react-loader-spinner";
+import RemoveAndAddModal from "../../RemoveAndAddModal";
 
 const ClientPage = () => {
   const isActive = useSelector((state) => state.addClient.isActive);
@@ -36,7 +38,7 @@ const ClientPage = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const rerender = useSelector((state) => state.rerender.isRerender);
-  const [clientsList, setClientsList] = useState([]);
+  const [clientsList, setClientsList] = useState();
   const clipboard = useClipboard();
   const [copyDone, setCopyDone] = useState(false);
   const [itemForRemove, setItemForRemove] = useState([]);
@@ -83,49 +85,70 @@ const ClientPage = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {clientsList.map((row) => (
-                <TableRow
-                  key={row.id}
-                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+              {clientsList == undefined ? (
+                <Grid
+                  sx={{ position: "absolute", left: "50%", marginTop: "20px" }}
                 >
-                  <TableCell component="th" scope="row">
-                    <Typography className={style.clue} data-clue={`${row.id}`}>
-                      {row.id.slice(0, 15) + "..."}
-                    </Typography>
-                    {!copyDone ? (
-                      <ContentCopyIcon
-                        onClick={() => {
-                          clipboard.copy(row.id);
-                          setCopyDone(true);
-                          setTimeout(() => {
-                            setCopyDone(false);
-                          }, 1500);
-                        }}
-                      ></ContentCopyIcon>
-                    ) : (
-                      <DoneIcon />
-                    )}
-                  </TableCell>
+                  <Watch
+                    height="80"
+                    width="80"
+                    radius="48"
+                    color="#4fa94d"
+                    ariaLabel="watch-loading"
+                    wrapperStyle={{}}
+                    wrapperClassName=""
+                    visible={true}
+                  />
+                </Grid>
+              ) : (
+                clientsList.map((row) => (
+                  <TableRow
+                    key={row.id}
+                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                  >
+                    <TableCell component="th" scope="row">
+                      <Typography
+                        className={style.clue}
+                        data-clue={`${row.id}`}
+                      >
+                        {row.id.slice(0, 15) + "..."}
+                      </Typography>
+                      {!copyDone ? (
+                        <ContentCopyIcon
+                          onClick={() => {
+                            clipboard.copy(row.id);
+                            setCopyDone(true);
+                            setTimeout(() => {
+                              setCopyDone(false);
+                            }, 1500);
+                          }}
+                        ></ContentCopyIcon>
+                      ) : (
+                        <DoneIcon />
+                      )}
+                    </TableCell>
 
-                  <TableCell align="left">{row.name}</TableCell>
-                  <TableCell align="left">{row.email}</TableCell>
-                  <TableCell align="right">
-                    <IconButton
-                      onClick={() => {
-                        setItemForRemove([row.id, "clients"]);
-                        dispatch(setModalDelete());
-                        dispatch(setPageRerender());
-                      }}
-                    >
-                      <DeleteForeverIcon></DeleteForeverIcon>
-                    </IconButton>
-                  </TableCell>
-                </TableRow>
-              ))}
+                    <TableCell align="left">{row.name}</TableCell>
+                    <TableCell align="left">{row.email}</TableCell>
+                    <TableCell align="right">
+                      <IconButton
+                        onClick={() => {
+                          setItemForRemove([row.id, "clients"]);
+                          dispatch(setModalDelete());
+                          dispatch(setPageRerender());
+                        }}
+                      >
+                        <DeleteForeverIcon></DeleteForeverIcon>
+                      </IconButton>
+                    </TableCell>
+                  </TableRow>
+                ))
+              )}
             </TableBody>
           </Table>
         </TableContainer>
       </Box>
+      <RemoveAndAddModal />
     </>
   );
 };
