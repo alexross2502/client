@@ -13,12 +13,7 @@ import InputLabel from "@mui/material/InputLabel";
 import NativeSelect from "@mui/material/NativeSelect";
 import Api from "../api";
 import { setPageRerender } from "../../../redux/rerenderReducer";
-
-async function townSave(atr) {
-  let data = { ...atr };
-
-  return await request({ url: `/towns`, method: "post", data: data });
-}
+import { setRemoveAndAddModal } from "../../../redux/RemoveAndAddModalReducer";
 
 const TownSave = () => {
   const dispatch = useDispatch();
@@ -37,6 +32,22 @@ const TownSave = () => {
   function onActiveClick() {
     dispatch(setModalAddTowns());
   }
+
+  ////Сохранение города
+  async function townSave(atr) {
+    let data = { ...atr };
+
+    await request({ url: `/towns`, method: "post", data: data }).then((res) => {
+      if (res.message == undefined) {
+        dispatch(setPageRerender());
+        dispatch(setRemoveAndAddModal(true));
+        setTimeout(() => {
+          dispatch(setRemoveAndAddModal(false));
+        }, 1000);
+      }
+    });
+  }
+  /////////
 
   return (
     <div

@@ -34,6 +34,7 @@ import DoneIcon from "@mui/icons-material/Done";
 import DeleteModal from "../DeleteModal";
 import { setModalDelete } from "../../../redux/deleteReducer";
 import { Watch } from "react-loader-spinner";
+import RemoveAndAddModal from "../../RemoveAndAddModal";
 
 const ReservationPage = () => {
   const { t } = useTranslation();
@@ -179,6 +180,7 @@ const ReservationPage = () => {
           </Table>
         </TableContainer>
       </Box>
+      <RemoveAndAddModal />
     </>
   );
 };

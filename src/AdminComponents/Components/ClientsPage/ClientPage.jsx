@@ -30,6 +30,7 @@ import DoneIcon from "@mui/icons-material/Done";
 import DeleteModal from "../DeleteModal";
 import { setModalDelete } from "../../../redux/deleteReducer";
 import { Watch } from "react-loader-spinner";
+import RemoveAndAddModal from "../../RemoveAndAddModal";
 
 const ClientPage = () => {
   const isActive = useSelector((state) => state.addClient.isActive);
@@ -147,6 +148,7 @@ const ClientPage = () => {
           </Table>
         </TableContainer>
       </Box>
+      <RemoveAndAddModal />
     </>
   );
 };

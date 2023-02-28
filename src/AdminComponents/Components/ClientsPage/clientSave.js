@@ -10,12 +10,8 @@ import { useState } from "react";
 import CloseIcon from "@mui/icons-material/Close";
 import { setModalAddClients } from "../../../redux/clientsReducer";
 import { setPageRerender } from "../../../redux/rerenderReducer";
-
-async function clientSave(atr) {
-  let data = { ...atr };
-
-  return await request({ url: `/clients`, method: "post", data: data });
-}
+import axios from "axios";
+import { setRemoveAndAddModal } from "../../../redux/RemoveAndAddModalReducer";
 
 const ClientSave = () => {
   const dispatch = useDispatch();
@@ -30,6 +26,24 @@ const ClientSave = () => {
   });
   //Открытие\закрытие модального окна
   const isActive = useSelector((state) => state.addClient.isActive);
+
+  ////Сохранение нового клиента
+  async function clientSave(atr) {
+    let data = { ...atr };
+
+    await request({ url: `/clients`, method: "post", data: data }).then(
+      (res) => {
+        if (res.message == undefined) {
+          dispatch(setPageRerender());
+          dispatch(setRemoveAndAddModal(true));
+          setTimeout(() => {
+            dispatch(setRemoveAndAddModal(false));
+          }, 1000);
+        }
+      }
+    );
+  }
+  ////////
 
   return (
     <div
