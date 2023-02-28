@@ -40,7 +40,7 @@ export async function reservationSave(atr) {
   let time = `${atr.time.split(":")[0]}:00:00`;
   data.day = toTimestamp(`${day[0]} ${day[1]} ${day[2]} ${time}`);
 
-  data.hours = atr.size * 3600;
+  data.hours = atr.size;
   data.master_id = atr.master;
   data.towns_id = atr.town;
   data.clientId = atr.client;
@@ -198,22 +198,22 @@ const ReservationSave = () => {
             />
           </Grid>
           <Grid item marginTop={3}>
-            <InputLabel variant="standard" htmlFor="uncontrolled-native">
+            <InputLabel variant="standard" htmlFor="size">
               Размер часов
             </InputLabel>
             <NativeSelect
               inputProps={{
-                name: "age",
-                id: "uncontrolled-native",
+                name: "size",
+                id: "size",
               }}
               style={{ width: 200 }}
               {...register("size", {
                 required: `${t("adminPopup.emptyField")}`,
               })}
             >
-              <option value={1}>1</option>
-              <option value={2}>2</option>
-              <option value={3}>3</option>
+              <option value={"Маленький"}>Маленький</option>
+              <option value={"Средний"}>Средний</option>
+              <option value={"Большой"}>Большой</option>
             </NativeSelect>
           </Grid>
 
