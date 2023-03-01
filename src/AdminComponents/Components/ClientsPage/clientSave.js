@@ -36,6 +36,7 @@ const ClientSave = () => {
         if (res.message == undefined) {
           dispatch(setPageRerender());
           dispatch(setRemoveAndAddModal(true));
+          dispatch(setModalAddClients());
           setTimeout(() => {
             dispatch(setRemoveAndAddModal(false));
           }, 1000);
@@ -81,7 +82,11 @@ const ClientSave = () => {
               <CloseIcon onClick={() => dispatch(setModalAddClients())} />
             </Grid>
           </Grid>
-
+          {
+            <Typography color={"red"}>
+              {errors?.name && errors?.name.message}
+            </Typography>
+          }
           <TextField
             margin="normal"
             type={"text"}
@@ -91,8 +96,17 @@ const ClientSave = () => {
             name="name"
             {...register("name", {
               required: `${t("adminPopup.emptyField")}`,
+              pattern: {
+                value: /^[А-я]{2,20}$/,
+                message: `${t("adminPopup.onlyCyrillic")}`,
+              },
             })}
           />
+          {
+            <Typography color={"red"}>
+              {errors?.email && errors?.email.message}
+            </Typography>
+          }
           <TextField
             margin="normal"
             type={"text"}
@@ -123,7 +137,6 @@ const ClientSave = () => {
             type="submit"
             onClick={async () => {
               dispatch(setPageRerender());
-              dispatch(setModalAddClients());
             }}
           >
             Добавить

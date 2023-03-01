@@ -41,6 +41,7 @@ const TownSave = () => {
       if (res.message == undefined) {
         dispatch(setPageRerender());
         dispatch(setRemoveAndAddModal(true));
+        dispatch(setModalAddTowns());
         setTimeout(() => {
           dispatch(setRemoveAndAddModal(false));
         }, 1000);
@@ -85,7 +86,11 @@ const TownSave = () => {
               <CloseIcon onClick={() => dispatch(setModalAddTowns())} />
             </Grid>
           </Grid>
-
+          {
+            <Typography color={"red"}>
+              {errors?.name && errors?.name.message}
+            </Typography>
+          }
           <TextField
             margin="normal"
             type={"text"}
@@ -95,6 +100,10 @@ const TownSave = () => {
             name="name"
             {...register("name", {
               required: `${t("adminPopup.emptyField")}`,
+              pattern: {
+                value: /^[А-я]{2,20}$/,
+                message: `${t("adminPopup.onlyCyrillic")}`,
+              },
             })}
           />
 
@@ -112,7 +121,6 @@ const TownSave = () => {
             type="submit"
             onClick={() => {
               dispatch(setPageRerender());
-              dispatch(setModalAddTowns());
             }}
           >
             Добавить

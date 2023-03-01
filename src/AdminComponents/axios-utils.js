@@ -2,10 +2,9 @@ import axios from "axios";
 import { getToken } from "./token";
 
 const client = axios.create({
-  //baseURL: "https://server-cql5.onrender.com/api",
-  baseURL: "http://localhost:3306/api",
+  baseURL: process.env.REACT_APP_BASE_URL,
 });
-
+console.log(process.env);
 export const request = ({ ...option }) => {
   client.defaults.headers.common.Authorization = getToken();
   const onSuccess = (responce) => responce.data;
@@ -14,7 +13,7 @@ export const request = ({ ...option }) => {
       document.location.href = "/";
       sessionStorage.removeItem("token");
       sessionStorage.removeItem("persist:main-root");
-      const response = axios.get("https://server-cql5.onrender.com/api");
+      const response = axios.get(process.env.REACT_APP_BASE_URL);
       if (response.status === 200) {
         console.log("401");
 

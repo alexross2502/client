@@ -35,6 +35,7 @@ import DeleteModal from "../DeleteModal";
 import { setModalDelete } from "../../../redux/deleteReducer";
 import { Watch } from "react-loader-spinner";
 import RemoveAndAddModal from "../../RemoveAndAddModal";
+import { timestampToDate } from "../dateConverter";
 
 const ReservationPage = () => {
   const { t } = useTranslation();
@@ -154,7 +155,9 @@ const ReservationPage = () => {
                         <DoneIcon />
                       )}
                     </TableCell>
-                    <TableCell align="left">{row.day}</TableCell>
+                    <TableCell align="left">
+                      {timestampToDate(row.day)}
+                    </TableCell>
                     <TableCell align="left">{row.size}</TableCell>
                     <TableCell align="left">{row.hours}</TableCell>
                     <TableCell align="left">
