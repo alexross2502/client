@@ -45,6 +45,7 @@ const MasterSave = () => {
     await request({ url: `/masters`, method: "post", data: data }).then(
       (res) => {
         if (res.message == undefined) {
+          dispatch(setModalAddMasters());
           dispatch(setPageRerender());
           dispatch(setRemoveAndAddModal(true));
           setTimeout(() => {
@@ -92,7 +93,11 @@ const MasterSave = () => {
               <CloseIcon onClick={() => dispatch(setModalAddMasters())} />
             </Grid>
           </Grid>
-
+          {
+            <Typography color={"red"}>
+              {errors?.name && errors?.name.message}
+            </Typography>
+          }
           <TextField
             margin="normal"
             type={"text"}
@@ -102,8 +107,17 @@ const MasterSave = () => {
             name="name"
             {...register("name", {
               required: `${t("adminPopup.emptyField")}`,
+              pattern: {
+                value: /^[А-я]{2,20}$/,
+                message: `${t("adminPopup.onlyCyrillic")}`,
+              },
             })}
           />
+          {
+            <Typography color={"red"}>
+              {errors?.surname && errors?.surname.message}
+            </Typography>
+          }
           <TextField
             margin="normal"
             type={"text"}
@@ -113,6 +127,10 @@ const MasterSave = () => {
             name="surname"
             {...register("surname", {
               required: `${t("adminPopup.emptyField")}`,
+              pattern: {
+                value: /^[А-я]{2,20}$/,
+                message: `${t("adminPopup.onlyCyrillic")}`,
+              },
             })}
           />
           <Grid item marginTop={3}>
@@ -173,7 +191,6 @@ const MasterSave = () => {
             type="submit"
             onClick={() => {
               dispatch(setPageRerender());
-              dispatch(setModalAddMasters());
             }}
           >
             Добавить

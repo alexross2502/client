@@ -77,6 +77,7 @@ const ReservationSave = () => {
         if (res.message == undefined) {
           dispatch(setPageRerender());
           dispatch(setRemoveAndAddModal(true));
+          dispatch(setModalAddReservations());
           setTimeout(() => {
             dispatch(setRemoveAndAddModal(false));
           }, 1000);
@@ -174,7 +175,8 @@ const ReservationSave = () => {
               id="day"
               label="Дата"
               type="date"
-              defaultValue="2017-05-24"
+              required={true}
+              minDate={new Date()}
               className={classes.textField}
               InputLabelProps={{
                 shrink: true,
@@ -259,7 +261,6 @@ const ReservationSave = () => {
             type="submit"
             onClick={() => {
               dispatch(setPageRerender());
-              dispatch(setModalAddReservations());
             }}
           >
             Добавить
