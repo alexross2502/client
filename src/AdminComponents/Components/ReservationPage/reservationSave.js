@@ -15,6 +15,9 @@ import { setPageRerender } from "../../../redux/rerenderReducer";
 import { makeStyles } from "@material-ui/core/styles";
 import MenuItem from "@mui/material/MenuItem";
 import moment from "moment";
+import { dateToTimestamp, timestampToDate } from "../dateConverter";
+import repairTime from "../repairTime.json";
+import { setRemoveAndAddModal } from "../../../redux/RemoveAndAddModalReducer";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -29,25 +32,6 @@ const useStyles = makeStyles((theme) => ({
     width: 200,
   },
 }));
-function toTimestamp(strDate) {
-  var datum = Date.parse(strDate);
-  return datum / 1000;
-}
-
-export async function reservationSave(atr) {
-  let data = {};
-  let day = atr.date.split("-");
-  let time = `${atr.time.split(":")[0]}:00:00`;
-  data.day = toTimestamp(`${day[0]} ${day[1]} ${day[2]} ${time}`);
-
-  data.hours = atr.size;
-  data.master_id = atr.master;
-  data.towns_id = atr.town;
-  data.clientId = atr.client;
-  console.log(data);
-
-  return await request({ url: `/reservation`, method: "post", data: data });
-}
 
 const ReservationSave = () => {
   const classes = useStyles();
@@ -73,13 +57,34 @@ const ReservationSave = () => {
       let towns = [...(await Api.getAll("towns"))];
       setTownsList(towns);
       let clients = [...(await Api.getAll("clients"))];
-
       setClientsList(clients);
       let masters = [...(await Api.getAll("masters"))];
       setMastersList(masters);
     };
     asyncFunc();
   }, [rerender]);
+
+  ////Сохранение нового резерва
+  async function reservationSave(atr) {
+    atr.day = dateToTimestamp(atr.day, atr.hours.split(":")[0]);
+    atr.hours = `${atr.hours.split(":")[0]}:00-${
+      +atr.hours.split(":")[0] + repairTime[atr.size]
+    }:00`;
+    let data = { ...atr };
+
+    await request({ url: `/reservation`, method: "post", data: data }).then(
+      (res) => {
+        if (res.message == undefined) {
+          dispatch(setPageRerender());
+          dispatch(setRemoveAndAddModal(true));
+          setTimeout(() => {
+            dispatch(setRemoveAndAddModal(false));
+          }, 1000);
+        }
+      }
+    );
+  }
+  //////////////
 
   return (
     <div
@@ -118,16 +123,16 @@ const ReservationSave = () => {
             </Grid>
           </Grid>
           <Grid item marginTop={3}>
-            <InputLabel variant="standard" htmlFor="town">
+            <InputLabel variant="standard" htmlFor="towns_id">
               Город
             </InputLabel>
             <NativeSelect
               inputProps={{
-                name: "town",
-                id: "town",
+                name: "towns_id",
+                id: "towns_id",
               }}
               style={{ width: 200 }}
-              {...register("town", {
+              {...register("towns_id", {
                 required: `${t("adminPopup.emptyField")}`,
               })}
             >
@@ -141,16 +146,16 @@ const ReservationSave = () => {
             </NativeSelect>
           </Grid>
           <Grid item marginTop={3}>
-            <InputLabel variant="standard" htmlFor="town">
+            <InputLabel variant="standard" htmlFor="clientId">
               Клиент
             </InputLabel>
             <NativeSelect
               inputProps={{
-                name: "client",
-                id: "client",
+                name: "clientId",
+                id: "clientId",
               }}
               style={{ width: 200 }}
-              {...register("client", {
+              {...register("clientId", {
                 required: `${t("adminPopup.emptyField")}`,
               })}
             >
@@ -166,7 +171,7 @@ const ReservationSave = () => {
 
           <Grid item marginTop={3}>
             <TextField
-              id="date"
+              id="day"
               label="Дата"
               type="date"
               defaultValue="2017-05-24"
@@ -174,17 +179,17 @@ const ReservationSave = () => {
               InputLabelProps={{
                 shrink: true,
               }}
-              {...register("date", {
+              {...register("day", {
                 required: `${t("adminPopup.emptyField")}`,
               })}
             />
           </Grid>
           <Grid item marginTop={3}>
             <TextField
-              id="time"
+              id="hours"
               label="Время"
-              type="time"
-              defaultValue="07:30"
+              type="hours"
+              defaultValue="09:00"
               className={classes.textField}
               InputLabelProps={{
                 shrink: true,
@@ -192,7 +197,7 @@ const ReservationSave = () => {
               inputProps={{
                 step: 3600,
               }}
-              {...register("time", {
+              {...register("hours", {
                 required: `${t("adminPopup.emptyField")}`,
               })}
             />
@@ -218,16 +223,16 @@ const ReservationSave = () => {
           </Grid>
 
           <Grid item marginTop={3}>
-            <InputLabel variant="standard" htmlFor="town">
+            <InputLabel variant="standard" htmlFor="master_id">
               Мастер
             </InputLabel>
             <NativeSelect
               inputProps={{
-                name: "master",
-                id: "master",
+                name: "master_id",
+                id: "master_id",
               }}
               style={{ width: 200 }}
-              {...register("master", {
+              {...register("master_id", {
                 required: `${t("adminPopup.emptyField")}`,
               })}
             >
