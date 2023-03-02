@@ -225,9 +225,11 @@ const ReservationSave = () => {
                 required: `${t("adminPopup.emptyField")}`,
               })}
             >
-              <option value={"Маленький"}>Маленький</option>
-              <option value={"Средний"}>Средний</option>
-              <option value={"Большой"}>Большой</option>
+              {Object.keys(repairTime).map((el) => {
+                return (
+                  <option value={t(`size.${el}`)}>{t(`size.${el}`)}</option>
+                );
+              })}
             </NativeSelect>
           </Grid>
 

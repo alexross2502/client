@@ -52,8 +52,8 @@ const ModalOrder = () => {
   const [townsList, setTownsList] = useState([]);
   useEffect(() => {
     let asyncFunc = async () => {
-      let towns = [...(await Api.getAll("towns"))];
-      setTownsList(towns);
+      let towns = await Api.getAll("towns");
+      setTownsList(towns.data);
     };
     asyncFunc();
   }, [isActive]);
@@ -173,9 +173,9 @@ const ModalOrder = () => {
                 required: `${t("adminPopup.emptyField")}`,
               })}
             >
-              <option value={"Маленький"}>Маленький</option>
-              <option value={"Средний"}>Средний</option>
-              <option value={"Большой"}>Большой</option>
+              {Object.keys(repairTime).map((el) => {
+                return <option value={el}>{t(`size.${el}`)}</option>;
+              })}
             </NativeSelect>
           </Grid>
 

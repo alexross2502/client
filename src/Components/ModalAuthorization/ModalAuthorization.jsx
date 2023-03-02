@@ -28,13 +28,9 @@ const ModalAuthorization = () => {
   const isActive = useSelector((state) => state.modalWindow.isActive);
   const [isAuthData, setAuthData] = useState("");
 
-  function onActiveClick() {
-    dispatch(setModalActive());
-  }
-
   async function authController(data) {
     let response = await authCheck(data);
-    if (response.availability == true) {
+    if (response.data.availability == true) {
       dispatch(setAuthorized());
       navigate("/reservation");
     } else {
