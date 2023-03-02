@@ -31,6 +31,7 @@ import DeleteModal from "../DeleteModal";
 import { setModalDelete } from "../../../redux/deleteReducer";
 import { Watch } from "react-loader-spinner";
 import RemoveAndAddModal from "../../RemoveAndAddModal";
+import RemoveAndAddModalError from "../../RemoveAndAddModalError";
 
 const TownsPage = () => {
   const { t } = useTranslation();
@@ -44,7 +45,7 @@ const TownsPage = () => {
   useEffect(() => {
     let asyncFunc = async () => {
       let towns = await Api.getAll("towns");
-      setTownsList(towns);
+      setTownsList(towns.data);
     };
     asyncFunc();
   }, [rerender]);
@@ -143,6 +144,7 @@ const TownsPage = () => {
         </TableContainer>
       </Box>
       <RemoveAndAddModal />
+      <RemoveAndAddModalError />
     </>
   );
 };

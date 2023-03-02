@@ -18,6 +18,7 @@ import moment from "moment";
 import { dateToTimestamp, timestampToDate } from "../dateConverter";
 import repairTime from "../repairTime.json";
 import { setRemoveAndAddModal } from "../../../redux/RemoveAndAddModalReducer";
+import { setRemoveAndAddModalError } from "../../../redux/RemoveAndAddModalErrorReducer";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -54,12 +55,12 @@ const ReservationSave = () => {
 
   useEffect(() => {
     let asyncFunc = async () => {
-      let towns = [...(await Api.getAll("towns"))];
-      setTownsList(towns);
-      let clients = [...(await Api.getAll("clients"))];
-      setClientsList(clients);
-      let masters = [...(await Api.getAll("masters"))];
-      setMastersList(masters);
+      let towns = await Api.getAll("towns");
+      setTownsList(towns.data);
+      let clients = await Api.getAll("clients");
+      setClientsList(clients.data);
+      let masters = await Api.getAll("masters");
+      setMastersList(masters.data);
     };
     asyncFunc();
   }, [rerender]);
@@ -74,12 +75,18 @@ const ReservationSave = () => {
 
     await request({ url: `/reservation`, method: "post", data: data }).then(
       (res) => {
-        if (res.message == undefined) {
+        if (res.status == 200) {
           dispatch(setPageRerender());
           dispatch(setRemoveAndAddModal(true));
           dispatch(setModalAddReservations());
           setTimeout(() => {
             dispatch(setRemoveAndAddModal(false));
+          }, 1000);
+        } else {
+          dispatch(setRemoveAndAddModalError(true));
+          dispatch(setModalAddReservations());
+          setTimeout(() => {
+            dispatch(setRemoveAndAddModalError(false));
           }, 1000);
         }
       }

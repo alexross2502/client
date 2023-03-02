@@ -12,6 +12,7 @@ import { setModalAddClients } from "../../../redux/clientsReducer";
 import { setPageRerender } from "../../../redux/rerenderReducer";
 import axios from "axios";
 import { setRemoveAndAddModal } from "../../../redux/RemoveAndAddModalReducer";
+import { setRemoveAndAddModalError } from "../../../redux/RemoveAndAddModalErrorReducer";
 
 const ClientSave = () => {
   const dispatch = useDispatch();
@@ -33,12 +34,18 @@ const ClientSave = () => {
 
     await request({ url: `/clients`, method: "post", data: data }).then(
       (res) => {
-        if (res.message == undefined) {
+        if (res.status == 200) {
           dispatch(setPageRerender());
           dispatch(setRemoveAndAddModal(true));
           dispatch(setModalAddClients());
           setTimeout(() => {
             dispatch(setRemoveAndAddModal(false));
+          }, 1000);
+        } else {
+          dispatch(setRemoveAndAddModalError(true));
+          dispatch(setModalAddClients());
+          setTimeout(() => {
+            dispatch(setRemoveAndAddModalError(false));
           }, 1000);
         }
       }

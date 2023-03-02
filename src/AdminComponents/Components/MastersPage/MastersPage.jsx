@@ -31,6 +31,7 @@ import DeleteModal from "../DeleteModal";
 import { setModalDelete } from "../../../redux/deleteReducer";
 import { Watch } from "react-loader-spinner";
 import RemoveAndAddModal from "../../RemoveAndAddModal";
+import RemoveAndAddModalError from "../../RemoveAndAddModalError";
 
 const MastersPage = () => {
   const { t } = useTranslation();
@@ -47,9 +48,9 @@ const MastersPage = () => {
   useEffect(() => {
     let asyncFunc = async () => {
       let towns = await Api.getAll("towns");
-      setTownsList(towns);
+      setTownsList(towns.data);
       let masters = await Api.getAll("masters");
-      setMastersList(masters);
+      setMastersList(masters.data);
     };
     asyncFunc();
   }, [rerender]);
@@ -165,6 +166,7 @@ const MastersPage = () => {
         </TableContainer>
       </Box>
       <RemoveAndAddModal />
+      <RemoveAndAddModalError />
     </>
   );
 };

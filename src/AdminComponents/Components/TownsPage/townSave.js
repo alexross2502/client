@@ -14,6 +14,7 @@ import NativeSelect from "@mui/material/NativeSelect";
 import Api from "../api";
 import { setPageRerender } from "../../../redux/rerenderReducer";
 import { setRemoveAndAddModal } from "../../../redux/RemoveAndAddModalReducer";
+import { setRemoveAndAddModalError } from "../../../redux/RemoveAndAddModalErrorReducer";
 
 const TownSave = () => {
   const dispatch = useDispatch();
@@ -38,12 +39,18 @@ const TownSave = () => {
     let data = { ...atr };
 
     await request({ url: `/towns`, method: "post", data: data }).then((res) => {
-      if (res.message == undefined) {
+      if (res.status == 200) {
         dispatch(setPageRerender());
         dispatch(setRemoveAndAddModal(true));
         dispatch(setModalAddTowns());
         setTimeout(() => {
           dispatch(setRemoveAndAddModal(false));
+        }, 1000);
+      } else {
+        dispatch(setRemoveAndAddModalError(true));
+        dispatch(setModalAddTowns());
+        setTimeout(() => {
+          dispatch(setRemoveAndAddModalError(false));
         }, 1000);
       }
     });
