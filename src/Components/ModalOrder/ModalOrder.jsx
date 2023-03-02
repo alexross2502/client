@@ -59,13 +59,10 @@ const ModalOrder = () => {
   }, [isActive]);
 
   function submitFunction(atr) {
-    let data = {};
-    data.town = atr.town;
-    data.start = dateToTimestamp(atr.day, atr.hours.split(":")[0]);
-    data.end =
-      dateToTimestamp(atr.day, atr.hours.split(":")[0]) +
-      repairTime[atr.size] * 3600000;
+    let data = { ...atr };
 
+    data.day = dateToTimestamp(atr.day, atr.hours.split(":")[0]);
+    ////Это пока не работает
     console.log(data);
   }
 

@@ -68,9 +68,6 @@ const ReservationSave = () => {
   ////Сохранение нового резерва
   async function reservationSave(atr) {
     atr.day = dateToTimestamp(atr.day, atr.hours.split(":")[0]);
-    atr.hours = `${atr.hours.split(":")[0]}:00-${
-      +atr.hours.split(":")[0] + repairTime[atr.size]
-    }:00`;
     let data = { ...atr };
 
     await request({ url: `/reservation`, method: "post", data: data }).then(
@@ -226,9 +223,7 @@ const ReservationSave = () => {
               })}
             >
               {Object.keys(repairTime).map((el) => {
-                return (
-                  <option value={t(`size.${el}`)}>{t(`size.${el}`)}</option>
-                );
+                return <option value={el}>{t(`size.${el}`)}</option>;
               })}
             </NativeSelect>
           </Grid>
