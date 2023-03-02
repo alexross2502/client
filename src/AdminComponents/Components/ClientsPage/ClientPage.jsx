@@ -45,7 +45,7 @@ const ClientPage = () => {
 
   useEffect(() => {
     let asyncFunc = async () => {
-      let clients = [...(await Api.getAll("clients"))];
+      let clients = await Api.getAll("clients");
       setClientsList(clients);
     };
     asyncFunc();

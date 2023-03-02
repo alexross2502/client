@@ -176,7 +176,7 @@ const ReservationSave = () => {
               label="Дата"
               type="date"
               required={true}
-              minDate={new Date()}
+              defaultValue={new Date()}
               className={classes.textField}
               InputLabelProps={{
                 shrink: true,

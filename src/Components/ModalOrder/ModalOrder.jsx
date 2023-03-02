@@ -16,6 +16,8 @@ import { makeStyles } from "@material-ui/core/styles";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import NativeSelect from "@mui/material/NativeSelect";
+import { dateToTimestamp } from "../../AdminComponents/Components/dateConverter";
+import repairTime from "../../AdminComponents/Components/repairTime.json";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -46,11 +48,6 @@ const ModalOrder = () => {
 
   //Открытие\закрытие модального окна
   const isActive = useSelector((state) => state.order.isActive);
-  const [selectedDate, setSelectedDate] = useState(null);
-  const [selectedTime, setSelectedTime] = useState(null);
-  function onActiveClick() {
-    dispatch(setModalOrder());
-  }
 
   const [townsList, setTownsList] = useState([]);
   useEffect(() => {
@@ -61,10 +58,15 @@ const ModalOrder = () => {
     asyncFunc();
   }, [isActive]);
 
-  function submitFunction() {
-    console.log(
-      "Доделываю логику поиска свободных мастеров после рефакторинга базы"
-    );
+  function submitFunction(atr) {
+    let data = {};
+    data.town = atr.town;
+    data.start = dateToTimestamp(atr.day, atr.hours.split(":")[0]);
+    data.end =
+      dateToTimestamp(atr.day, atr.hours.split(":")[0]) +
+      repairTime[atr.size] * 3600000;
+
+    console.log(data);
   }
 
   return (
@@ -167,6 +169,9 @@ const ModalOrder = () => {
                 id: "size",
               }}
               style={{ width: 200 }}
+              {...register("size", {
+                required: `${t("adminPopup.emptyField")}`,
+              })}
             >
               <option value={"Маленький"}>Маленький</option>
               <option value={"Средний"}>Средний</option>
@@ -175,20 +180,23 @@ const ModalOrder = () => {
           </Grid>
 
           <TextField
-            id="date"
+            id="day"
             label="Дата"
             type="date"
-            defaultValue="2017-05-24"
+            required={true}
+            defaultValue={new Date()}
             className={classes.textField}
             InputLabelProps={{
               shrink: true,
             }}
-            margin="5px"
+            {...register("day", {
+              required: `${t("adminPopup.emptyField")}`,
+            })}
           />
           <TextField
-            id="time"
+            id="hours"
             label="Время"
-            type="time"
+            type="hours"
             defaultValue="09:00"
             className={classes.textField}
             InputLabelProps={{
@@ -197,6 +205,9 @@ const ModalOrder = () => {
             inputProps={{
               step: 3600,
             }}
+            {...register("hours", {
+              required: `${t("adminPopup.emptyField")}`,
+            })}
           />
 
           <Button

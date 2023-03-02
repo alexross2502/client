@@ -88,7 +88,11 @@ const ModalAuthorization = () => {
               />
             </Grid>
           </Grid>
-
+          {
+            <Typography color={"red"}>
+              {errors?.email && errors?.email.message}
+            </Typography>
+          }
           <TextField
             margin="normal"
             type={"email"}
@@ -105,7 +109,11 @@ const ModalAuthorization = () => {
               },
             })}
           />
-
+          {
+            <Typography color={"red"}>
+              {errors?.password && errors?.password.message}
+            </Typography>
+          }
           <Box>
             <TextField
               margin="normal"
