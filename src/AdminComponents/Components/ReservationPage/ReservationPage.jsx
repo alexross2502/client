@@ -53,13 +53,13 @@ const ReservationPage = () => {
   useEffect(() => {
     let asyncFunc = async () => {
       let clients = await Api.getAll("clients");
-      setClientsList(clients.data);
+      setClientsList(clients);
       let masters = await Api.getAll("masters");
-      setMastersList(masters.data);
+      setMastersList(masters);
       let towns = await Api.getAll("towns");
-      setTownsList(towns.data);
+      setTownsList(towns);
       let reservation = await Api.getAll("reservation");
-      setReservationList(reservation.data);
+      setReservationList(reservation);
     };
     asyncFunc();
   }, [rerender]);

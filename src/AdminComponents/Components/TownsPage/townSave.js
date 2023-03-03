@@ -39,18 +39,18 @@ const TownSave = () => {
     let data = { ...atr };
 
     await request({ url: `/towns`, method: "post", data: data }).then((res) => {
-      if (res.status == 200) {
+      if (res.response?.status) {
+        dispatch(setRemoveAndAddModalError(true));
+        dispatch(setModalAddTowns());
+        setTimeout(() => {
+          dispatch(setRemoveAndAddModalError(false));
+        }, 1000);
+      } else {
         dispatch(setPageRerender());
         dispatch(setRemoveAndAddModal(true));
         dispatch(setModalAddTowns());
         setTimeout(() => {
           dispatch(setRemoveAndAddModal(false));
-        }, 1000);
-      } else {
-        dispatch(setRemoveAndAddModalError(true));
-        dispatch(setModalAddTowns());
-        setTimeout(() => {
-          dispatch(setRemoveAndAddModalError(false));
         }, 1000);
       }
     });

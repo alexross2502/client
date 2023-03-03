@@ -48,9 +48,9 @@ const MastersPage = () => {
   useEffect(() => {
     let asyncFunc = async () => {
       let towns = await Api.getAll("towns");
-      setTownsList(towns.data);
+      setTownsList(towns);
       let masters = await Api.getAll("masters");
-      setMastersList(masters.data);
+      setMastersList(masters);
     };
     asyncFunc();
   }, [rerender]);

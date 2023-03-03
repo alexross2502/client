@@ -34,18 +34,18 @@ const ClientSave = () => {
 
     await request({ url: `/clients`, method: "post", data: data }).then(
       (res) => {
-        if (res.status == 200) {
+        if (res.response?.status) {
+          dispatch(setRemoveAndAddModalError(true));
+          dispatch(setModalAddClients());
+          setTimeout(() => {
+            dispatch(setRemoveAndAddModalError(false));
+          }, 1000);
+        } else {
           dispatch(setPageRerender());
           dispatch(setRemoveAndAddModal(true));
           dispatch(setModalAddClients());
           setTimeout(() => {
             dispatch(setRemoveAndAddModal(false));
-          }, 1000);
-        } else {
-          dispatch(setRemoveAndAddModalError(true));
-          dispatch(setModalAddClients());
-          setTimeout(() => {
-            dispatch(setRemoveAndAddModalError(false));
           }, 1000);
         }
       }

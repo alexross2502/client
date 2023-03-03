@@ -7,13 +7,8 @@ const client = axios.create({
 console.log(process.env);
 export const request = ({ ...option }) => {
   client.defaults.headers.common.Authorization = getToken();
-  const onSuccess = (responce) => {
-    if (responce.status == 200) {
-      return { data: responce.data, status: responce.status };
-    } else {
-      return responce.status;
-    }
-  };
+  const onSuccess = (responce) => responce.data;
+
   const onError = (error) => {
     if (error.response.status == 401) {
       document.location.href = "/";

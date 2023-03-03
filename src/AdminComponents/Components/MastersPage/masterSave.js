@@ -34,7 +34,7 @@ const MasterSave = () => {
   useEffect(() => {
     let asyncFunc = async () => {
       let towns = await Api.getAll("towns");
-      setTownsList(towns.data);
+      setTownsList(towns);
     };
     asyncFunc();
   }, [rerender]);
@@ -45,19 +45,18 @@ const MasterSave = () => {
 
     await request({ url: `/masters`, method: "post", data: data }).then(
       (res) => {
-        console.log(res);
-        if (res.status == 200) {
+        if (res.response?.status) {
+          dispatch(setRemoveAndAddModalError(true));
+          dispatch(setModalAddMasters());
+          setTimeout(() => {
+            dispatch(setRemoveAndAddModalError(false));
+          }, 1000);
+        } else {
           dispatch(setModalAddMasters());
           dispatch(setPageRerender());
           dispatch(setRemoveAndAddModal(true));
           setTimeout(() => {
             dispatch(setRemoveAndAddModal(false));
-          }, 1000);
-        } else {
-          dispatch(setRemoveAndAddModalError(true));
-          dispatch(setModalAddMasters());
-          setTimeout(() => {
-            dispatch(setRemoveAndAddModalError(false));
           }, 1000);
         }
       }

@@ -53,7 +53,7 @@ const ModalOrder = () => {
   useEffect(() => {
     let asyncFunc = async () => {
       let towns = await Api.getAll("towns");
-      setTownsList(towns.data);
+      setTownsList(towns);
     };
     asyncFunc();
   }, [isActive]);
