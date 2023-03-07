@@ -7,10 +7,10 @@ const client = axios.create({
 console.log(process.env);
 export const request = ({ ...option }) => {
   client.defaults.headers.common.Authorization = getToken();
+
   const onSuccess = (responce) => responce.data;
 
   const onError = (error) => {
-    console.log(error);
     if (error.response.status == 401) {
       document.location.href = "/";
       sessionStorage.removeItem("token");
@@ -22,7 +22,7 @@ export const request = ({ ...option }) => {
         return error.config;
       }
     }
-    return error.response.request.status;
+    return error.response.request;
   };
 
   return client(option).then(onSuccess).catch(onError);

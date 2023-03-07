@@ -72,12 +72,13 @@ const ReservationSave = () => {
 
     await request({ url: `/reservation`, method: "post", data: data }).then(
       (res) => {
-        if (res.response?.status) {
+        if (res?.status) {
           dispatch(setRemoveAndAddModalError(true));
           dispatch(setModalAddReservations());
           setTimeout(() => {
             dispatch(setRemoveAndAddModalError(false));
           }, 1000);
+          console.log(res.status, res.statusText);
         } else {
           dispatch(setPageRerender());
           dispatch(setRemoveAndAddModal(true));

@@ -45,12 +45,13 @@ const MasterSave = () => {
 
     await request({ url: `/masters`, method: "post", data: data }).then(
       (res) => {
-        if (res.response?.status) {
+        if (res?.status) {
           dispatch(setRemoveAndAddModalError(true));
           dispatch(setModalAddMasters());
           setTimeout(() => {
             dispatch(setRemoveAndAddModalError(false));
           }, 1000);
+          console.log(res.status, res.statusText);
         } else {
           dispatch(setModalAddMasters());
           dispatch(setPageRerender());

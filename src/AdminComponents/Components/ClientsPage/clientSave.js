@@ -34,13 +34,13 @@ const ClientSave = () => {
 
     await request({ url: `/clients`, method: "post", data: data }).then(
       (res) => {
-        console.log(res);
-        if (res.response?.status) {
+        if (res?.status) {
           dispatch(setRemoveAndAddModalError(true));
           dispatch(setModalAddClients());
           setTimeout(() => {
             dispatch(setRemoveAndAddModalError(false));
           }, 1000);
+          console.log(res.status, res.statusText);
         } else {
           dispatch(setPageRerender());
           dispatch(setRemoveAndAddModal(true));
