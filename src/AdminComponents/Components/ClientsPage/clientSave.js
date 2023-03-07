@@ -34,6 +34,7 @@ const ClientSave = () => {
 
     await request({ url: `/clients`, method: "post", data: data }).then(
       (res) => {
+        console.log(res);
         if (res.response?.status) {
           dispatch(setRemoveAndAddModalError(true));
           dispatch(setModalAddClients());

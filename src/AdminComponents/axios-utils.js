@@ -10,6 +10,7 @@ export const request = ({ ...option }) => {
   const onSuccess = (responce) => responce.data;
 
   const onError = (error) => {
+    console.log(error);
     if (error.response.status == 401) {
       document.location.href = "/";
       sessionStorage.removeItem("token");
@@ -21,7 +22,7 @@ export const request = ({ ...option }) => {
         return error.config;
       }
     }
-    return error;
+    return error.response.request.status;
   };
 
   return client(option).then(onSuccess).catch(onError);
