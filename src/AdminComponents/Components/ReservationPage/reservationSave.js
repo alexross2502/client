@@ -56,11 +56,11 @@ const ReservationSave = () => {
   useEffect(() => {
     let asyncFunc = async () => {
       let towns = await Api.getAll("towns");
-      setTownsList(towns.data);
+      setTownsList(towns);
       let clients = await Api.getAll("clients");
-      setClientsList(clients.data);
+      setClientsList(clients);
       let masters = await Api.getAll("masters");
-      setMastersList(masters.data);
+      setMastersList(masters);
     };
     asyncFunc();
   }, [rerender]);
@@ -72,18 +72,18 @@ const ReservationSave = () => {
 
     await request({ url: `/reservation`, method: "post", data: data }).then(
       (res) => {
-        if (res.status == 200) {
+        if (res.response?.status) {
+          dispatch(setRemoveAndAddModalError(true));
+          dispatch(setModalAddReservations());
+          setTimeout(() => {
+            dispatch(setRemoveAndAddModalError(false));
+          }, 1000);
+        } else {
           dispatch(setPageRerender());
           dispatch(setRemoveAndAddModal(true));
           dispatch(setModalAddReservations());
           setTimeout(() => {
             dispatch(setRemoveAndAddModal(false));
-          }, 1000);
-        } else {
-          dispatch(setRemoveAndAddModalError(true));
-          dispatch(setModalAddReservations());
-          setTimeout(() => {
-            dispatch(setRemoveAndAddModalError(false));
           }, 1000);
         }
       }

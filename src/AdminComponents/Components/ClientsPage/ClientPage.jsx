@@ -48,7 +48,7 @@ const ClientPage = () => {
   useEffect(() => {
     let asyncFunc = async () => {
       let clients = await request({ url: `/clients`, method: "get" });
-      setClientsList(clients.data);
+      setClientsList(clients);
     };
     asyncFunc();
   }, [rerender]);
