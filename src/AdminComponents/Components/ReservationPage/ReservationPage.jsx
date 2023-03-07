@@ -36,6 +36,7 @@ import { setModalDelete } from "../../../redux/deleteReducer";
 import { Watch } from "react-loader-spinner";
 import RemoveAndAddModal from "../../RemoveAndAddModal";
 import { timestampToDate } from "../dateConverter";
+import RemoveAndAddModalError from "../../RemoveAndAddModalError";
 
 const ReservationPage = () => {
   const { t } = useTranslation();
@@ -51,13 +52,13 @@ const ReservationPage = () => {
 
   useEffect(() => {
     let asyncFunc = async () => {
-      let clients = [...(await Api.getAll("clients"))];
+      let clients = await Api.getAll("clients");
       setClientsList(clients);
-      let masters = [...(await Api.getAll("masters"))];
+      let masters = await Api.getAll("masters");
       setMastersList(masters);
-      let towns = [...(await Api.getAll("towns"))];
+      let towns = await Api.getAll("towns");
       setTownsList(towns);
-      let reservation = [...(await Api.getAll("reservation"))];
+      let reservation = await Api.getAll("reservation");
       setReservationList(reservation);
     };
     asyncFunc();
@@ -184,6 +185,7 @@ const ReservationPage = () => {
         </TableContainer>
       </Box>
       <RemoveAndAddModal />
+      <RemoveAndAddModalError />
     </>
   );
 };

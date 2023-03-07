@@ -28,10 +28,6 @@ const ModalAuthorization = () => {
   const isActive = useSelector((state) => state.modalWindow.isActive);
   const [isAuthData, setAuthData] = useState("");
 
-  function onActiveClick() {
-    dispatch(setModalActive());
-  }
-
   async function authController(data) {
     let response = await authCheck(data);
     if (response.availability == true) {
@@ -88,7 +84,11 @@ const ModalAuthorization = () => {
               />
             </Grid>
           </Grid>
-
+          {
+            <Typography color={"red"}>
+              {errors?.email && errors?.email.message}
+            </Typography>
+          }
           <TextField
             margin="normal"
             type={"email"}
@@ -105,7 +105,11 @@ const ModalAuthorization = () => {
               },
             })}
           />
-
+          {
+            <Typography color={"red"}>
+              {errors?.password && errors?.password.message}
+            </Typography>
+          }
           <Box>
             <TextField
               margin="normal"
