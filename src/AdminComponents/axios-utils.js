@@ -8,7 +8,13 @@ console.log(process.env);
 export const request = ({ ...option }) => {
   client.defaults.headers.common.Authorization = getToken();
 
-  const onSuccess = (responce) => responce.data;
+  const onSuccess = (responce) => {
+    if (responce.status == 200) {
+      return responce.data;
+    } else {
+      throw new Error();
+    }
+  };
 
   const onError = (error) => {
     if (error.response.status == 401) {
