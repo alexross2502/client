@@ -36,6 +36,7 @@ import { setModalDelete } from "../../../redux/deleteReducer";
 import { Watch } from "react-loader-spinner";
 import RemoveAndAddModal from "../../RemoveAndAddModal";
 import { timestampToDate } from "../dateConverter";
+import RemoveAndAddModalError from "../../RemoveAndAddModalError";
 
 const ReservationPage = () => {
   const { t } = useTranslation();
@@ -184,6 +185,7 @@ const ReservationPage = () => {
         </TableContainer>
       </Box>
       <RemoveAndAddModal />
+      <RemoveAndAddModalError />
     </>
   );
 };

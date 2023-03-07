@@ -52,20 +52,17 @@ const ModalOrder = () => {
   const [townsList, setTownsList] = useState([]);
   useEffect(() => {
     let asyncFunc = async () => {
-      let towns = [...(await Api.getAll("towns"))];
+      let towns = await Api.getAll("towns");
       setTownsList(towns);
     };
     asyncFunc();
   }, [isActive]);
 
   function submitFunction(atr) {
-    let data = {};
-    data.town = atr.town;
-    data.start = dateToTimestamp(atr.day, atr.hours.split(":")[0]);
-    data.end =
-      dateToTimestamp(atr.day, atr.hours.split(":")[0]) +
-      repairTime[atr.size] * 3600000;
+    let data = { ...atr };
 
+    data.day = dateToTimestamp(atr.day, atr.hours.split(":")[0]);
+    ////Это пока не работает
     console.log(data);
   }
 
@@ -173,9 +170,9 @@ const ModalOrder = () => {
                 required: `${t("adminPopup.emptyField")}`,
               })}
             >
-              <option value={"Маленький"}>Маленький</option>
-              <option value={"Средний"}>Средний</option>
-              <option value={"Большой"}>Большой</option>
+              {Object.keys(repairTime).map((el) => {
+                return <option value={el}>{t(`size.${el}`)}</option>;
+              })}
             </NativeSelect>
           </Grid>
 

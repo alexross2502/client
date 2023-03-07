@@ -13,6 +13,7 @@ import NativeSelect from "@mui/material/NativeSelect";
 import Api from "../api";
 import { setPageRerender } from "../../../redux/rerenderReducer";
 import { setRemoveAndAddModal } from "../../../redux/RemoveAndAddModalReducer";
+import { setRemoveAndAddModalError } from "../../../redux/RemoveAndAddModalErrorReducer";
 
 const MasterSave = () => {
   const dispatch = useDispatch();
@@ -32,7 +33,7 @@ const MasterSave = () => {
 
   useEffect(() => {
     let asyncFunc = async () => {
-      let towns = [...(await Api.getAll("towns"))];
+      let towns = await Api.getAll("towns");
       setTownsList(towns);
     };
     asyncFunc();
@@ -44,7 +45,13 @@ const MasterSave = () => {
 
     await request({ url: `/masters`, method: "post", data: data }).then(
       (res) => {
-        if (res.message == undefined) {
+        if (res.response?.status) {
+          dispatch(setRemoveAndAddModalError(true));
+          dispatch(setModalAddMasters());
+          setTimeout(() => {
+            dispatch(setRemoveAndAddModalError(false));
+          }, 1000);
+        } else {
           dispatch(setModalAddMasters());
           dispatch(setPageRerender());
           dispatch(setRemoveAndAddModal(true));

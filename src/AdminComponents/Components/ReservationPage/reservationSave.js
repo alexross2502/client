@@ -18,6 +18,7 @@ import moment from "moment";
 import { dateToTimestamp, timestampToDate } from "../dateConverter";
 import repairTime from "../repairTime.json";
 import { setRemoveAndAddModal } from "../../../redux/RemoveAndAddModalReducer";
+import { setRemoveAndAddModalError } from "../../../redux/RemoveAndAddModalErrorReducer";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -54,11 +55,11 @@ const ReservationSave = () => {
 
   useEffect(() => {
     let asyncFunc = async () => {
-      let towns = [...(await Api.getAll("towns"))];
+      let towns = await Api.getAll("towns");
       setTownsList(towns);
-      let clients = [...(await Api.getAll("clients"))];
+      let clients = await Api.getAll("clients");
       setClientsList(clients);
-      let masters = [...(await Api.getAll("masters"))];
+      let masters = await Api.getAll("masters");
       setMastersList(masters);
     };
     asyncFunc();
@@ -67,14 +68,17 @@ const ReservationSave = () => {
   ////Сохранение нового резерва
   async function reservationSave(atr) {
     atr.day = dateToTimestamp(atr.day, atr.hours.split(":")[0]);
-    atr.hours = `${atr.hours.split(":")[0]}:00-${
-      +atr.hours.split(":")[0] + repairTime[atr.size]
-    }:00`;
     let data = { ...atr };
 
     await request({ url: `/reservation`, method: "post", data: data }).then(
       (res) => {
-        if (res.message == undefined) {
+        if (res.response?.status) {
+          dispatch(setRemoveAndAddModalError(true));
+          dispatch(setModalAddReservations());
+          setTimeout(() => {
+            dispatch(setRemoveAndAddModalError(false));
+          }, 1000);
+        } else {
           dispatch(setPageRerender());
           dispatch(setRemoveAndAddModal(true));
           dispatch(setModalAddReservations());
@@ -218,9 +222,9 @@ const ReservationSave = () => {
                 required: `${t("adminPopup.emptyField")}`,
               })}
             >
-              <option value={"Маленький"}>Маленький</option>
-              <option value={"Средний"}>Средний</option>
-              <option value={"Большой"}>Большой</option>
+              {Object.keys(repairTime).map((el) => {
+                return <option value={el}>{t(`size.${el}`)}</option>;
+              })}
             </NativeSelect>
           </Grid>
 

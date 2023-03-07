@@ -8,6 +8,7 @@ console.log(process.env);
 export const request = ({ ...option }) => {
   client.defaults.headers.common.Authorization = getToken();
   const onSuccess = (responce) => responce.data;
+
   const onError = (error) => {
     if (error.response.status == 401) {
       document.location.href = "/";
