@@ -30,7 +30,6 @@ const ModalAuthorization = () => {
 
   async function authController(data) {
     await authCheck(data).then((response) => {
-      alert(response.availability);
       if (response.availability == true) {
         dispatch(setAuthorized(true));
         navigate("/reservation");

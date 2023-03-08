@@ -4,7 +4,8 @@
     "portfolio": "Портфолио",
     "contacts": "Контакты",
     "about us": "О нас",
-    "login": "Войти"
+    "login": "Войти",
+    "authorized": "Вернуться"
   },
   "mainText": {
     "part1": "Со временем все будет хорошо,",
