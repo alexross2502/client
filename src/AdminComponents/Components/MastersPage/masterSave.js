@@ -1,4 +1,4 @@
-import { request } from "../../axios-utils";
+import { instance } from "../../axios-utils";
 import style from "../../../scale.module.css";
 import React, { useEffect, useState } from "react";
 import { Box, Button, Grid, TextField, Typography } from "@mui/material";
@@ -43,25 +43,22 @@ const MasterSave = () => {
   async function masterSave(atr) {
     let data = { ...atr };
 
-    await request({ url: `/masters`, method: "post", data: data }).then(
-      (res) => {
-        if (res?.status) {
-          dispatch(setRemoveAndAddModalError(true));
-          dispatch(setModalAddMasters());
-          setTimeout(() => {
-            dispatch(setRemoveAndAddModalError(false));
-          }, 1000);
-          console.log(res.status, res.statusText);
-        } else {
-          dispatch(setModalAddMasters());
-          dispatch(setPageRerender());
-          dispatch(setRemoveAndAddModal(true));
-          setTimeout(() => {
-            dispatch(setRemoveAndAddModal(false));
-          }, 1000);
-        }
-      }
-    );
+    await instance({ url: `/masters`, method: "post", data: data })
+      .then(() => {
+        dispatch(setModalAddMasters());
+        dispatch(setPageRerender());
+        dispatch(setRemoveAndAddModal(true));
+        setTimeout(() => {
+          dispatch(setRemoveAndAddModal(false));
+        }, 1000);
+      })
+      .catch(() => {
+        dispatch(setRemoveAndAddModalError(true));
+        dispatch(setModalAddMasters());
+        setTimeout(() => {
+          dispatch(setRemoveAndAddModalError(false));
+        }, 1000);
+      });
   }
   ///////////
 

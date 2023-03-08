@@ -1,17 +1,17 @@
-import { request } from "../axios-utils";
+import { instance } from "../axios-utils";
 
 const Api = {};
 
 Api.getAll = async function (url) {
-  return await request({ url: `/${url}` });
+  return await instance({ url: `/${url}` });
 };
 
 Api.delete = async function (url, id) {
-  return await request({ url: `/${url}/${id}`, method: "delete" });
+  return await instance({ url: `/${url}/${id}`, method: "delete" });
 };
 
 Api.getAvailable = async function (url, id) {
-  return await request({
+  return await instance({
     url: `/${url}/${id}`,
     method: "get",
   });

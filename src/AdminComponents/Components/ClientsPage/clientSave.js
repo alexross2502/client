@@ -1,4 +1,4 @@
-import { request } from "../../axios-utils";
+import { instance, request } from "../../axios-utils";
 import style from "../../../scale.module.css";
 import React from "react";
 import { Box, Button, Grid, TextField, Typography } from "@mui/material";
@@ -10,7 +10,6 @@ import { useState } from "react";
 import CloseIcon from "@mui/icons-material/Close";
 import { setModalAddClients } from "../../../redux/clientsReducer";
 import { setPageRerender } from "../../../redux/rerenderReducer";
-import axios from "axios";
 import { setRemoveAndAddModal } from "../../../redux/RemoveAndAddModalReducer";
 import { setRemoveAndAddModalError } from "../../../redux/RemoveAndAddModalErrorReducer";
 
@@ -32,27 +31,23 @@ const ClientSave = () => {
   async function clientSave(atr) {
     let data = { ...atr };
 
-    await request({ url: `/clients`, method: "post", data: data }).then(
-      (res) => {
-        if (res?.status) {
-          dispatch(setRemoveAndAddModalError(true));
-          dispatch(setModalAddClients());
-          setTimeout(() => {
-            dispatch(setRemoveAndAddModalError(false));
-          }, 1000);
-          console.log(res.status, res.statusText);
-        } else {
-          dispatch(setPageRerender());
-          dispatch(setRemoveAndAddModal(true));
-          dispatch(setModalAddClients());
-          setTimeout(() => {
-            dispatch(setRemoveAndAddModal(false));
-          }, 1000);
-        }
-      }
-    );
+    await instance({ url: `clients`, method: "post", data: data })
+      .then(() => {
+        dispatch(setPageRerender());
+        dispatch(setRemoveAndAddModal(true));
+        dispatch(setModalAddClients());
+        setTimeout(() => {
+          dispatch(setRemoveAndAddModal(false));
+        }, 1000);
+      })
+      .catch(() => {
+        dispatch(setRemoveAndAddModalError(true));
+        dispatch(setModalAddClients());
+        setTimeout(() => {
+          dispatch(setRemoveAndAddModalError(false));
+        }, 1000);
+      });
   }
-  ////////
 
   return (
     <div
