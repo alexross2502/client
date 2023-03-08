@@ -1,4 +1,4 @@
-import { request } from "../../axios-utils";
+import { instance } from "../../axios-utils";
 import style from "../../../scale.module.css";
 import React from "react";
 import { Box, Button, Grid, TextField, Typography } from "@mui/material";
@@ -38,23 +38,22 @@ const TownSave = () => {
   async function townSave(atr) {
     let data = { ...atr };
 
-    await request({ url: `/towns`, method: "post", data: data }).then((res) => {
-      if (res?.status) {
-        dispatch(setRemoveAndAddModalError(true));
-        dispatch(setModalAddTowns());
-        setTimeout(() => {
-          dispatch(setRemoveAndAddModalError(false));
-        }, 1000);
-        console.log(res.status, res.statusText);
-      } else {
+    await instance({ url: `/towns`, method: "post", data: data })
+      .then(() => {
         dispatch(setPageRerender());
         dispatch(setRemoveAndAddModal(true));
         dispatch(setModalAddTowns());
         setTimeout(() => {
           dispatch(setRemoveAndAddModal(false));
         }, 1000);
-      }
-    });
+      })
+      .catch(() => {
+        dispatch(setRemoveAndAddModalError(true));
+        dispatch(setModalAddTowns());
+        setTimeout(() => {
+          dispatch(setRemoveAndAddModalError(false));
+        }, 1000);
+      });
   }
   /////////
 
