@@ -35,6 +35,7 @@ import RemoveAndAddModal from "../../RemoveAndAddModal";
 import { timestampToDate } from "../dateConverter";
 import RemoveAndAddModalError from "../../RemoveAndAddModalError";
 import CopyIcon from "../CopyIcon";
+import repairTime from "../repairTime.json";
 
 const ReservationPage = () => {
   const { t } = useTranslation();
@@ -76,6 +77,14 @@ const ReservationPage = () => {
     IdToName[el.id] = el?.name;
   });
   ////////////////////////////////////////
+  ///////Опции отображения даты
+  var options = {
+    year: "numeric",
+    month: "numeric",
+    day: "numeric",
+    timezone: "UTC",
+  };
+  //////////////////
 
   return (
     <>
@@ -141,10 +150,12 @@ const ReservationPage = () => {
                       <CopyIcon data={row.id} />
                     </TableCell>
                     <TableCell align="left">
-                      {timestampToDate(row.day)}
+                      {new Date(row.day).toLocaleString("ru", options)}
                     </TableCell>
                     <TableCell align="left">{row.size}</TableCell>
-                    <TableCell align="left">{row.hours}</TableCell>
+                    <TableCell align="left">{`${new Date(row.day).getHours()}-${
+                      new Date(row.day).getHours() + repairTime[row.size]
+                    }`}</TableCell>
                     <TableCell align="left">
                       {IdToName[row.master_id]}
                     </TableCell>

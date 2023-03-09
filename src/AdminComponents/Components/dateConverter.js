@@ -1,6 +1,6 @@
 export function timestampToDate(timestamp) {
   var d = new Date(timestamp);
-  console.log(d);
+
   //console.log(d.getHours());
   return (
     ("0" + d.getDate()).slice(-2) +
