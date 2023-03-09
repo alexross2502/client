@@ -24,15 +24,13 @@ import { setModalAddClients } from "../../../redux/clientsReducer";
 import { DataGrid } from "@mui/x-data-grid";
 import TableContainer from "@mui/material/TableContainer";
 import Paper from "@mui/material/Paper";
-import ContentCopyIcon from "@mui/icons-material/ContentCopy";
-import { useClipboard } from "use-clipboard-copy";
-import DoneIcon from "@mui/icons-material/Done";
 import DeleteModal from "../DeleteModal";
 import { setModalDelete } from "../../../redux/deleteReducer";
 import { Watch } from "react-loader-spinner";
 import RemoveAndAddModal from "../../RemoveAndAddModal";
 import { instance } from "../../axios-utils";
 import RemoveAndAddModalError from "../../RemoveAndAddModalError";
+import CopyIcon from "../CopyIcon";
 
 const ClientPage = () => {
   const isActive = useSelector((state) => state.addClient.isActive);
@@ -41,8 +39,6 @@ const ClientPage = () => {
   const dispatch = useDispatch();
   const rerender = useSelector((state) => state.rerender.isRerender);
   const [clientsList, setClientsList] = useState();
-  const clipboard = useClipboard();
-  const [copyDone, setCopyDone] = useState(false);
   const [itemForRemove, setItemForRemove] = useState([]);
 
   useEffect(() => {
@@ -115,19 +111,7 @@ const ClientPage = () => {
                       >
                         {row.id.slice(0, 15) + "..."}
                       </Typography>
-                      {!copyDone ? (
-                        <ContentCopyIcon
-                          onClick={() => {
-                            clipboard.copy(row.id);
-                            setCopyDone(true);
-                            setTimeout(() => {
-                              setCopyDone(false);
-                            }, 1500);
-                          }}
-                        ></ContentCopyIcon>
-                      ) : (
-                        <DoneIcon />
-                      )}
+                      <CopyIcon data={row.id} />
                     </TableCell>
 
                     <TableCell align="left">{row.name}</TableCell>

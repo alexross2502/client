@@ -24,14 +24,12 @@ import { setModalAddMasters } from "../../../redux/mastersReducer";
 import { DataGrid } from "@mui/x-data-grid";
 import TableContainer from "@mui/material/TableContainer";
 import Paper from "@mui/material/Paper";
-import ContentCopyIcon from "@mui/icons-material/ContentCopy";
-import { useClipboard } from "use-clipboard-copy";
-import DoneIcon from "@mui/icons-material/Done";
 import DeleteModal from "../DeleteModal";
 import { setModalDelete } from "../../../redux/deleteReducer";
 import { Watch } from "react-loader-spinner";
 import RemoveAndAddModal from "../../RemoveAndAddModal";
 import RemoveAndAddModalError from "../../RemoveAndAddModalError";
+import CopyIcon from "../CopyIcon";
 
 const MastersPage = () => {
   const { t } = useTranslation();
@@ -39,8 +37,6 @@ const MastersPage = () => {
   const rerender = useSelector((state) => state.rerender.isRerender);
   const [mastersList, setMastersList] = useState();
   const [townsList, setTownsList] = useState([]);
-  const clipboard = useClipboard();
-  const [copyDone, setCopyDone] = useState(false);
   const [itemForRemove, setItemForRemove] = useState([]);
 
   const isActive = useSelector((state) => state.addMaster.isActive);
@@ -125,19 +121,7 @@ const MastersPage = () => {
                       >
                         {row.id.slice(0, 15) + "..."}
                       </Typography>
-                      {!copyDone ? (
-                        <ContentCopyIcon
-                          onClick={() => {
-                            clipboard.copy(row.id);
-                            setCopyDone(true);
-                            setTimeout(() => {
-                              setCopyDone(false);
-                            }, 1500);
-                          }}
-                        ></ContentCopyIcon>
-                      ) : (
-                        <DoneIcon />
-                      )}
+                      <CopyIcon data={row.id} />
                     </TableCell>
                     <TableCell align="left">
                       {row.name} {row.surname}
