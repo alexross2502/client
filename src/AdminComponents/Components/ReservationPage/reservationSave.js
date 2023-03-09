@@ -1,4 +1,3 @@
-import { request } from "../../axios-utils";
 import style from "../../../scale.module.css";
 import React, { useEffect, useState } from "react";
 import { Box, Button, Grid, TextField, Typography } from "@mui/material";
@@ -14,11 +13,11 @@ import Api from "../api";
 import { setPageRerender } from "../../../redux/rerenderReducer";
 import { makeStyles } from "@material-ui/core/styles";
 import MenuItem from "@mui/material/MenuItem";
-import moment from "moment";
 import { dateToTimestamp, timestampToDate } from "../dateConverter";
 import repairTime from "../repairTime.json";
 import { setRemoveAndAddModal } from "../../../redux/RemoveAndAddModalReducer";
 import { setRemoveAndAddModalError } from "../../../redux/RemoveAndAddModalErrorReducer";
+import { instance } from "../../axios-utils";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -70,14 +69,15 @@ const ReservationSave = () => {
     atr.day = dateToTimestamp(atr.day, atr.hours.split(":")[0]);
     let data = { ...atr };
 
-    await request({ url: `/reservation`, method: "post", data: data }).then(
-      (res) => {
-        if (res.response?.status) {
+    await instance({ url: `/reservation`, method: "post", data: data }).then(
+      /*(res) => {
+        if (res?.status) {
           dispatch(setRemoveAndAddModalError(true));
           dispatch(setModalAddReservations());
           setTimeout(() => {
             dispatch(setRemoveAndAddModalError(false));
           }, 1000);
+          console.log(res.status, res.statusText);
         } else {
           dispatch(setPageRerender());
           dispatch(setRemoveAndAddModal(true));
@@ -86,7 +86,8 @@ const ReservationSave = () => {
             dispatch(setRemoveAndAddModal(false));
           }, 1000);
         }
-      }
+      }*/
+      console.log("11")
     );
   }
   //////////////

@@ -31,7 +31,7 @@ import DeleteModal from "../DeleteModal";
 import { setModalDelete } from "../../../redux/deleteReducer";
 import { Watch } from "react-loader-spinner";
 import RemoveAndAddModal from "../../RemoveAndAddModal";
-import { request } from "../../axios-utils";
+import { instance } from "../../axios-utils";
 import RemoveAndAddModalError from "../../RemoveAndAddModalError";
 
 const ClientPage = () => {
@@ -47,7 +47,7 @@ const ClientPage = () => {
 
   useEffect(() => {
     let asyncFunc = async () => {
-      let clients = await request({ url: `/clients`, method: "get" });
+      let clients = await instance({ url: `/clients`, method: "GET" });
       setClientsList(clients);
     };
     asyncFunc();
