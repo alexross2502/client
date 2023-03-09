@@ -69,7 +69,8 @@ const ReservationSave = () => {
     atr.day = dateToTimestamp(atr.day, atr.hours.split(":")[0]);
     let data = { ...atr };
 
-    await instance({ url: `/reservation`, method: "post", data: data }).then(
+    await instance({ url: `/reservation`, method: "post", data: data })
+      .then
       /*(res) => {
         if (res?.status) {
           dispatch(setRemoveAndAddModalError(true));
@@ -87,8 +88,7 @@ const ReservationSave = () => {
           }, 1000);
         }
       }*/
-      console.log("11")
-    );
+      ();
   }
   //////////////
 
