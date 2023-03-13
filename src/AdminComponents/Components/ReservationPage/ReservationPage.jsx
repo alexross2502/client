@@ -28,15 +28,13 @@ import { setModalAddReservations } from "../../../redux/reservationsReducer";
 import { DataGrid } from "@mui/x-data-grid";
 import TableContainer from "@mui/material/TableContainer";
 import Paper from "@mui/material/Paper";
-import ContentCopyIcon from "@mui/icons-material/ContentCopy";
-import { useClipboard } from "use-clipboard-copy";
-import DoneIcon from "@mui/icons-material/Done";
 import DeleteModal from "../DeleteModal";
 import { setModalDelete } from "../../../redux/deleteReducer";
 import { Watch } from "react-loader-spinner";
 import RemoveAndAddModal from "../../RemoveAndAddModal";
 import { timestampToDate } from "../dateConverter";
 import RemoveAndAddModalError from "../../RemoveAndAddModalError";
+import CopyIcon from "../CopyIcon";
 
 const ReservationPage = () => {
   const { t } = useTranslation();
@@ -46,8 +44,6 @@ const ReservationPage = () => {
   const [mastersList, setMastersList] = useState([]);
   const [townsList, setTownsList] = useState([]);
   const [reservationList, setReservationList] = useState();
-  const clipboard = useClipboard();
-  const [copyDone, setCopyDone] = useState(false);
   const [itemForRemove, setItemForRemove] = useState([]);
 
   useEffect(() => {
@@ -142,19 +138,7 @@ const ReservationPage = () => {
                       >
                         {row.id.slice(0, 15) + "..."}
                       </Typography>
-                      {!copyDone ? (
-                        <ContentCopyIcon
-                          onClick={() => {
-                            clipboard.copy(row.id);
-                            setCopyDone(true);
-                            setTimeout(() => {
-                              setCopyDone(false);
-                            }, 1500);
-                          }}
-                        ></ContentCopyIcon>
-                      ) : (
-                        <DoneIcon />
-                      )}
+                      <CopyIcon data={row.id} />
                     </TableCell>
                     <TableCell align="left">
                       {timestampToDate(row.day)}
