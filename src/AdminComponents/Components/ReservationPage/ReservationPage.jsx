@@ -9,8 +9,6 @@ import { setPageRerender } from "../../../redux/rerenderReducer";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import ReservationSave, { reservationSave } from "./reservationSave";
-import setHours from "date-fns/setHours";
-import setMinutes from "date-fns/setMinutes";
 import { Box } from "@mui/system";
 import {
   Grid,
@@ -35,6 +33,7 @@ import RemoveAndAddModal from "../../RemoveAndAddModal";
 import { timestampToDate } from "../dateConverter";
 import RemoveAndAddModalError from "../../RemoveAndAddModalError";
 import CopyIcon from "../CopyIcon";
+import repairTime from "../repairTime.json";
 
 const ReservationPage = () => {
   const { t } = useTranslation();
@@ -55,6 +54,13 @@ const ReservationPage = () => {
       let towns = await Api.getAll("towns");
       setTownsList(towns);
       let reservation = await Api.getAll("reservation");
+      reservation.forEach((el) => {
+        el.end = `${new Date(el.day).getHours()}-${
+          new Date(el.day).getHours() + repairTime[el.size]
+        }`;
+        el.day = new Date(el.day).toLocaleString("ru", options);
+      });
+
       setReservationList(reservation);
     };
     asyncFunc();
@@ -76,6 +82,14 @@ const ReservationPage = () => {
     IdToName[el.id] = el?.name;
   });
   ////////////////////////////////////////
+  ///////Опции отображения даты
+  var options = {
+    year: "numeric",
+    month: "numeric",
+    day: "numeric",
+    timezone: "UTC",
+  };
+  //////////////////
 
   return (
     <>
@@ -140,11 +154,9 @@ const ReservationPage = () => {
                       </Typography>
                       <CopyIcon data={row.id} />
                     </TableCell>
-                    <TableCell align="left">
-                      {timestampToDate(row.day)}
-                    </TableCell>
+                    <TableCell align="left">{row.day}</TableCell>
                     <TableCell align="left">{row.size}</TableCell>
-                    <TableCell align="left">{row.hours}</TableCell>
+                    <TableCell align="left">{row.end}</TableCell>
                     <TableCell align="left">
                       {IdToName[row.master_id]}
                     </TableCell>
