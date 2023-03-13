@@ -20,7 +20,6 @@ import { setRemoveAndAddModalError } from "../../../redux/RemoveAndAddModalError
 import { instance } from "../../axios-utils";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
-import dayjs from "dayjs";
 import { format } from "date-fns";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 
@@ -73,27 +72,22 @@ const ReservationSave = () => {
   async function reservationSave(atr) {
     atr.day = value.getTime();
     let data = { ...atr };
-    console.log(data);
     await instance({ url: `/reservation`, method: "post", data: data })
-      .then
-      /*(res) => {
-        if (res?.status) {
-          dispatch(setRemoveAndAddModalError(true));
-          dispatch(setModalAddReservations());
-          setTimeout(() => {
-            dispatch(setRemoveAndAddModalError(false));
-          }, 1000);
-          console.log(res.status, res.statusText);
-        } else {
-          dispatch(setPageRerender());
-          dispatch(setRemoveAndAddModal(true));
-          dispatch(setModalAddReservations());
-          setTimeout(() => {
-            dispatch(setRemoveAndAddModal(false));
-          }, 1000);
-        }
-      }*/
-      ();
+      .then(() => {
+        dispatch(setPageRerender());
+        dispatch(setRemoveAndAddModal(true));
+        dispatch(setModalAddReservations());
+        setTimeout(() => {
+          dispatch(setRemoveAndAddModal(false));
+        }, 1000);
+      })
+      .catch(() => {
+        dispatch(setRemoveAndAddModalError(true));
+        dispatch(setModalAddReservations());
+        setTimeout(() => {
+          dispatch(setRemoveAndAddModalError(false));
+        }, 1000);
+      });
   }
 
   const [value, setValue] = React.useState(null);
@@ -135,23 +129,6 @@ const ReservationSave = () => {
             </Grid>
           </Grid>
 
-          <LocalizationProvider dateAdapter={AdapterDateFns}>
-            <DateTimePicker
-              views={["year", "month", "day", "hours"]}
-              name="DateTimePicker"
-              disablePast={true}
-              value={value}
-              onChange={(newValue) => {
-                setValue(newValue);
-              }}
-              inputFormat="dd-MM-yyyy"
-              ampm={false}
-              renderInput={(params) => (
-                <TextField {...params} helperText={null} />
-              )}
-            />
-          </LocalizationProvider>
-
           <Grid item marginTop={3}>
             <InputLabel variant="standard" htmlFor="towns_id">
               Город
@@ -174,6 +151,24 @@ const ReservationSave = () => {
                 );
               })}
             </NativeSelect>
+          </Grid>
+          <Grid item marginTop={3}>
+            <LocalizationProvider dateAdapter={AdapterDateFns}>
+              <DateTimePicker
+                views={["year", "month", "day", "hours"]}
+                name="DateTimePicker"
+                disablePast={true}
+                value={value}
+                onChange={(newValue) => {
+                  setValue(newValue);
+                }}
+                inputFormat="dd-MM-yyyy"
+                ampm={false}
+                renderInput={(params) => (
+                  <TextField {...params} helperText={null} />
+                )}
+              />
+            </LocalizationProvider>
           </Grid>
           <Grid item marginTop={3}>
             <InputLabel variant="standard" htmlFor="clientId">
