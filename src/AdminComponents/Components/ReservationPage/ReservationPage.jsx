@@ -96,7 +96,7 @@ const ReservationPage = () => {
                 <TableCell>Номер резерва</TableCell>
                 <TableCell align="left">День</TableCell>
                 <TableCell align="left">Размер</TableCell>
-                <TableCell align="left">Часы</TableCell>
+                <TableCell align="left">Время</TableCell>
                 <TableCell align="left">Мастер</TableCell>
                 <TableCell align="left">Город</TableCell>
                 <TableCell align="left">Клиент</TableCell>

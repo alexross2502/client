@@ -14,6 +14,7 @@ import Api from "./api";
 import { setPageRerender } from "../../redux/rerenderReducer";
 import { setModalDelete } from "../../redux/deleteReducer";
 import { setRemoveAndAddModal } from "../../redux/RemoveAndAddModalReducer";
+import { setRemoveAndAddModalError } from "../../redux/RemoveAndAddModalErrorReducer";
 
 const DeleteModal = (props) => {
   const dispatch = useDispatch();
@@ -67,7 +68,7 @@ const DeleteModal = (props) => {
           <Grid item sx={6} margin={"auto"}>
             <Button
               sx={{
-                background: "rgba(180,58,58,1)",
+                background: "#82c434",
                 marginTop: 3,
                 borderRadius: 3,
                 padding: 1,
@@ -78,16 +79,23 @@ const DeleteModal = (props) => {
               color="warning"
               onClick={() => {
                 let [id, url] = props.props;
-                Api.delete(url, id).then((res) => {
-                  if (res.message == undefined) {
+                Api.delete(url, id)
+                  .then((res) => {
                     dispatch(setPageRerender());
                     dispatch(setRemoveAndAddModal(true));
                     setTimeout(() => {
                       dispatch(setRemoveAndAddModal(false));
                     }, 1000);
-                  }
-                  dispatch(setModalDelete());
-                });
+
+                    dispatch(setModalDelete());
+                  })
+                  .catch(() => {
+                    dispatch(setRemoveAndAddModalError(true));
+                    setTimeout(() => {
+                      dispatch(setRemoveAndAddModalError(false));
+                    }, 1000);
+                    dispatch(setModalDelete());
+                  });
               }}
             >
               Да
@@ -96,7 +104,7 @@ const DeleteModal = (props) => {
           <Grid item sx={6} margin={"auto"}>
             <Button
               sx={{
-                background: "#82c434",
+                background: "rgba(180,58,58,1)",
                 marginTop: 3,
                 borderRadius: 3,
                 padding: 1,

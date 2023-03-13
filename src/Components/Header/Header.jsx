@@ -1,4 +1,4 @@
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setModalActive } from "../../redux/modalWindowReducer";
 import { useTranslation } from "react-i18next";
 import {
@@ -17,6 +17,9 @@ import { useState } from "react";
 import { Box } from "@mui/system";
 import { DrawerComp } from "./DrawerComp";
 import { setModalOrder } from "../../redux/orderReducer";
+import { useEffect } from "react";
+import { getToken } from "../../AdminComponents/token";
+import { useNavigate } from "react-router-dom";
 
 const Header = () => {
   const dispatch = useDispatch();
@@ -31,6 +34,7 @@ const Header = () => {
   const [value, setValue] = useState();
   const theme = useTheme();
   const isMatch = useMediaQuery(theme.breakpoints.down("md"));
+  const navigate = useNavigate();
 
   return (
     <AppBar
@@ -88,13 +92,23 @@ const Header = () => {
                 >
                   {t("order.header")}
                 </Button>
-                <Button
-                  sx={{ marginLeft: "auto", background: "rgba(180,58,58,1)" }}
-                  variant="contained"
-                  onClick={() => onClickLogin()}
-                >
-                  {t("header.login")}
-                </Button>
+                {getToken() !== null ? (
+                  <Button
+                    sx={{ marginLeft: "auto", background: "rgba(180,58,58,1)" }}
+                    variant="contained"
+                    onClick={() => navigate("/reservation")}
+                  >
+                    {t("header.authorized")}
+                  </Button>
+                ) : (
+                  <Button
+                    sx={{ marginLeft: "auto", background: "rgba(180,58,58,1)" }}
+                    variant="contained"
+                    onClick={() => onClickLogin()}
+                  >
+                    {t("header.login")}
+                  </Button>
+                )}
               </Box>
             </Grid>
           </Grid>

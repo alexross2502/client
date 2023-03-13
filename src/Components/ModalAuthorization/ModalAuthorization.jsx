@@ -29,16 +29,15 @@ const ModalAuthorization = () => {
   const [isAuthData, setAuthData] = useState("");
 
   async function authController(data) {
-    await authCheck(data).then((response) => {
-      alert(response.availability);
-      if (response.availability == true) {
+    await authCheck(data)
+      .then((response) => {
         dispatch(setAuthorized(true));
         navigate("/reservation");
-      } else {
+      })
+      .catch(() => {
         reset();
         setAuthData(`${t("adminPopup.vrongAuth")}`);
-      }
-    });
+      });
   }
   ///Глазик в пароле
   let [passwordType, setPasswordType] = useState("password");
