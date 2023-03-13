@@ -72,6 +72,15 @@ const ModalOrder = () => {
     console.log(data);
   }
 
+  ///////Опции отображения даты
+  var options = {
+    year: "numeric",
+    month: "numeric",
+    day: "numeric",
+    timezone: "UTC",
+  };
+  //////////////////
+
   return (
     <div
       onClick={(e) => e.stopPropagation()}
