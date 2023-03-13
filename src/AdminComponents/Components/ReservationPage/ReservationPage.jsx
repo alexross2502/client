@@ -54,6 +54,13 @@ const ReservationPage = () => {
       let towns = await Api.getAll("towns");
       setTownsList(towns);
       let reservation = await Api.getAll("reservation");
+      reservation.forEach((el) => {
+        el.end = `${new Date(el.day).getHours()}-${
+          new Date(el.day).getHours() + repairTime[el.size]
+        }`;
+        el.day = new Date(el.day).toLocaleString("ru", options);
+      });
+
       setReservationList(reservation);
     };
     asyncFunc();
@@ -147,13 +154,9 @@ const ReservationPage = () => {
                       </Typography>
                       <CopyIcon data={row.id} />
                     </TableCell>
-                    <TableCell align="left">
-                      {new Date(row.day).toLocaleString("ru", options)}
-                    </TableCell>
+                    <TableCell align="left">{row.day}</TableCell>
                     <TableCell align="left">{row.size}</TableCell>
-                    <TableCell align="left">{`${new Date(row.day).getHours()}-${
-                      new Date(row.day).getHours() + repairTime[row.size]
-                    }`}</TableCell>
+                    <TableCell align="left">{row.end}</TableCell>
                     <TableCell align="left">
                       {IdToName[row.master_id]}
                     </TableCell>
