@@ -18,6 +18,10 @@ import MenuItem from "@mui/material/MenuItem";
 import NativeSelect from "@mui/material/NativeSelect";
 import { dateToTimestamp } from "../../AdminComponents/Components/dateConverter";
 import repairTime from "../../AdminComponents/Components/repairTime.json";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
+import { format } from "date-fns";
+import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -58,6 +62,8 @@ const ModalOrder = () => {
     asyncFunc();
   }, [isActive]);
 
+  const [value, setValue] = React.useState(null);
+
   function submitFunction(atr) {
     let data = { ...atr };
 
@@ -65,6 +71,15 @@ const ModalOrder = () => {
     ////Это пока не работает
     console.log(data);
   }
+
+  ///////Опции отображения даты
+  var options = {
+    year: "numeric",
+    month: "numeric",
+    day: "numeric",
+    timezone: "UTC",
+  };
+  //////////////////
 
   return (
     <div
@@ -134,6 +149,24 @@ const ModalOrder = () => {
             })}
           />
           <Grid item marginTop={3}>
+            <LocalizationProvider dateAdapter={AdapterDateFns}>
+              <DateTimePicker
+                views={["year", "month", "day", "hours"]}
+                name="DateTimePicker"
+                disablePast={true}
+                value={value}
+                onChange={(newValue) => {
+                  setValue(newValue);
+                }}
+                inputFormat="dd-MM-yyyy"
+                ampm={false}
+                renderInput={(params) => (
+                  <TextField {...params} helperText={null} />
+                )}
+              />
+            </LocalizationProvider>
+          </Grid>
+          <Grid item marginTop={3}>
             <InputLabel variant="standard" htmlFor="town">
               Город
             </InputLabel>
@@ -175,37 +208,6 @@ const ModalOrder = () => {
               })}
             </NativeSelect>
           </Grid>
-
-          <TextField
-            id="day"
-            label="Дата"
-            type="date"
-            required={true}
-            defaultValue={new Date()}
-            className={classes.textField}
-            InputLabelProps={{
-              shrink: true,
-            }}
-            {...register("day", {
-              required: `${t("adminPopup.emptyField")}`,
-            })}
-          />
-          <TextField
-            id="hours"
-            label="Время"
-            type="hours"
-            defaultValue="09:00"
-            className={classes.textField}
-            InputLabelProps={{
-              shrink: true,
-            }}
-            inputProps={{
-              step: 3600,
-            }}
-            {...register("hours", {
-              required: `${t("adminPopup.emptyField")}`,
-            })}
-          />
 
           <Button
             sx={{

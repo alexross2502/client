@@ -18,6 +18,10 @@ import repairTime from "../repairTime.json";
 import { setRemoveAndAddModal } from "../../../redux/RemoveAndAddModalReducer";
 import { setRemoveAndAddModalError } from "../../../redux/RemoveAndAddModalErrorReducer";
 import { instance } from "../../axios-utils";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
+import { format } from "date-fns";
+import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -66,31 +70,27 @@ const ReservationSave = () => {
 
   ////Сохранение нового резерва
   async function reservationSave(atr) {
-    atr.day = dateToTimestamp(atr.day, atr.hours.split(":")[0]);
+    atr.day = value.getTime();
     let data = { ...atr };
-
     await instance({ url: `/reservation`, method: "post", data: data })
-      .then
-      /*(res) => {
-        if (res?.status) {
-          dispatch(setRemoveAndAddModalError(true));
-          dispatch(setModalAddReservations());
-          setTimeout(() => {
-            dispatch(setRemoveAndAddModalError(false));
-          }, 1000);
-          console.log(res.status, res.statusText);
-        } else {
-          dispatch(setPageRerender());
-          dispatch(setRemoveAndAddModal(true));
-          dispatch(setModalAddReservations());
-          setTimeout(() => {
-            dispatch(setRemoveAndAddModal(false));
-          }, 1000);
-        }
-      }*/
-      ();
+      .then(() => {
+        dispatch(setPageRerender());
+        dispatch(setRemoveAndAddModal(true));
+        dispatch(setModalAddReservations());
+        setTimeout(() => {
+          dispatch(setRemoveAndAddModal(false));
+        }, 1000);
+      })
+      .catch(() => {
+        dispatch(setRemoveAndAddModalError(true));
+        dispatch(setModalAddReservations());
+        setTimeout(() => {
+          dispatch(setRemoveAndAddModalError(false));
+        }, 1000);
+      });
   }
-  //////////////
+
+  const [value, setValue] = React.useState(null);
 
   return (
     <div
@@ -128,6 +128,7 @@ const ReservationSave = () => {
               <CloseIcon onClick={() => dispatch(setModalAddReservations())} />
             </Grid>
           </Grid>
+
           <Grid item marginTop={3}>
             <InputLabel variant="standard" htmlFor="towns_id">
               Город
@@ -150,6 +151,24 @@ const ReservationSave = () => {
                 );
               })}
             </NativeSelect>
+          </Grid>
+          <Grid item marginTop={3}>
+            <LocalizationProvider dateAdapter={AdapterDateFns}>
+              <DateTimePicker
+                views={["year", "month", "day", "hours"]}
+                name="DateTimePicker"
+                disablePast={true}
+                value={value}
+                onChange={(newValue) => {
+                  setValue(newValue);
+                }}
+                inputFormat="dd-MM-yyyy"
+                ampm={false}
+                renderInput={(params) => (
+                  <TextField {...params} helperText={null} />
+                )}
+              />
+            </LocalizationProvider>
           </Grid>
           <Grid item marginTop={3}>
             <InputLabel variant="standard" htmlFor="clientId">
@@ -175,40 +194,6 @@ const ReservationSave = () => {
             </NativeSelect>
           </Grid>
 
-          <Grid item marginTop={3}>
-            <TextField
-              id="day"
-              label="Дата"
-              type="date"
-              required={true}
-              defaultValue={new Date()}
-              className={classes.textField}
-              InputLabelProps={{
-                shrink: true,
-              }}
-              {...register("day", {
-                required: `${t("adminPopup.emptyField")}`,
-              })}
-            />
-          </Grid>
-          <Grid item marginTop={3}>
-            <TextField
-              id="hours"
-              label="Время"
-              type="hours"
-              defaultValue="09:00"
-              className={classes.textField}
-              InputLabelProps={{
-                shrink: true,
-              }}
-              inputProps={{
-                step: 3600,
-              }}
-              {...register("hours", {
-                required: `${t("adminPopup.emptyField")}`,
-              })}
-            />
-          </Grid>
           <Grid item marginTop={3}>
             <InputLabel variant="standard" htmlFor="size">
               Размер часов
