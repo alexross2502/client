@@ -6,7 +6,6 @@ import ClientSave from "./clientSave";
 import { LeftSideMenu } from "../../LeftSideMenu.jsx";
 import { useForm } from "react-hook-form";
 import Api from "../api";
-import { setPageRerender } from "../../../redux/rerenderReducer";
 import { Box } from "@mui/system";
 import {
   Grid,
@@ -40,11 +39,14 @@ const ClientPage = () => {
   const rerender = useSelector((state) => state.rerender.isRerender);
   const [clientsList, setClientsList] = useState();
   const [itemForRemove, setItemForRemove] = useState([]);
+  const [isLoading, setLoading] = useState(false);
 
   useEffect(() => {
     let asyncFunc = async () => {
+      setLoading(true);
       let clients = await instance({ url: `/clients`, method: "GET" });
       setClientsList(clients);
+      setLoading(false);
     };
     asyncFunc();
   }, [rerender]);
@@ -83,7 +85,7 @@ const ClientPage = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {clientsList == undefined ? (
+              {isLoading && (
                 <Grid
                   sx={{ position: "absolute", left: "50%", marginTop: "20px" }}
                 >
@@ -98,8 +100,11 @@ const ClientPage = () => {
                     visible={true}
                   />
                 </Grid>
+              )}
+              {clientsList?.length === 0 ? (
+                <Typography>Нет записей</Typography>
               ) : (
-                clientsList.map((row) => (
+                clientsList?.map((row) => (
                   <TableRow
                     key={row.id}
                     sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
@@ -121,7 +126,6 @@ const ClientPage = () => {
                         onClick={() => {
                           setItemForRemove([row.id, "clients"]);
                           dispatch(setModalDelete());
-                          dispatch(setPageRerender());
                         }}
                       >
                         <DeleteForeverIcon></DeleteForeverIcon>

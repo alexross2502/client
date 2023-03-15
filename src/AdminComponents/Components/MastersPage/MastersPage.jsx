@@ -6,7 +6,6 @@ import MasterSave from "./masterSave";
 import { LeftSideMenu } from "../../LeftSideMenu.jsx";
 import { useForm } from "react-hook-form";
 import Api from "../api";
-import { setPageRerender } from "../../../redux/rerenderReducer";
 import { Box } from "@mui/system";
 import {
   Grid,
@@ -38,15 +37,18 @@ const MastersPage = () => {
   const [mastersList, setMastersList] = useState();
   const [townsList, setTownsList] = useState([]);
   const [itemForRemove, setItemForRemove] = useState([]);
+  const [isLoading, setLoading] = useState(false);
 
   const isActive = useSelector((state) => state.addMaster.isActive);
 
   useEffect(() => {
     let asyncFunc = async () => {
+      setLoading(true);
       let towns = await Api.getAll("towns");
       setTownsList(towns);
       let masters = await Api.getAll("masters");
       setMastersList(masters);
+      setLoading(false);
     };
     asyncFunc();
   }, [rerender]);
@@ -93,7 +95,7 @@ const MastersPage = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {mastersList == undefined ? (
+              {isLoading && (
                 <Grid
                   sx={{ position: "absolute", left: "50%", marginTop: "20px" }}
                 >
@@ -108,8 +110,11 @@ const MastersPage = () => {
                     visible={true}
                   />
                 </Grid>
+              )}
+              {mastersList?.length === 0 ? (
+                <Typography>Нет записей</Typography>
               ) : (
-                mastersList.map((row) => (
+                mastersList?.map((row) => (
                   <TableRow
                     key={row.id}
                     sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
@@ -136,7 +141,6 @@ const MastersPage = () => {
                         onClick={() => {
                           setItemForRemove([row.id, "masters"]);
                           dispatch(setModalDelete());
-                          dispatch(setPageRerender());
                         }}
                       >
                         <DeleteForeverIcon></DeleteForeverIcon>

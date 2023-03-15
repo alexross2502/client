@@ -126,9 +126,6 @@ const TownSave = () => {
             variant="contained"
             color="warning"
             type="submit"
-            onClick={() => {
-              dispatch(setPageRerender());
-            }}
           >
             Добавить
           </Button>

@@ -6,7 +6,6 @@ import { useSelector, useDispatch } from "react-redux";
 import TownSave, { townSave } from "./townSave";
 import { useForm } from "react-hook-form";
 import Api from "../api";
-import { setPageRerender } from "../../../redux/rerenderReducer";
 import { Box } from "@mui/system";
 import {
   Grid,
@@ -37,11 +36,14 @@ const TownsPage = () => {
   const rerender = useSelector((state) => state.rerender.isRerender);
   const [townsList, setTownsList] = useState();
   const [itemForRemove, setItemForRemove] = useState([]);
+  const [isLoading, setLoading] = useState(false);
 
   useEffect(() => {
     let asyncFunc = async () => {
+      setLoading(true);
       let towns = await Api.getAll("towns");
       setTownsList(towns);
+      setLoading(false);
     };
     asyncFunc();
   }, [rerender]);
@@ -78,7 +80,7 @@ const TownsPage = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {townsList == undefined ? (
+              {isLoading && (
                 <Grid
                   sx={{ position: "absolute", left: "50%", marginTop: "20px" }}
                 >
@@ -93,6 +95,9 @@ const TownsPage = () => {
                     visible={true}
                   />
                 </Grid>
+              )}
+              {townsList?.length === 0 ? (
+                <Typography>Нет записей</Typography>
               ) : (
                 townsList?.map((row) => (
                   <TableRow
@@ -114,7 +119,6 @@ const TownsPage = () => {
                         onClick={() => {
                           setItemForRemove([row.id, "towns"]);
                           dispatch(setModalDelete());
-                          dispatch(setPageRerender());
                         }}
                       >
                         <DeleteForeverIcon></DeleteForeverIcon>

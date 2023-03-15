@@ -138,9 +138,6 @@ const ClientSave = () => {
             variant="contained"
             color="warning"
             type="submit"
-            onClick={async () => {
-              dispatch(setPageRerender());
-            }}
           >
             Добавить
           </Button>

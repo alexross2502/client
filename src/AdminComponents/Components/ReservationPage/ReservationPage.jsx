@@ -5,7 +5,6 @@ import { useSelector, useDispatch } from "react-redux";
 import { LeftSideMenu } from "../../LeftSideMenu.jsx";
 import { useForm } from "react-hook-form";
 import Api from "../api";
-import { setPageRerender } from "../../../redux/rerenderReducer";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import ReservationSave, { reservationSave } from "./reservationSave";
@@ -160,7 +159,7 @@ const ReservationPage = () => {
                       <CopyIcon data={row.id} />
                     </TableCell>
                     <TableCell align="left">{row.day}</TableCell>
-                    <TableCell align="left">{row.size}</TableCell>
+                    <TableCell align="left">{t(`size.${row.size}`)}</TableCell>
                     <TableCell align="left">{row.end}</TableCell>
                     <TableCell align="left">
                       {IdToName[row.master_id]}
