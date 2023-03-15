@@ -44,9 +44,11 @@ const ReservationPage = () => {
   const [townsList, setTownsList] = useState([]);
   const [reservationList, setReservationList] = useState();
   const [itemForRemove, setItemForRemove] = useState([]);
+  const [isLoading, setLoading] = useState(false);
 
   useEffect(() => {
     let asyncFunc = async () => {
+      setLoading(true);
       let clients = await Api.getAll("clients");
       setClientsList(clients);
       let masters = await Api.getAll("masters");
@@ -60,8 +62,8 @@ const ReservationPage = () => {
         }`;
         el.day = new Date(el.day).toLocaleString("ru", options);
       });
-
       setReservationList(reservation);
+      setLoading(false);
     };
     asyncFunc();
   }, [rerender]);
@@ -124,7 +126,7 @@ const ReservationPage = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {reservationList == undefined ? (
+              {isLoading && (
                 <Grid
                   sx={{ position: "absolute", left: "50%", marginTop: "20px" }}
                 >
@@ -139,8 +141,11 @@ const ReservationPage = () => {
                     visible={true}
                   />
                 </Grid>
+              )}
+              {reservationList?.length === 0 ? (
+                <Typography>Нет записей</Typography>
               ) : (
-                reservationList.map((row) => (
+                reservationList?.map((row) => (
                   <TableRow
                     key={row.id}
                     sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
@@ -167,7 +172,6 @@ const ReservationPage = () => {
                         onClick={() => {
                           setItemForRemove([row.id, "reservation"]);
                           dispatch(setModalDelete());
-                          dispatch(setPageRerender());
                         }}
                       >
                         <DeleteForeverIcon></DeleteForeverIcon>
