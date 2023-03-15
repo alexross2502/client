@@ -44,9 +44,11 @@ const ReservationPage = () => {
   const [townsList, setTownsList] = useState([]);
   const [reservationList, setReservationList] = useState();
   const [itemForRemove, setItemForRemove] = useState([]);
+  const [isLoading, setLoading] = useState(false);
 
   useEffect(() => {
     let asyncFunc = async () => {
+      setLoading(true);
       let clients = await Api.getAll("clients");
       setClientsList(clients);
       let masters = await Api.getAll("masters");
@@ -60,8 +62,8 @@ const ReservationPage = () => {
         }`;
         el.day = new Date(el.day).toLocaleString("ru", options);
       });
-
       setReservationList(reservation);
+      setLoading(false);
     };
     asyncFunc();
   }, [rerender]);
@@ -124,7 +126,7 @@ const ReservationPage = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {reservationList == undefined ? (
+              {isLoading && (
                 <Grid
                   sx={{ position: "absolute", left: "50%", marginTop: "20px" }}
                 >
@@ -139,6 +141,61 @@ const ReservationPage = () => {
                     visible={true}
                   />
                 </Grid>
+              )}
+              {reservationList?.length === 0 ? (
+                <Typography>Нет записей</Typography>
+              ) : (
+                reservationList?.map((row) => (
+                  <TableRow
+                    key={row.id}
+                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                  >
+                    <TableCell component="th" scope="row">
+                      <Typography
+                        className={style.clue}
+                        data-clue={`${row.id}`}
+                      >
+                        {row.id.slice(0, 15) + "..."}
+                      </Typography>
+                      <CopyIcon data={row.id} />
+                    </TableCell>
+                    <TableCell align="left">{row.day}</TableCell>
+                    <TableCell align="left">{row.size}</TableCell>
+                    <TableCell align="left">{row.end}</TableCell>
+                    <TableCell align="left">
+                      {IdToName[row.master_id]}
+                    </TableCell>
+                    <TableCell align="left">{IdToName[row.towns_id]}</TableCell>
+                    <TableCell align="left">{IdToName[row.clientId]}</TableCell>
+                    <TableCell align="right">
+                      <IconButton
+                        onClick={() => {
+                          setItemForRemove([row.id, "reservation"]);
+                          dispatch(setModalDelete());
+                        }}
+                      >
+                        <DeleteForeverIcon></DeleteForeverIcon>
+                      </IconButton>
+                    </TableCell>
+                  </TableRow>
+                ))
+              )}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </Box>
+      <RemoveAndAddModal />
+      <RemoveAndAddModalError />
+    </>
+  );
+};
+
+export default ReservationPage;
+
+/*
+
+{reservationList == [] && !isLoading ? (
+                <h1>11111</h1>
               ) : (
                 reservationList.map((row) => (
                   <TableRow
@@ -176,14 +233,6 @@ const ReservationPage = () => {
                   </TableRow>
                 ))
               )}
-            </TableBody>
-          </Table>
-        </TableContainer>
-      </Box>
-      <RemoveAndAddModal />
-      <RemoveAndAddModalError />
-    </>
-  );
-};
 
-export default ReservationPage;
+
+*/

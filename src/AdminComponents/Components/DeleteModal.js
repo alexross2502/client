@@ -114,7 +114,6 @@ const DeleteModal = (props) => {
               variant="contained"
               color="warning"
               onClick={() => {
-                dispatch(setPageRerender());
                 dispatch(setModalDelete());
               }}
             >
