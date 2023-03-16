@@ -194,9 +194,6 @@ const MasterSave = () => {
             variant="contained"
             color="warning"
             type="submit"
-            onClick={() => {
-              dispatch(setPageRerender());
-            }}
           >
             Добавить
           </Button>
