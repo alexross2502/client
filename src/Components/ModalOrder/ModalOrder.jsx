@@ -75,7 +75,6 @@ const ModalOrder = () => {
       data: data,
     })
       .then((res) => {
-        console.log(res);
         dispatch(setModalOrder());
         dispatch({ type: "setAvailableMasters", payload: [...res] });
         dispatch({
