@@ -78,6 +78,16 @@ const ModalOrder = () => {
         console.log(res);
         dispatch(setModalOrder());
         dispatch({ type: "setAvailableMasters", payload: [...res] });
+        dispatch({
+          type: "setOrderData",
+          payload: {
+            day: value.getTime(),
+            size: atr.size,
+            recipient: atr.email,
+            clientName: atr.name,
+            towns_id: atr.towns_id,
+          },
+        });
         dispatch(setModalMasters());
       })
       .catch(() => {

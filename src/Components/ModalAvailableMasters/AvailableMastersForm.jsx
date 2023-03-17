@@ -1,6 +1,16 @@
 import { Grid, Typography } from "@mui/material";
+import { useDispatch, useSelector } from "react-redux";
+import { instance } from "../../AdminComponents/axios-utils";
+import { setModalMasters } from "../../redux/modalMastersReducer";
 
 const AvailableMastersForm = (props) => {
+  let dispatch = useDispatch();
+  let orderData = useSelector((state) => state.orderData.data);
+
+  /////собираем нужные поля для запроса из разных мест
+  let data = Object.assign(props.data, orderData[0]);
+  data.master_id = data.id;
+
   return (
     <Grid
       container
@@ -13,6 +23,19 @@ const AvailableMastersForm = (props) => {
         ":hover": {
           boxShadow: "10px 10px 20px #ccc",
         },
+      }}
+      onClick={async () => {
+        await instance({
+          url: `/reservation/order`,
+          method: "post",
+          data: data,
+        })
+          .then(() => {
+            dispatch(setModalMasters());
+          })
+          .catch((err) => {
+            console.log(err);
+          });
       }}
     >
       <Grid item xs={4}>

@@ -62,7 +62,13 @@ const ModalAvailableMasters = () => {
               />
             </Grid>
           </Grid>
-          <Grid container>{masterListItem}</Grid>
+          <Grid container>
+            {masterListItem.length !== 0 ? (
+              masterListItem
+            ) : (
+              <Typography>{t("available.emptyHeader")}</Typography>
+            )}
+          </Grid>
         </Box>
       </form>
     </div>

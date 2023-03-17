@@ -1,14 +1,7 @@
 const setOrderData = "setOrderData";
 
 const defaultState = {
-  data: {
-    recipient: null,
-    day: null,
-    size: null,
-    master_id: null,
-    towns_id: null,
-    clientName: null,
-  },
+  data: {},
 };
 
 export const orderDataReducer = (state = defaultState, action) => {
