@@ -22,6 +22,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import { format } from "date-fns";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
+import { instance } from "../../AdminComponents/axios-utils";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -64,12 +65,33 @@ const ModalOrder = () => {
 
   const [value, setValue] = React.useState(null);
 
-  function submitFunction(atr) {
+  async function submitFunction(atr) {
     let data = { ...atr };
+    data.day = value.getTime();
 
-    data.day = dateToTimestamp(atr.day, atr.hours.split(":")[0]);
-    ////Это пока не работает
-    console.log(data);
+    await instance({
+      url: `/reservation/available`,
+      method: "post",
+      data: data,
+    })
+      .then((res) => {
+        dispatch(setModalOrder());
+        dispatch({ type: "setAvailableMasters", payload: [...res] });
+        dispatch({
+          type: "setOrderData",
+          payload: {
+            day: value.getTime(),
+            size: atr.size,
+            recipient: atr.email,
+            clientName: atr.name,
+            towns_id: atr.towns_id,
+          },
+        });
+        dispatch(setModalMasters());
+      })
+      .catch(() => {
+        //тут будет ошибка
+      });
   }
 
   return (
@@ -158,16 +180,16 @@ const ModalOrder = () => {
             </LocalizationProvider>
           </Grid>
           <Grid item marginTop={3}>
-            <InputLabel variant="standard" htmlFor="town">
+            <InputLabel variant="standard" htmlFor="towns_id">
               Город
             </InputLabel>
             <NativeSelect
               inputProps={{
-                name: "town",
-                id: "town",
+                name: "towns_id",
+                id: "towns_id",
               }}
               style={{ width: 200 }}
-              {...register("town", {
+              {...register("towns_id", {
                 required: `${t("adminPopup.emptyField")}`,
               })}
             >

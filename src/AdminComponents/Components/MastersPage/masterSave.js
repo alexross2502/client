@@ -152,7 +152,7 @@ const MasterSave = () => {
                 required: `${t("adminPopup.emptyField")}`,
               })}
             >
-              <option value={1}>1</option>
+              <option defaultValue={1}>1</option>
               <option value={2}>2</option>
               <option value={3}>3</option>
               <option value={4}>4</option>
@@ -168,6 +168,7 @@ const MasterSave = () => {
                 name: "townId",
                 id: "townId",
               }}
+              displayEmpty
               style={{ width: 200 }}
               {...register("townId", {
                 required: `${t("adminPopup.emptyField")}`,

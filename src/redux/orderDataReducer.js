@@ -1,7 +1,7 @@
 const setOrderData = "setOrderData";
 
 const defaultState = {
-  data: ['', '', '', '', '', '', '', ''],
+  data: {},
 };
 
 export const orderDataReducer = (state = defaultState, action) => {

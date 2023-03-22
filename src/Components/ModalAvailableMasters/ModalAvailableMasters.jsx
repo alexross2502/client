@@ -7,20 +7,20 @@ import Api from "../../AdminComponents/Components/api";
 import { setModalOrder } from "../../redux/orderReducer";
 import CloseIcon from "@mui/icons-material/Close";
 import { Box, Button, Grid, TextField, Typography } from "@mui/material";
+import AvailableMastersForm from "./AvailableMastersForm";
 
 const ModalAvailableMasters = () => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
-  const [finaleMasters, setFinaleMasters] = useState([]);
+  //const [finaleMasters, setFinaleMasters] = useState();
   const orderData = useSelector((state) => state.availableMasters.masters);
 
   //Открытие\закрытие модального окна
   const isActive = useSelector((state) => state.modalMasters.isActive);
 
-  const windowClose = () => {
-    dispatch(setModalMasters());
-  };
-  //
+  const masterListItem = orderData?.flat().map((item) => {
+    return <AvailableMastersForm data={item} key={item.id} />;
+  });
 
   return (
     <div
@@ -31,7 +31,7 @@ const ModalAvailableMasters = () => {
         <Box
           display="flex"
           flexDirection={"column"}
-          maxWidth={400}
+          maxWidth={800}
           alignItems="center"
           justifyContent={"center"}
           margin="auto"
@@ -55,8 +55,19 @@ const ModalAvailableMasters = () => {
               </Typography>
             </Grid>
             <Grid item xs={1}>
-              <CloseIcon />
+              <CloseIcon
+                onClick={() => {
+                  dispatch(setModalMasters());
+                }}
+              />
             </Grid>
+          </Grid>
+          <Grid container>
+            {masterListItem.length !== 0 ? (
+              masterListItem
+            ) : (
+              <Typography>{t("available.emptyHeader")}</Typography>
+            )}
           </Grid>
         </Box>
       </form>
