@@ -1,15 +1,11 @@
-import { request } from "../axios-utils";
 import style from "../../scale.module.css";
 import React from "react";
 import { Box, Button, Grid, TextField, Typography } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import { useSelector, useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useState } from "react";
 import CloseIcon from "@mui/icons-material/Close";
-import InputLabel from "@mui/material/InputLabel";
-import NativeSelect from "@mui/material/NativeSelect";
 import Api from "./api";
 import { setPageRerender } from "../../redux/rerenderReducer";
 import { setModalDelete } from "../../redux/deleteReducer";

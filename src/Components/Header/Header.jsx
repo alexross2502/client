@@ -17,7 +17,6 @@ import { useState } from "react";
 import { Box } from "@mui/system";
 import { DrawerComp } from "./DrawerComp";
 import { setModalOrder } from "../../redux/orderReducer";
-import { useEffect } from "react";
 import { getToken } from "../../AdminComponents/token";
 import { useNavigate } from "react-router-dom";
 

@@ -4,7 +4,6 @@ import React, { useEffect, useState } from "react";
 import { Box, Button, Grid, TextField, Typography } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import { useSelector, useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import CloseIcon from "@mui/icons-material/Close";
 import { setModalAddMasters } from "../../../redux/mastersReducer";

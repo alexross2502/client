@@ -1,11 +1,7 @@
 import { useTranslation } from "react-i18next";
-import { useDispatch } from "react-redux";
-import { setModalOrder } from "../../redux/orderReducer";
-import { Button } from "@mui/material";
 
 const Content = () => {
   const { t } = useTranslation();
-  const dispatch = useDispatch();
 
   return (
     <div>

@@ -20,7 +20,6 @@ import {
 } from "@mui/material";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import { setModalAddMasters } from "../../../redux/mastersReducer";
-import { DataGrid } from "@mui/x-data-grid";
 import TableContainer from "@mui/material/TableContainer";
 import Paper from "@mui/material/Paper";
 import DeleteModal from "../DeleteModal";
@@ -38,8 +37,6 @@ const MastersPage = () => {
   const [townsList, setTownsList] = useState([]);
   const [itemForRemove, setItemForRemove] = useState([]);
   const [isLoading, setLoading] = useState(false);
-
-  const isActive = useSelector((state) => state.addMaster.isActive);
 
   useEffect(() => {
     let asyncFunc = async () => {

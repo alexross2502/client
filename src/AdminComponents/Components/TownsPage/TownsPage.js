@@ -3,7 +3,7 @@ import style from "../../AdminPage.module.css";
 import { LeftSideMenu } from "../../LeftSideMenu.jsx";
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import TownSave, { townSave } from "./townSave";
+import TownSave from "./townSave";
 import { useForm } from "react-hook-form";
 import Api from "../api";
 import { Box } from "@mui/system";
@@ -20,7 +20,6 @@ import {
 } from "@mui/material";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import { setModalAddTowns } from "../../../redux/townsReducer";
-import { DataGrid } from "@mui/x-data-grid";
 import TableContainer from "@mui/material/TableContainer";
 import Paper from "@mui/material/Paper";
 import DeleteModal from "../DeleteModal";

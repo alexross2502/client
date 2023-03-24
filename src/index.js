@@ -10,7 +10,7 @@ import "./i18n";
 ReactDOM.render(
   <Provider store={store}>
     <PersistGate loading={null} persistor={Persistor}>
-    <App />
+      <App />
     </PersistGate>
   </Provider>,
   document.getElementById("root")

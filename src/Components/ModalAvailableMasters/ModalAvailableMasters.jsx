@@ -1,12 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import style from "../../scale.module.css";
 import { useSelector, useDispatch } from "react-redux";
 import { setModalMasters } from "../../redux/modalMastersReducer";
 import { useTranslation } from "react-i18next";
-import Api from "../../AdminComponents/Components/api";
-import { setModalOrder } from "../../redux/orderReducer";
 import CloseIcon from "@mui/icons-material/Close";
-import { Box, Button, Grid, TextField, Typography } from "@mui/material";
+import { Box, Grid, Typography } from "@mui/material";
 import AvailableMastersForm from "./AvailableMastersForm";
 
 const ModalAvailableMasters = () => {

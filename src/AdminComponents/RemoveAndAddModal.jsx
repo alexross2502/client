@@ -3,7 +3,6 @@ import React from "react";
 import { Box, Grid, Typography } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import { useSelector, useDispatch } from "react-redux";
-import { setRemoveAndAddModal } from "../redux/RemoveAndAddModalReducer";
 
 const RemoveAndAddModal = () => {
   const dispatch = useDispatch();

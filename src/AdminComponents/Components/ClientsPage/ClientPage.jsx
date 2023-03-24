@@ -5,7 +5,6 @@ import { useSelector, useDispatch } from "react-redux";
 import ClientSave from "./clientSave";
 import { LeftSideMenu } from "../../LeftSideMenu.jsx";
 import { useForm } from "react-hook-form";
-import Api from "../api";
 import { Box } from "@mui/system";
 import {
   Grid,
@@ -20,7 +19,6 @@ import {
 } from "@mui/material";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import { setModalAddClients } from "../../../redux/clientsReducer";
-import { DataGrid } from "@mui/x-data-grid";
 import TableContainer from "@mui/material/TableContainer";
 import Paper from "@mui/material/Paper";
 import DeleteModal from "../DeleteModal";
@@ -32,8 +30,6 @@ import RemoveAndAddModalError from "../../RemoveAndAddModalError";
 import CopyIcon from "../CopyIcon";
 
 const ClientPage = () => {
-  const isActive = useSelector((state) => state.addClient.isActive);
-
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const rerender = useSelector((state) => state.rerender.isRerender);
