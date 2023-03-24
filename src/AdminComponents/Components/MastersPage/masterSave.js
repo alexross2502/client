@@ -40,9 +40,10 @@ const MasterSave = () => {
   }, [rerender]);
 
   /////Сохранение нового мастера
+  const [pending, setPending] = useState(false);
   async function masterSave(atr) {
     let data = { ...atr };
-
+    setPending(true);
     await instance({ url: `/masters`, method: "post", data: data })
       .then(() => {
         dispatch(setModalAddMasters());
@@ -51,6 +52,7 @@ const MasterSave = () => {
         setTimeout(() => {
           dispatch(setRemoveAndAddModal(false));
         }, 1000);
+        setPending(false);
       })
       .catch(() => {
         dispatch(setRemoveAndAddModalError(true));
@@ -58,6 +60,7 @@ const MasterSave = () => {
         setTimeout(() => {
           dispatch(setRemoveAndAddModalError(false));
         }, 1000);
+        setPending(false);
       });
   }
   ///////////
@@ -195,6 +198,7 @@ const MasterSave = () => {
             variant="contained"
             color="warning"
             type="submit"
+            disabled={pending}
           >
             Добавить
           </Button>

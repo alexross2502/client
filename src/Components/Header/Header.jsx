@@ -88,7 +88,9 @@ const Header = () => {
                 <Button
                   sx={{ background: "#82c434" }}
                   variant="contained"
-                  onClick={() => onClickOrder()}
+                  onClick={() => {
+                    onClickOrder();
+                  }}
                 >
                   {t("order.header")}
                 </Button>
@@ -104,7 +106,9 @@ const Header = () => {
                   <Button
                     sx={{ marginLeft: "auto", background: "rgba(180,58,58,1)" }}
                     variant="contained"
-                    onClick={() => onClickLogin()}
+                    onClick={() => {
+                      onClickLogin();
+                    }}
                   >
                     {t("header.login")}
                   </Button>

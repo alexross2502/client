@@ -64,11 +64,12 @@ const ModalOrder = () => {
   }, [isActive]);
 
   const [value, setValue] = React.useState(null);
+  const [pending, setPending] = useState(false);
 
   async function submitFunction(atr) {
     let data = { ...atr };
     data.day = value.getTime();
-
+    setPending(true);
     await instance({
       url: `/reservation/available`,
       method: "post",
@@ -88,6 +89,7 @@ const ModalOrder = () => {
           },
         });
         dispatch(setModalMasters());
+        setPending(false);
       })
       .catch(() => {
         //тут будет ошибка
@@ -234,6 +236,7 @@ const ModalOrder = () => {
             variant="contained"
             color="warning"
             type="submit"
+            disabled={pending}
           >
             Заказать
           </Button>

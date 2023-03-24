@@ -28,9 +28,10 @@ const ClientSave = () => {
   const isActive = useSelector((state) => state.addClient.isActive);
 
   ////Сохранение нового клиента
+  const [pending, setPending] = useState(false);
   async function clientSave(atr) {
     let data = { ...atr };
-
+    setPending(true);
     await instance({ url: `clients`, method: "post", data: data })
       .then(() => {
         dispatch(setPageRerender());
@@ -39,6 +40,7 @@ const ClientSave = () => {
         setTimeout(() => {
           dispatch(setRemoveAndAddModal(false));
         }, 1000);
+        setPending(false);
       })
       .catch(() => {
         dispatch(setRemoveAndAddModalError(true));
@@ -46,6 +48,7 @@ const ClientSave = () => {
         setTimeout(() => {
           dispatch(setRemoveAndAddModalError(false));
         }, 1000);
+        setPending(false);
       });
   }
 
@@ -138,6 +141,7 @@ const ClientSave = () => {
             variant="contained"
             color="warning"
             type="submit"
+            disabled={pending}
           >
             Добавить
           </Button>

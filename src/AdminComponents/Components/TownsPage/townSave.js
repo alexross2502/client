@@ -35,9 +35,10 @@ const TownSave = () => {
   }
 
   ////Сохранение города
+  const [pending, setPending] = useState(false);
   async function townSave(atr) {
     let data = { ...atr };
-
+    setPending(true);
     await instance({ url: `/towns`, method: "post", data: data })
       .then(() => {
         dispatch(setPageRerender());
@@ -46,6 +47,7 @@ const TownSave = () => {
         setTimeout(() => {
           dispatch(setRemoveAndAddModal(false));
         }, 1000);
+        setPending(false);
       })
       .catch(() => {
         dispatch(setRemoveAndAddModalError(true));
@@ -53,6 +55,7 @@ const TownSave = () => {
         setTimeout(() => {
           dispatch(setRemoveAndAddModalError(false));
         }, 1000);
+        setPending(false);
       });
   }
   /////////
@@ -126,6 +129,7 @@ const TownSave = () => {
             variant="contained"
             color="warning"
             type="submit"
+            disabled={pending}
           >
             Добавить
           </Button>

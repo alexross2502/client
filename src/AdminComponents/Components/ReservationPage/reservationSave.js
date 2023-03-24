@@ -69,9 +69,11 @@ const ReservationSave = () => {
   }, [rerender]);
 
   ////Сохранение нового резерва
+  const [pending, setPending] = useState(false);
   async function reservationSave(atr) {
     atr.day = value.getTime();
     let data = { ...atr };
+    setPending(true);
     await instance({ url: `/reservation`, method: "post", data: data })
       .then(() => {
         dispatch(setPageRerender());
@@ -80,6 +82,7 @@ const ReservationSave = () => {
         setTimeout(() => {
           dispatch(setRemoveAndAddModal(false));
         }, 1000);
+        setPending(false);
       })
       .catch(() => {
         dispatch(setRemoveAndAddModalError(true));
@@ -87,6 +90,7 @@ const ReservationSave = () => {
         setTimeout(() => {
           dispatch(setRemoveAndAddModalError(false));
         }, 1000);
+        setPending(true);
       });
   }
 
@@ -249,6 +253,7 @@ const ReservationSave = () => {
             variant="contained"
             color="warning"
             type="submit"
+            disabled={pending}
           >
             Добавить
           </Button>

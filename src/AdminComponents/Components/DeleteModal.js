@@ -27,6 +27,7 @@ const DeleteModal = (props) => {
   } = useForm({
     mode: "onBlur",
   });
+  const [pending, setPending] = useState(false);
   //Открытие\закрытие модального окна
   const isActive = useSelector((state) => state.delete.isActive);
 
@@ -77,7 +78,9 @@ const DeleteModal = (props) => {
               }}
               variant="contained"
               color="warning"
+              disabled={pending}
               onClick={() => {
+                setPending(true);
                 let [id, url] = props.props;
                 Api.delete(url, id)
                   .then((res) => {
@@ -86,7 +89,7 @@ const DeleteModal = (props) => {
                     setTimeout(() => {
                       dispatch(setRemoveAndAddModal(false));
                     }, 1000);
-
+                    setPending(false);
                     dispatch(setModalDelete());
                   })
                   .catch(() => {
@@ -94,6 +97,7 @@ const DeleteModal = (props) => {
                     setTimeout(() => {
                       dispatch(setRemoveAndAddModalError(false));
                     }, 1000);
+                    setPending(false);
                     dispatch(setModalDelete());
                   });
               }}
@@ -113,6 +117,7 @@ const DeleteModal = (props) => {
               }}
               variant="contained"
               color="warning"
+              disabled={pending}
               onClick={() => {
                 dispatch(setModalDelete());
               }}
