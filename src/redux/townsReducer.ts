@@ -1,15 +1,10 @@
-import { AnyAction } from "redux";
-
 const setAddTowns = "setAddTowns";
 
 const defaultState = {
   isActive: false,
 };
 
-export default function modalAddTownsReducer(
-  state = defaultState,
-  action: AnyAction
-) {
+export default function modalAddTownsReducer(state = defaultState, action) {
   switch (action.type) {
     case setAddTowns:
       if (!state.isActive) {
@@ -29,4 +24,4 @@ export default function modalAddTownsReducer(
   }
 }
 
-export const setModalAddTowns = (props?: Boolean) => ({ type: setAddTowns });
+export const setModalAddTowns = (props?: boolean) => ({ type: setAddTowns });

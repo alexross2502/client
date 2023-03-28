@@ -1,5 +1,6 @@
 import { instance } from "../../axios-utils";
-import "../../../scale.module.css";
+import style from "../../../scale.module.css";
+import React from "react";
 import { Box, Button, Grid, TextField, Typography } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import { useSelector, useDispatch } from "react-redux";
@@ -10,7 +11,6 @@ import { setModalAddClients } from "../../../redux/clientsReducer";
 import { setPageRerender } from "../../../redux/rerenderReducer";
 import { setRemoveAndAddModal } from "../../../redux/RemoveAndAddModalReducer";
 import { setRemoveAndAddModalError } from "../../../redux/RemoveAndAddModalErrorReducer";
-import React = require("react");
 import { RootState } from "../../../redux/rootReducer";
 
 const ClientSave = () => {
@@ -28,14 +28,14 @@ const ClientSave = () => {
   const isActive = useSelector((state: RootState) => state.addClient.isActive);
 
   ////Сохранение нового клиента
-  const [pending, setPending] = useState<boolean>(false);
+  const [pending, setPending] = useState(false);
   async function clientSave(atr) {
     let data = { ...atr };
     setPending(true);
     await instance({ url: `clients`, method: "post", data: data })
       .then(() => {
         dispatch(setPageRerender());
-        dispatch(setRemoveAndAddModal(false));
+        dispatch(setRemoveAndAddModal(true));
         dispatch(setModalAddClients());
         setTimeout(() => {
           dispatch(setRemoveAndAddModal(false));
@@ -55,7 +55,7 @@ const ClientSave = () => {
   return (
     <div
       onClick={(e) => e.stopPropagation()}
-      className={isActive ? `${"active"}` : `${"inactive"}`}
+      className={isActive ? `${style.active}` : `${style.inactive}`}
     >
       <form onSubmit={handleSubmit(clientSave)}>
         <Box

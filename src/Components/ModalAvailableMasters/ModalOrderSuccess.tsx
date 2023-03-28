@@ -1,9 +1,8 @@
-import "./ModalAvailableMasters.module.css";
+import React, { useEffect } from "react";
+import style from "./ModalAvailableMasters.module.css";
 import { useSelector, useDispatch } from "react-redux";
 import { useTranslation } from "react-i18next";
 import { setOrderSuccessReducer } from "../../redux/orderSuccessReducer";
-import { useEffect } from "react";
-import React = require("react");
 import { RootState } from "../../redux/rootReducer";
 
 const ModalOrderSuccess = () => {
@@ -27,9 +26,13 @@ const ModalOrderSuccess = () => {
 
   return (
     <div
-      className={isActive ? `${"modal_popup"} ${"active"}` : `${"modal_popup"}`}
+      className={
+        isActive
+          ? `${style.modal_popup} ${style.active}`
+          : `${style.modal_popup}`
+      }
     >
-      <p className={"h1"}>{t("success.content")}</p>
+      <p className={style.h1}>{t("success.content")}</p>
     </div>
   );
 };

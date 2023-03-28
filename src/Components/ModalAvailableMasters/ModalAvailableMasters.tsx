@@ -1,11 +1,11 @@
-import "../../scale.module.css";
+import React from "react";
+import style from "../../scale.module.css";
 import { useSelector, useDispatch } from "react-redux";
 import { setModalMasters } from "../../redux/modalMastersReducer";
 import { useTranslation } from "react-i18next";
 import CloseIcon from "@mui/icons-material/Close";
 import { Box, Grid, Typography } from "@mui/material";
 import AvailableMastersForm from "./AvailableMastersForm";
-import React = require("react");
 import { RootState } from "../../redux/rootReducer";
 
 const ModalAvailableMasters = () => {
@@ -28,7 +28,7 @@ const ModalAvailableMasters = () => {
   return (
     <div
       onClick={(e) => e.stopPropagation()}
-      className={isActive ? `${"active"}` : `${"inactive"}`}
+      className={isActive ? `${style.active}` : `${style.inactive}`}
     >
       <form>
         <Box

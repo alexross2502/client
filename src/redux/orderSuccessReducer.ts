@@ -1,15 +1,10 @@
-import { AnyAction } from "redux";
-
 const setOrderSuccess = "setOrderSuccess";
 
 const defaultState = {
   isActive: false,
 };
 
-export default function orderSuccessReducer(
-  state = defaultState,
-  action: AnyAction
-) {
+export default function orderSuccessReducer(state = defaultState, action) {
   switch (action.type) {
     case setOrderSuccess:
       if (!state.isActive) {
@@ -29,6 +24,6 @@ export default function orderSuccessReducer(
   }
 }
 
-export const setOrderSuccessReducer = (props?: Boolean) => ({
+export const setOrderSuccessReducer = (props?: boolean) => ({
   type: setOrderSuccess,
 });

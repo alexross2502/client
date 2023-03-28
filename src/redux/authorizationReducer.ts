@@ -1,15 +1,10 @@
-import { AnyAction } from "redux";
-
 const setAuthorization = "setAuthorization";
 
 const defaultState = {
   isAuthorized: false,
 };
 
-export default function authorizationReducer(
-  state = defaultState,
-  action: AnyAction
-) {
+export default function authorizationReducer(state = defaultState, action) {
   switch (action.type) {
     case setAuthorization:
       if (!state.isAuthorized) {
@@ -24,4 +19,4 @@ export default function authorizationReducer(
   }
 }
 
-export const setAuthorized = (props?: Boolean) => ({ type: setAuthorization });
+export const setAuthorized = (props?: boolean) => ({ type: setAuthorization });

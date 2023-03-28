@@ -1,15 +1,10 @@
-import { AnyAction } from "redux";
-
 const setDelete = "setDelete";
 
 const defaultState = {
   isActive: false,
 };
 
-export default function modalDeleteReducer(
-  state = defaultState,
-  action: AnyAction
-) {
+export default function modalDeleteReducer(state = defaultState, action) {
   switch (action.type) {
     case setDelete:
       if (!state.isActive) {
@@ -29,4 +24,4 @@ export default function modalDeleteReducer(
   }
 }
 
-export const setModalDelete = (props?: Boolean) => ({ type: setDelete });
+export const setModalDelete = (props?: boolean) => ({ type: setDelete });

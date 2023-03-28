@@ -1,5 +1,6 @@
 import { useTranslation } from "react-i18next";
-import "../../AdminPage.module.css";
+import style from "../../AdminPage.module.css";
+import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { LeftSideMenu } from "../../LeftSideMenu.jsx";
 import { useForm } from "react-hook-form";
@@ -28,9 +29,7 @@ import { Watch } from "react-loader-spinner";
 import RemoveAndAddModal from "../../RemoveAndAddModal";
 import RemoveAndAddModalError from "../../RemoveAndAddModalError";
 import CopyIcon from "../CopyIcon";
-import * as repairTime from "../repairTime.json";
-import { useState, useEffect } from "react";
-import React = require("react");
+import repairTime from "../repairTime.json";
 import { RootState } from "../../../redux/rootReducer";
 
 const ReservationPage = () => {
@@ -41,17 +40,8 @@ const ReservationPage = () => {
   const [mastersList, setMastersList] = useState<any>([]);
   const [townsList, setTownsList] = useState<any>([]);
   const [reservationList, setReservationList] = useState<any>();
-  const [itemForRemove, setItemForRemove] = useState<any>([]);
-  const [isLoading, setLoading] = useState<boolean>(false);
-
-  ///////Опции отображения даты
-  const options = {
-    year: "numeric",
-    month: "numeric",
-    day: "numeric",
-    timezone: "UTC",
-  };
-  //////////////////
+  const [itemForRemove, setItemForRemove] = useState([]);
+  const [isLoading, setLoading] = useState(false);
 
   useEffect(() => {
     let asyncFunc = async () => {
@@ -67,7 +57,7 @@ const ReservationPage = () => {
         el.end = `${new Date(el.day).getHours()}-${
           new Date(el.day).getHours() + repairTime[el.size]
         }`;
-        el.day = new Date(el.day).toLocaleString("ru");
+        el.day = new Date(el.day).toLocaleString("ru", options);
       });
       setReservationList(reservation);
       setLoading(false);
@@ -91,6 +81,14 @@ const ReservationPage = () => {
     IdToName[el.id] = el?.name;
   });
   ////////////////////////////////////////
+  ///////Опции отображения даты
+  var options = {
+    year: "numeric",
+    month: "numeric",
+    day: "numeric",
+    timezone: "UTC",
+  };
+  //////////////////
 
   return (
     <>
@@ -149,7 +147,10 @@ const ReservationPage = () => {
                     sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                   >
                     <TableCell component="th" scope="row">
-                      <Typography className={"clue"} data-clue={`${row.id}`}>
+                      <Typography
+                        className={style.clue}
+                        data-clue={`${row.id}`}
+                      >
                         {row.id.slice(0, 15) + "..."}
                       </Typography>
                       <CopyIcon data={row.id} />

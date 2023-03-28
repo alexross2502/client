@@ -1,5 +1,6 @@
 import { useTranslation } from "react-i18next";
-import "../../AdminPage.module.css";
+import style from "../../AdminPage.module.css";
+import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import ClientSave from "./clientSave";
 import { LeftSideMenu } from "../../LeftSideMenu.jsx";
@@ -27,8 +28,6 @@ import RemoveAndAddModal from "../../RemoveAndAddModal";
 import { instance } from "../../axios-utils";
 import RemoveAndAddModalError from "../../RemoveAndAddModalError";
 import CopyIcon from "../CopyIcon";
-import { useState, useEffect } from "react";
-import React = require("react");
 import { RootState } from "../../../redux/rootReducer";
 
 const ClientPage = () => {
@@ -36,8 +35,8 @@ const ClientPage = () => {
   const dispatch = useDispatch();
   const rerender = useSelector((state: RootState) => state.rerender.isRerender);
   const [clientsList, setClientsList] = useState<any>();
-  const [itemForRemove, setItemForRemove] = useState<any>([]);
-  const [isLoading, setLoading] = useState<boolean>(false);
+  const [itemForRemove, setItemForRemove] = useState([]);
+  const [isLoading, setLoading] = useState(false);
 
   useEffect(() => {
     let asyncFunc = async () => {
@@ -107,7 +106,10 @@ const ClientPage = () => {
                     sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                   >
                     <TableCell component="th" scope="row">
-                      <Typography className={"clue"} data-clue={`${row.id}`}>
+                      <Typography
+                        className={style.clue}
+                        data-clue={`${row.id}`}
+                      >
                         {row.id.slice(0, 15) + "..."}
                       </Typography>
                       <CopyIcon data={row.id} />

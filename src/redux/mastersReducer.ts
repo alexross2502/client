@@ -1,15 +1,10 @@
-import { AnyAction } from "redux";
-
 const setAddMasters = "setAddMasters";
 
 const defaultState = {
   isActive: false,
 };
 
-export default function modalAddMastersReducer(
-  state = defaultState,
-  action: AnyAction
-) {
+export default function modalAddMastersReducer(state = defaultState, action) {
   switch (action.type) {
     case setAddMasters:
       if (!state.isActive) {
@@ -29,6 +24,6 @@ export default function modalAddMastersReducer(
   }
 }
 
-export const setModalAddMasters = (props?: Boolean) => ({
+export const setModalAddMasters = (props?: boolean) => ({
   type: setAddMasters,
 });

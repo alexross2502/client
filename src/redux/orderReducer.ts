@@ -1,12 +1,10 @@
-import { AnyAction } from "redux";
-
 const setOrder = "setOrder";
 
 const defaultState = {
   isActive: false,
 };
 
-export default function orderReducer(state = defaultState, action: AnyAction) {
+export default function orderReducer(state = defaultState, action) {
   switch (action.type) {
     case setOrder:
       if (!state.isActive) {
@@ -26,4 +24,4 @@ export default function orderReducer(state = defaultState, action: AnyAction) {
   }
 }
 
-export const setModalOrder = (props?: Boolean) => ({ type: setOrder });
+export const setModalOrder = (props?: boolean) => ({ type: setOrder });

@@ -1,5 +1,5 @@
 import { Grid, Typography } from "@mui/material";
-import React = require("react");
+import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { instance } from "../../AdminComponents/axios-utils";
 import { setModalMasters } from "../../redux/modalMastersReducer";

@@ -1,4 +1,5 @@
-import "../../scale.module.css";
+import style from "../../scale.module.css";
+import React from "react";
 import { Box, Button, Grid, TextField, Typography } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import { useSelector, useDispatch } from "react-redux";
@@ -10,7 +11,6 @@ import { setPageRerender } from "../../redux/rerenderReducer";
 import { setModalDelete } from "../../redux/deleteReducer";
 import { setRemoveAndAddModal } from "../../redux/RemoveAndAddModalReducer";
 import { setRemoveAndAddModalError } from "../../redux/RemoveAndAddModalErrorReducer";
-import React = require("react");
 import { RootState } from "../../redux/rootReducer";
 
 const DeleteModal = (props) => {
@@ -24,14 +24,14 @@ const DeleteModal = (props) => {
   } = useForm({
     mode: "onBlur",
   });
-  const [pending, setPending] = useState<boolean>(false);
+  const [pending, setPending] = useState(false);
   //Открытие\закрытие модального окна
   const isActive = useSelector((state: RootState) => state.delete.isActive);
 
   return (
     <div
       onClick={(e) => e.stopPropagation()}
-      className={isActive ? `${"active"}` : `${"inactive"}`}
+      className={isActive ? `${style.active}` : `${style.inactive}`}
     >
       <Box
         display="flex"

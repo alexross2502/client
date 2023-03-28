@@ -6,12 +6,12 @@ import {
   ListItemIcon,
   ListItemText,
 } from "@mui/material";
+import React, { useState } from "react";
 import MenuRoundedIcon from "@mui/icons-material/MenuRounded";
 import { useTranslation } from "react-i18next";
-import { useState } from "react";
-import React = require("react");
+
 export const DrawerComp = () => {
-  const [open, setOpen] = useState<any>(false);
+  const [open, setOpen] = useState(false);
   const { t } = useTranslation();
   return (
     <>

@@ -1,5 +1,3 @@
-import { AnyAction } from "redux";
-
 const setRemoveAndAddError = "setRemoveAndAddError";
 
 const defaultState = {
@@ -8,7 +6,7 @@ const defaultState = {
 
 export default function RemoveAndAddModalErrorReducer(
   state = defaultState,
-  action: AnyAction
+  action
 ) {
   switch (action.type) {
     case setRemoveAndAddError:
@@ -29,6 +27,6 @@ export default function RemoveAndAddModalErrorReducer(
   }
 }
 
-export const setRemoveAndAddModalError = (props?: Boolean) => ({
+export const setRemoveAndAddModalError = (props?: boolean) => ({
   type: setRemoveAndAddError,
 });

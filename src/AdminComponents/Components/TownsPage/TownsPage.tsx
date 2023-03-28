@@ -1,7 +1,7 @@
 import { useTranslation } from "react-i18next";
-import "../../AdminPage.module.css";
+import style from "../../AdminPage.module.css";
 import { LeftSideMenu } from "../../LeftSideMenu.jsx";
-
+import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import TownSave from "./townSave";
 import { useForm } from "react-hook-form";
@@ -28,8 +28,6 @@ import { Watch } from "react-loader-spinner";
 import RemoveAndAddModal from "../../RemoveAndAddModal";
 import RemoveAndAddModalError from "../../RemoveAndAddModalError";
 import CopyIcon from "../CopyIcon";
-import { useState, useEffect } from "react";
-import React = require("react");
 import { RootState } from "../../../redux/rootReducer";
 
 const TownsPage = () => {
@@ -37,8 +35,8 @@ const TownsPage = () => {
   const dispatch = useDispatch();
   const rerender = useSelector((state: RootState) => state.rerender.isRerender);
   const [townsList, setTownsList] = useState<any>();
-  const [itemForRemove, setItemForRemove] = useState<any>([]);
-  const [isLoading, setLoading] = useState<boolean>(false);
+  const [itemForRemove, setItemForRemove] = useState([]);
+  const [isLoading, setLoading] = useState(false);
 
   useEffect(() => {
     let asyncFunc = async () => {
@@ -106,7 +104,10 @@ const TownsPage = () => {
                     sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                   >
                     <TableCell component="th" scope="row">
-                      <Typography className={"clue"} data-clue={`${row.id}`}>
+                      <Typography
+                        className={style.clue}
+                        data-clue={`${row.id}`}
+                      >
                         {row.id.slice(0, 15) + "..."}
                       </Typography>
                       <CopyIcon data={row.id} />

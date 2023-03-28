@@ -1,15 +1,15 @@
-import "./MainPage.module.css";
+import style from "./MainPage.module.css";
 import Header from "./Components/Header/Header";
 import Content from "./Components/Content/Content";
 import ModalAuthorization from "./Components/ModalAuthorization/ModalAuthorization";
 import ModalOrder from "./Components/ModalOrder/ModalOrder";
 import ModalAvailableMasters from "./Components/ModalAvailableMasters/ModalAvailableMasters";
-import React = require("react");
+import React from "react";
 
 const MainPage = () => {
   return (
     <div>
-      <div className={"background"}>
+      <div className={style.background}>
         <Header />
         <Content />
         <ModalAuthorization />

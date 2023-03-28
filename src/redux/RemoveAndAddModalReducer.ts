@@ -1,15 +1,10 @@
-import { AnyAction } from "redux";
-
 const setRemoveAndAdd = "setRemoveAndAdd";
 
 const defaultState = {
   isActive: false,
 };
 
-export default function RemoveAndAddModalReducer(
-  state = defaultState,
-  action: AnyAction
-) {
+export default function RemoveAndAddModalReducer(state = defaultState, action) {
   switch (action.type) {
     case setRemoveAndAdd:
       if (!state.isActive) {
@@ -29,6 +24,6 @@ export default function RemoveAndAddModalReducer(
   }
 }
 
-export const setRemoveAndAddModal = (props?: Boolean) => ({
+export const setRemoveAndAddModal = (props?: boolean) => ({
   type: setRemoveAndAdd,
 });

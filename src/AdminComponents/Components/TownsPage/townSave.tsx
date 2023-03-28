@@ -1,5 +1,6 @@
 import { instance } from "../../axios-utils";
-import "../../../scale.module.css";
+import style from "../../../scale.module.css";
+import React from "react";
 import { Box, Button, Grid, TextField, Typography } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import { useSelector, useDispatch } from "react-redux";
@@ -10,7 +11,6 @@ import { setModalAddTowns } from "../../../redux/townsReducer";
 import { setPageRerender } from "../../../redux/rerenderReducer";
 import { setRemoveAndAddModal } from "../../../redux/RemoveAndAddModalReducer";
 import { setRemoveAndAddModalError } from "../../../redux/RemoveAndAddModalErrorReducer";
-import React = require("react");
 import { RootState } from "../../../redux/rootReducer";
 
 const TownSave = () => {
@@ -32,7 +32,7 @@ const TownSave = () => {
   }
 
   ////Сохранение города
-  const [pending, setPending] = useState<boolean>(false);
+  const [pending, setPending] = useState(false);
   async function townSave(atr) {
     let data = { ...atr };
     setPending(true);
@@ -60,7 +60,7 @@ const TownSave = () => {
   return (
     <div
       onClick={(e) => e.stopPropagation()}
-      className={isActive ? `${"active"}` : `${"inactive"}`}
+      className={isActive ? `${style.active}` : `${style.inactive}`}
     >
       <form onSubmit={handleSubmit(townSave)}>
         <Box

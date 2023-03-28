@@ -19,7 +19,7 @@ import { DrawerComp } from "./DrawerComp";
 import { setModalOrder } from "../../redux/orderReducer";
 import { getToken } from "../../AdminComponents/token";
 import { useNavigate } from "react-router-dom";
-import React = require("react");
+import React from "react";
 
 const Header = () => {
   const dispatch = useDispatch();
@@ -31,7 +31,7 @@ const Header = () => {
   }
 
   const { t } = useTranslation();
-  const [value, setValue] = useState<any>();
+  const [value, setValue] = useState();
   const theme = useTheme();
   const isMatch = useMediaQuery(theme.breakpoints.down("md"));
   const navigate = useNavigate();

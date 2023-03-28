@@ -1,4 +1,5 @@
-import "../../../scale.module.css";
+import style from "../../../scale.module.css";
+import React, { useEffect, useState } from "react";
 import { Box, Button, Grid, TextField, Typography } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import { useSelector, useDispatch } from "react-redux";
@@ -10,15 +11,13 @@ import NativeSelect from "@mui/material/NativeSelect";
 import Api from "../api";
 import { setPageRerender } from "../../../redux/rerenderReducer";
 import { makeStyles } from "@material-ui/core/styles";
-import * as repairTime from "../repairTime.json";
+import repairTime from "../repairTime.json";
 import { setRemoveAndAddModal } from "../../../redux/RemoveAndAddModalReducer";
 import { setRemoveAndAddModalError } from "../../../redux/RemoveAndAddModalErrorReducer";
 import { instance } from "../../axios-utils";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
-import { useState, useEffect } from "react";
-import React = require("react");
 import { RootState } from "../../../redux/rootReducer";
 
 const useStyles = makeStyles((theme) => ({
@@ -99,7 +98,7 @@ const ReservationSave = () => {
   return (
     <div
       onClick={(e) => e.stopPropagation()}
-      className={isActive ? `${"active"}` : `${"inactive"}`}
+      className={isActive ? `${style.active}` : `${style.inactive}`}
     >
       <form onSubmit={handleSubmit(reservationSave)}>
         <Box

@@ -1,5 +1,3 @@
-import { AnyAction } from "redux";
-
 const setAddReservations = "setAddReservations";
 
 const defaultState = {
@@ -8,7 +6,7 @@ const defaultState = {
 
 export default function modalAddReservationsReducer(
   state = defaultState,
-  action: AnyAction
+  action
 ) {
   switch (action.type) {
     case setAddReservations:
@@ -29,6 +27,6 @@ export default function modalAddReservationsReducer(
   }
 }
 
-export const setModalAddReservations = (props?: Boolean) => ({
+export const setModalAddReservations = (props?: boolean) => ({
   type: setAddReservations,
 });

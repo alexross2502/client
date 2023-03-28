@@ -7,7 +7,7 @@ import ClientPage from "./AdminComponents/Components/ClientsPage/ClientPage";
 import MastersPage from "./AdminComponents/Components/MastersPage/MastersPage";
 import TownsPage from "./AdminComponents/Components/TownsPage/TownsPage";
 import ReservationPage from "./AdminComponents/Components/ReservationPage/ReservationPage";
-import React = require("react");
+import React from "react";
 
 function App() {
   return (

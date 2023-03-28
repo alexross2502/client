@@ -1,12 +1,11 @@
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
+import React, { useState } from "react";
 import DoneIcon from "@mui/icons-material/Done";
-import { useState } from "react";
-import React = require("react");
 import { useClipboard } from "use-clipboard-copy";
 
 const CopyIcon = (props) => {
   const clipboard = useClipboard();
-  const [copy, setCopy] = useState<boolean>(false);
+  const [copy, setCopy] = useState(false);
 
   return !copy ? (
     <ContentCopyIcon

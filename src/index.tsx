@@ -1,11 +1,10 @@
-import * as ReactDOM from "react-dom";
+import React from "react";
+import ReactDOM from "react-dom";
 import App from "./App";
-import reportWebVitals from "./reportWebVitals";
 import { Persistor, store } from "./redux/rootReducer";
 import { Provider } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
 import "./i18n";
-import * as React from "react";
 
 ReactDOM.render(
   <Provider store={store}>
@@ -15,5 +14,3 @@ ReactDOM.render(
   </Provider>,
   document.getElementById("root")
 );
-
-reportWebVitals();

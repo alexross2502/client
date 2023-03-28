@@ -1,15 +1,10 @@
-import { AnyAction } from "redux";
-
 const setActive = "setActive";
 
 const defaultState = {
   isActive: false,
 };
 
-export default function modalWindowReducer(
-  state = defaultState,
-  action: AnyAction
-) {
+export default function modalWindowReducer(state = defaultState, action) {
   switch (action.type) {
     case setActive:
       if (!state.isActive) {
@@ -29,4 +24,4 @@ export default function modalWindowReducer(
   }
 }
 
-export const setModalActive = (props?: Boolean) => ({ type: setActive });
+export const setModalActive = (props?: boolean) => ({ type: setActive });

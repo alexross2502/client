@@ -1,4 +1,5 @@
-import "../../scale.module.css";
+import style from "../../scale.module.css";
+import React from "react";
 import { Box, Button, Grid, TextField, Typography } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import { useSelector, useDispatch } from "react-redux";
@@ -10,7 +11,6 @@ import { useForm } from "react-hook-form";
 import { useState } from "react";
 import CloseIcon from "@mui/icons-material/Close";
 import VisibilityIcon from "@mui/icons-material/Visibility";
-import React = require("react");
 import { RootState } from "../../redux/rootReducer";
 
 const ModalAuthorization = () => {
@@ -29,7 +29,8 @@ const ModalAuthorization = () => {
   const isActive = useSelector(
     (state: RootState) => state.modalWindow.isActive
   );
-  const [isAuthData, setAuthData] = useState<any>("");
+
+  const [isAuthData, setAuthData] = useState("");
 
   async function authController(data) {
     await authCheck(data)
@@ -51,7 +52,7 @@ const ModalAuthorization = () => {
   return (
     <div
       onClick={(e) => e.stopPropagation()}
-      className={isActive ? `${"active"}` : `${"inactive"}`}
+      className={isActive ? `${style.active}` : `${style.inactive}`}
     >
       <form onSubmit={handleSubmit(authController)}>
         <Box

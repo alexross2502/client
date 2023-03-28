@@ -1,4 +1,5 @@
-import "../../scale.module.css";
+import React, { useEffect, useState } from "react";
+import style from "../../scale.module.css";
 import { useSelector, useDispatch } from "react-redux";
 import { setModalOrder } from "../../redux/orderReducer";
 import { useTranslation } from "react-i18next";
@@ -11,13 +12,11 @@ import { Box, Button, Grid, TextField, Typography } from "@mui/material";
 import { makeStyles } from "@material-ui/core/styles";
 import InputLabel from "@mui/material/InputLabel";
 import NativeSelect from "@mui/material/NativeSelect";
-import * as repairTime from "../../AdminComponents/Components/repairTime.json";
+import repairTime from "../../AdminComponents/Components/repairTime.json";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { instance } from "../../AdminComponents/axios-utils";
-import { useState, useEffect } from "react";
-import React = require("react");
 import { RootState } from "../../redux/rootReducer";
 
 const useStyles = makeStyles((theme) => ({
@@ -73,7 +72,8 @@ const ModalOrder = () => {
     })
       .then((res) => {
         dispatch(setModalOrder());
-        dispatch({ type: "setAvailableMasters", payload: [...[res]] });
+        dispatch({ type: "setAvailableMasters", payload: [...res] });
+
         dispatch({
           type: "setOrderData",
           payload: {
@@ -95,7 +95,7 @@ const ModalOrder = () => {
   return (
     <div
       onClick={(e) => e.stopPropagation()}
-      className={isActive ? `${"active"}` : `${"inactive"}`}
+      className={isActive ? `${style.active}` : `${style.inactive}`}
     >
       <form onSubmit={handleSubmit(submitFunction)}>
         <Box

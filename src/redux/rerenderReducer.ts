@@ -1,15 +1,10 @@
-import { AnyAction } from "redux";
-
 const setRerender = "setRerender";
 
 const defaultState = {
   isRerender: false,
 };
 
-export default function rerenderReducer(
-  state = defaultState,
-  action: AnyAction
-) {
+export default function rerenderReducer(state = defaultState, action) {
   switch (action.type) {
     case setRerender:
       if (!state.isRerender) {
@@ -29,4 +24,4 @@ export default function rerenderReducer(
   }
 }
 
-export const setPageRerender = (props?: Boolean) => ({ type: setRerender });
+export const setPageRerender = (props?: boolean) => ({ type: setRerender });

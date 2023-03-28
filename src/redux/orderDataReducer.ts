@@ -1,12 +1,10 @@
-import { AnyAction } from "redux";
-
 const setOrderData = "setOrderData";
 
 const defaultState = {
   data: {},
 };
 
-export const orderDataReducer = (state = defaultState, action: AnyAction) => {
+export const orderDataReducer = (state = defaultState, action) => {
   switch (action.type) {
     case setOrderData:
       return { ...state, data: [action.payload] };
@@ -15,4 +13,4 @@ export const orderDataReducer = (state = defaultState, action: AnyAction) => {
   }
 };
 
-export const setData = (props?: any) => ({ type: setOrderData });
+export const setData = () => ({ type: setOrderData });

@@ -1,15 +1,10 @@
-import { AnyAction } from "redux";
-
 const setAvailableMasters = "setAvailableMasters";
 
 const defaultState = {
   masters: [],
 };
 
-export const availableMastersReducer = (
-  state = defaultState,
-  action: AnyAction
-) => {
+export const availableMastersReducer = (state = defaultState, action) => {
   switch (action.type) {
     case setAvailableMasters:
       return { ...state, masters: [action.payload] };
@@ -18,4 +13,4 @@ export const availableMastersReducer = (
   }
 };
 
-export const setMasters = (props?: any) => ({ type: setAvailableMasters });
+export const setMasters = (props: []) => ({ type: setAvailableMasters });

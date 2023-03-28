@@ -33,7 +33,7 @@ export function LeftSideMenu(props) {
   return (
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
-      <AppBar position="fixed">
+      <AppBar position="fixed" open={true}>
         <Toolbar>
           <Typography variant="h6" noWrap>
             {t("adminPage.header")} {t(`adminPage.${props.name}`)}
@@ -51,6 +51,7 @@ export function LeftSideMenu(props) {
         }}
         variant="persistent"
         anchor="left"
+        open={true}
       >
         <DrawerHeader></DrawerHeader>
         <Divider />
@@ -94,7 +95,7 @@ export function LeftSideMenu(props) {
             onClick={() => {
               sessionStorage.removeItem("token");
               sessionStorage.removeItem("persist:main-root");
-              dispatch(setAuthorized(false));
+              dispatch(setAuthorized("false"));
               navigate("/");
             }}
           >

@@ -1,15 +1,10 @@
-import { AnyAction } from "redux";
-
 const setAddClients = "setAddClients";
 
 const defaultState = {
   isActive: false,
 };
 
-export default function modalAddClientsReducer(
-  state = defaultState,
-  action: AnyAction
-) {
+export default function modalAddClientsReducer(state = defaultState, action) {
   switch (action.type) {
     case setAddClients:
       if (!state.isActive) {
@@ -29,6 +24,6 @@ export default function modalAddClientsReducer(
   }
 }
 
-export const setModalAddClients = (props?: Boolean) => ({
+export const setModalAddClients = (props?: boolean) => ({
   type: setAddClients,
 });
