@@ -3,7 +3,7 @@ import style from "../../AdminPage.module.css";
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import ClientSave from "./clientSave";
-import { LeftSideMenu } from "../../LeftSideMenu.jsx";
+import { LeftSideMenu } from "../../LeftSideMenu";
 import { useForm } from "react-hook-form";
 import { Box } from "@mui/system";
 import {
@@ -25,7 +25,7 @@ import DeleteModal from "../DeleteModal";
 import { setModalDelete } from "../../../redux/deleteReducer";
 import { Watch } from "react-loader-spinner";
 import RemoveAndAddModal from "../../RemoveAndAddModal";
-import { instance } from "../../axios-utils";
+import { instance, InstanceResponse } from "../../axios-utils";
 import RemoveAndAddModalError from "../../RemoveAndAddModalError";
 import CopyIcon from "../CopyIcon";
 import { RootState } from "../../../redux/rootReducer";
@@ -34,9 +34,9 @@ const ClientPage = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const rerender = useSelector((state: RootState) => state.rerender.isRerender);
-  const [clientsList, setClientsList] = useState<any>();
+  const [clientsList, setClientsList] = useState<InstanceResponse | []>();
   const [itemForRemove, setItemForRemove] = useState([]);
-  const [isLoading, setLoading] = useState(false);
+  const [isLoading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
     let asyncFunc = async () => {

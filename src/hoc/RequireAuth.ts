@@ -1,16 +1,19 @@
-import { useLocation, Navigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { setModalActive } from "../redux/modalWindowReducer";
 import React from "react";
+import { RootState } from "../redux/rootReducer";
 
 const RequireAuth = ({ children }) => {
-  const location = useLocation();
-  const isAuthorized = useSelector((state) => state.authorization.isAuthorized);
+  const isAuthorized = useSelector(
+    (state: RootState) => state.authorization.isAuthorized
+  );
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   if (!isAuthorized) {
     dispatch(setModalActive());
-    return <Navigate to="/" state={{ from: location }} />;
+    navigate("/");
   }
 
   return children;

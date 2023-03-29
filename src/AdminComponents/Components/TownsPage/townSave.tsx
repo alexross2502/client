@@ -32,7 +32,7 @@ const TownSave = () => {
   }
 
   ////Сохранение города
-  const [pending, setPending] = useState(false);
+  const [pending, setPending] = useState<boolean>(false);
   async function townSave(atr) {
     let data = { ...atr };
     setPending(true);

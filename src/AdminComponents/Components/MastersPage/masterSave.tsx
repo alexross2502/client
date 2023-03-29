@@ -1,4 +1,4 @@
-import { instance } from "../../axios-utils";
+import { instance, InstanceResponse } from "../../axios-utils";
 import style from "../../../scale.module.css";
 import React, { useEffect, useState } from "react";
 import { Box, Button, Grid, TextField, Typography } from "@mui/material";
@@ -29,7 +29,7 @@ const MasterSave = () => {
   //Открытие\закрытие модального окна
   const isActive = useSelector((state: RootState) => state.addMaster.isActive);
   const rerender = useSelector((state: RootState) => state.rerender.isRerender);
-  const [townsList, setTownsList] = useState<any>([]);
+  const [townsList, setTownsList] = useState<InstanceResponse | []>([]);
 
   useEffect(() => {
     let asyncFunc = async () => {

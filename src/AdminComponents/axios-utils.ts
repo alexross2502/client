@@ -1,12 +1,25 @@
-import axios from "axios";
+import axios, {
+  AxiosRequestHeaders,
+  AxiosResponse,
+  RawAxiosRequestHeaders,
+} from "axios";
 import { getToken } from "./token";
+
+export interface AxiosRequestConfig extends RawAxiosRequestHeaders {
+  headers: AxiosRequestHeaders;
+}
+
+export interface InstanceResponse extends AxiosResponse {
+  [x: string]: any;
+  data: object[] | [] | number | null;
+}
 
 export const instance = axios.create({
   baseURL: `${process.env.REACT_APP_BASE_URL}`,
 });
 
 instance.interceptors.request.use(
-  function (config) {
+  function (config: AxiosRequestConfig) {
     let token = getToken();
     config.headers.Authorization = token;
     return config;

@@ -3,13 +3,16 @@ import React from "react";
 import { Box, Grid, Typography } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import { useSelector, useDispatch } from "react-redux";
+import { RootState } from "../redux/rootReducer";
 
 const RemoveAndAddModalError = () => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
 
   //Открытие\закрытие модального окна
-  const isActive = useSelector((state) => state.removeAndAddError.isActive);
+  const isActive = useSelector(
+    (state: RootState) => state.removeAndAddError.isActive
+  );
 
   return (
     <Box

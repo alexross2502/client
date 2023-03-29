@@ -2,7 +2,7 @@ import { useTranslation } from "react-i18next";
 import style from "../../AdminPage.module.css";
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { LeftSideMenu } from "../../LeftSideMenu.jsx";
+import { LeftSideMenu } from "../../LeftSideMenu";
 import { useForm } from "react-hook-form";
 import Api from "../api";
 import "react-datepicker/dist/react-datepicker.css";
@@ -31,17 +31,20 @@ import RemoveAndAddModalError from "../../RemoveAndAddModalError";
 import CopyIcon from "../CopyIcon";
 import repairTime from "../repairTime.json";
 import { RootState } from "../../../redux/rootReducer";
+import { InstanceResponse } from "../../axios-utils";
 
 const ReservationPage = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const rerender = useSelector((state: RootState) => state.rerender.isRerender);
-  const [clientsList, setClientsList] = useState<any>([]);
-  const [mastersList, setMastersList] = useState<any>([]);
-  const [townsList, setTownsList] = useState<any>([]);
-  const [reservationList, setReservationList] = useState<any>();
+  const [clientsList, setClientsList] = useState<InstanceResponse | []>([]);
+  const [mastersList, setMastersList] = useState<InstanceResponse | []>([]);
+  const [townsList, setTownsList] = useState<InstanceResponse | []>([]);
+  const [reservationList, setReservationList] = useState<
+    InstanceResponse | []
+  >();
   const [itemForRemove, setItemForRemove] = useState([]);
-  const [isLoading, setLoading] = useState(false);
+  const [isLoading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
     let asyncFunc = async () => {
@@ -52,12 +55,16 @@ const ReservationPage = () => {
       setMastersList(masters);
       let towns = await Api.getAll("towns");
       setTownsList(towns);
-      let reservation = await Api.getAll("reservation");
+      let reservation: any = await Api.getAll("reservation");
       reservation.forEach((el) => {
         el.end = `${new Date(el.day).getHours()}-${
           new Date(el.day).getHours() + repairTime[el.size]
         }`;
-        el.day = new Date(el.day).toLocaleString("ru", options);
+        el.day = new Date(el.day).toLocaleString("ru", {
+          year: "numeric",
+          month: "numeric",
+          day: "numeric",
+        });
       });
       setReservationList(reservation);
       setLoading(false);
@@ -81,14 +88,6 @@ const ReservationPage = () => {
     IdToName[el.id] = el?.name;
   });
   ////////////////////////////////////////
-  ///////Опции отображения даты
-  var options = {
-    year: "numeric",
-    month: "numeric",
-    day: "numeric",
-    timezone: "UTC",
-  };
-  //////////////////
 
   return (
     <>

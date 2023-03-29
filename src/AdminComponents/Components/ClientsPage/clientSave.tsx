@@ -28,7 +28,7 @@ const ClientSave = () => {
   const isActive = useSelector((state: RootState) => state.addClient.isActive);
 
   ////Сохранение нового клиента
-  const [pending, setPending] = useState(false);
+  const [pending, setPending] = useState<boolean>(false);
   async function clientSave(atr) {
     let data = { ...atr };
     setPending(true);

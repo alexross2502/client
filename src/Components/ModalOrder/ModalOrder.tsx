@@ -16,7 +16,7 @@ import repairTime from "../../AdminComponents/Components/repairTime.json";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
-import { instance } from "../../AdminComponents/axios-utils";
+import { instance, InstanceResponse } from "../../AdminComponents/axios-utils";
 import { RootState } from "../../redux/rootReducer";
 
 const useStyles = makeStyles((theme) => ({
@@ -49,7 +49,7 @@ const ModalOrder = () => {
   //Открытие\закрытие модального окна
   const isActive = useSelector((state: RootState) => state.order.isActive);
 
-  const [townsList, setTownsList] = useState<any>([]);
+  const [townsList, setTownsList] = useState<InstanceResponse | []>([]);
   useEffect(() => {
     let asyncFunc = async () => {
       let towns = await Api.getAll("towns");
@@ -70,10 +70,9 @@ const ModalOrder = () => {
       method: "post",
       data: data,
     })
-      .then((res) => {
+      .then((res: any) => {
         dispatch(setModalOrder());
         dispatch({ type: "setAvailableMasters", payload: [...res] });
-
         dispatch({
           type: "setOrderData",
           payload: {

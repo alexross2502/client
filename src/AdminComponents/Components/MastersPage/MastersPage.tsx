@@ -3,7 +3,7 @@ import style from "../../AdminPage.module.css";
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import MasterSave from "./masterSave";
-import { LeftSideMenu } from "../../LeftSideMenu.jsx";
+import { LeftSideMenu } from "../../LeftSideMenu";
 import { useForm } from "react-hook-form";
 import Api from "../api";
 import { Box } from "@mui/system";
@@ -29,15 +29,16 @@ import RemoveAndAddModal from "../../RemoveAndAddModal";
 import RemoveAndAddModalError from "../../RemoveAndAddModalError";
 import CopyIcon from "../CopyIcon";
 import { RootState } from "../../../redux/rootReducer";
+import { InstanceResponse } from "../../axios-utils";
 
 const MastersPage = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const rerender = useSelector((state: RootState) => state.rerender.isRerender);
-  const [mastersList, setMastersList] = useState<any>();
-  const [townsList, setTownsList] = useState<any>([]);
+  const [mastersList, setMastersList] = useState<InstanceResponse | []>();
+  const [townsList, setTownsList] = useState<InstanceResponse | []>([]);
   const [itemForRemove, setItemForRemove] = useState([]);
-  const [isLoading, setLoading] = useState(false);
+  const [isLoading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
     let asyncFunc = async () => {

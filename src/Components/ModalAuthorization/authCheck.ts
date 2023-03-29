@@ -1,4 +1,9 @@
+import { AxiosResponse } from "axios";
 import { instance } from "../../AdminComponents/axios-utils";
+
+export interface AuthCheck extends AxiosResponse {
+  token?: string;
+}
 
 export async function authCheck(formData) {
   let data = {
@@ -10,7 +15,7 @@ export async function authCheck(formData) {
     url: `/admin`,
     method: "post",
     data: data,
-  }).then((res) => res);
+  }).then((res: AuthCheck) => res);
   sessionStorage.setItem("token", answer.token);
   return answer;
 }

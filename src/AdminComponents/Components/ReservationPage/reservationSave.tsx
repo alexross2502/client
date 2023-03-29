@@ -14,7 +14,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import repairTime from "../repairTime.json";
 import { setRemoveAndAddModal } from "../../../redux/RemoveAndAddModalReducer";
 import { setRemoveAndAddModalError } from "../../../redux/RemoveAndAddModalErrorReducer";
-import { instance } from "../../axios-utils";
+import { instance, InstanceResponse } from "../../axios-utils";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
@@ -51,9 +51,9 @@ const ReservationSave = () => {
     (state: RootState) => state.addReservation.isActive
   );
   const rerender = useSelector((state: RootState) => state.rerender.isRerender);
-  const [townsList, setTownsList] = useState<any>([]);
-  const [mastersList, setMastersList] = useState<any>([]);
-  const [clientsList, setClientsList] = useState<any>([]);
+  const [townsList, setTownsList] = useState<InstanceResponse | []>([]);
+  const [mastersList, setMastersList] = useState<InstanceResponse | []>([]);
+  const [clientsList, setClientsList] = useState<InstanceResponse | []>([]);
 
   useEffect(() => {
     let asyncFunc = async () => {
@@ -68,7 +68,7 @@ const ReservationSave = () => {
   }, [rerender]);
 
   ////Сохранение нового резерва
-  const [pending, setPending] = useState(false);
+  const [pending, setPending] = useState<boolean>(false);
   async function reservationSave(atr) {
     atr.day = value.getTime();
     let data = { ...atr };

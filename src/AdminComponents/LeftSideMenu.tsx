@@ -1,4 +1,3 @@
-import * as React from "react";
 import Box from "@mui/material/Box";
 import Drawer from "@mui/material/Drawer";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -21,7 +20,8 @@ import { setAuthorized } from "../redux/authorizationReducer";
 import LogoutIcon from "@mui/icons-material/Logout";
 import HomeIcon from "@mui/icons-material/Home";
 import { DrawerHeader } from "./DrawerHeader";
-import { AppBar } from "./AppBar";
+import { CustomAppBar } from "./AppBar";
+import React from "react";
 
 const drawerWidth = 240;
 
@@ -33,13 +33,13 @@ export function LeftSideMenu(props) {
   return (
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
-      <AppBar position="fixed" open={true}>
+      <CustomAppBar position="fixed">
         <Toolbar>
           <Typography variant="h6" noWrap>
             {t("adminPage.header")} {t(`adminPage.${props.name}`)}
           </Typography>
         </Toolbar>
-      </AppBar>
+      </CustomAppBar>
       <Drawer
         sx={{
           width: drawerWidth,
@@ -95,7 +95,7 @@ export function LeftSideMenu(props) {
             onClick={() => {
               sessionStorage.removeItem("token");
               sessionStorage.removeItem("persist:main-root");
-              dispatch(setAuthorized("false"));
+              dispatch(setAuthorized(false));
               navigate("/");
             }}
           >

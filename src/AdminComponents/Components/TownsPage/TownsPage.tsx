@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next";
 import style from "../../AdminPage.module.css";
-import { LeftSideMenu } from "../../LeftSideMenu.jsx";
+import { LeftSideMenu } from "../../LeftSideMenu";
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import TownSave from "./townSave";
@@ -29,14 +29,15 @@ import RemoveAndAddModal from "../../RemoveAndAddModal";
 import RemoveAndAddModalError from "../../RemoveAndAddModalError";
 import CopyIcon from "../CopyIcon";
 import { RootState } from "../../../redux/rootReducer";
+import { InstanceResponse } from "../../axios-utils";
 
 const TownsPage = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const rerender = useSelector((state: RootState) => state.rerender.isRerender);
-  const [townsList, setTownsList] = useState<any>();
+  const [townsList, setTownsList] = useState<InstanceResponse>();
   const [itemForRemove, setItemForRemove] = useState([]);
-  const [isLoading, setLoading] = useState(false);
+  const [isLoading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
     let asyncFunc = async () => {
