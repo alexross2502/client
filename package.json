@@ -65,5 +65,25 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@types/axios": "^0.14.0",
+    "@types/date-fns": "^2.6.0",
+    "@types/dotenv": "^8.2.0",
+    "@types/i18next": "^13.0.0",
+    "@types/nanoid": "^3.0.0",
+    "@types/react": "^17.0.54",
+    "@types/react-datepicker": "^4.10.0",
+    "@types/react-dom": "^18.0.11",
+    "@types/react-loader-spinner": "^4.0.0",
+    "@types/react-query": "^1.2.9",
+    "@types/react-redux": "^7.1.25",
+    "@types/redux": "^3.6.0",
+    "@types/redux-persist": "^4.3.1",
+    "@types/redux-thunk": "^2.1.0",
+    "@types/styled-components": "^5.1.26",
+    "css-loader": "^6.7.3",
+    "style-loader": "^3.3.2",
+    "typescript-plugin-css-modules": "^5.0.0"
   }
 }
