@@ -18,6 +18,7 @@ import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { instance, InstanceResponse } from "../../AdminComponents/axios-utils";
 import { RootState } from "../../redux/rootReducer";
+import { StaticDateTimePicker } from "@mui/x-date-pickers";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -60,8 +61,10 @@ const ModalOrder = () => {
 
   const [value, setValue] = React.useState(null);
   const [pending, setPending] = useState(false);
+  const [isError, setError] = useState<null | string>(null)
 
   async function submitFunction(atr) {
+    if(!!isError){throw new Error('error')}
     let data = { ...atr };
     data.day = value.getTime();
     setPending(true);
@@ -86,8 +89,8 @@ const ModalOrder = () => {
         dispatch(setModalMasters());
         setPending(false);
       })
-      .catch(() => {
-        //тут будет ошибка
+      .catch((e) => {
+        console.log(e)
       });
   }
 
@@ -131,24 +134,27 @@ const ModalOrder = () => {
               />
             </Grid>
           </Grid>
+          <Grid item marginTop={3} sx={{width:300}}>
           <TextField
-            margin="normal"
-            type={"text"}
-            variant="outlined"
-            placeholder="Имя"
-            sx={{ backgroundColor: "white" }}
-            name="name"
-            {...register("name", {
-              required: `${t("adminPopup.emptyField")}`,
-            })}
-          />
+          type={"text"}
+          variant="outlined"
+          placeholder="Имя"
+          sx={{ backgroundColor: "white" }}
+          fullWidth = {true}
+          name="name"
+          {...register("name", {
+            required: `${t("adminPopup.emptyField")}`,
+          })}
+        />
+          </Grid>
+          <Grid item marginTop={3} sx={{width:300}}>
           <TextField
-            margin="normal"
             type={"text"}
             variant="outlined"
             placeholder="Email"
             sx={{ backgroundColor: "white" }}
             name="email"
+            fullWidth = {true}
             {...register("email", {
               required: `${t("adminPopup.emptyField")}`,
               pattern: {
@@ -158,20 +164,40 @@ const ModalOrder = () => {
               },
             })}
           />
+          </Grid>
+          <LocalizationProvider dateAdapter={AdapterDateFns}>
+          <StaticDateTimePicker
+          
+          views={['year', 'month', 'day', 'hours']}
+          disablePast={true}
+                value={value}
+                onChange={(newValue) => {
+                  setValue(newValue);
+                }}
+                ampm={false}
+                minTime={new Date(0, 0, 0, 8)}
+                maxTime={new Date(0, 0, 0, 18)}
+                onError={((error)=>{setError(error)})}
+          />
+          </LocalizationProvider>
+         
           <Grid item marginTop={3}>
             <LocalizationProvider dateAdapter={AdapterDateFns}>
               <DateTimePicker
-                views={["year", "month", "day", "hours"]}
+                views={['year', 'month', 'day', 'hours']}
                 disablePast={true}
                 value={value}
                 onChange={(newValue) => {
                   setValue(newValue);
                 }}
                 ampm={false}
+                minTime={new Date(0, 0, 0, 8)}
+                maxTime={new Date(0, 0, 0, 18)}
+                onError={((error)=>{setError(error)})}
               />
             </LocalizationProvider>
           </Grid>
-          <Grid item marginTop={3}>
+          <Grid item marginTop={3} sx={{width:300}}>
             <InputLabel variant="standard" htmlFor="towns_id">
               Город
             </InputLabel>
@@ -179,8 +205,9 @@ const ModalOrder = () => {
               inputProps={{
                 name: "towns_id",
                 id: "towns_id",
-              }}
-              style={{ width: 200 }}
+              }} 
+              fullWidth = {true}
+              
               {...register("towns_id", {
                 required: `${t("adminPopup.emptyField")}`,
               })}
@@ -194,7 +221,7 @@ const ModalOrder = () => {
               })}
             </NativeSelect>
           </Grid>
-          <Grid item marginTop={3}>
+          <Grid item marginTop={3} sx={{width:300}}>
             <InputLabel variant="standard" htmlFor="size">
               Размер часов
             </InputLabel>
@@ -203,7 +230,7 @@ const ModalOrder = () => {
                 name: "size",
                 id: "size",
               }}
-              style={{ width: 200 }}
+              fullWidth = {true}
               {...register("size", {
                 required: `${t("adminPopup.emptyField")}`,
               })}

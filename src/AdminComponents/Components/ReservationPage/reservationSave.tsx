@@ -54,6 +54,8 @@ const ReservationSave = () => {
   const [townsList, setTownsList] = useState<InstanceResponse | []>([]);
   const [mastersList, setMastersList] = useState<InstanceResponse | []>([]);
   const [clientsList, setClientsList] = useState<InstanceResponse | []>([]);
+  const [pending, setPending] = useState<boolean>(false);
+  const [isError, setError] = useState<null | string>(null)
 
   useEffect(() => {
     let asyncFunc = async () => {
@@ -68,29 +70,33 @@ const ReservationSave = () => {
   }, [rerender]);
 
   ////Сохранение нового резерва
-  const [pending, setPending] = useState<boolean>(false);
+
   async function reservationSave(atr) {
-    atr.day = value.getTime();
-    let data = { ...atr };
-    setPending(true);
-    await instance({ url: `/reservation`, method: "post", data: data })
-      .then(() => {
-        dispatch(setPageRerender());
-        dispatch(setRemoveAndAddModal(true));
-        dispatch(setModalAddReservations());
-        setTimeout(() => {
-          dispatch(setRemoveAndAddModal(false));
-        }, 1000);
-        setPending(false);
-      })
-      .catch(() => {
-        dispatch(setRemoveAndAddModalError(true));
-        dispatch(setModalAddReservations());
-        setTimeout(() => {
-          dispatch(setRemoveAndAddModalError(false));
-        }, 1000);
-        setPending(true);
-      });
+    if(!!isError){
+      throw new Error('error')
+    }else{
+      atr.day = value.getTime();
+      let data = { ...atr };
+      setPending(true);
+      await instance({ url: `/reservation`, method: "post", data: data })
+        .then(() => {
+          dispatch(setPageRerender());
+          dispatch(setRemoveAndAddModal(true));
+          dispatch(setModalAddReservations());
+          setTimeout(() => {
+            dispatch(setRemoveAndAddModal(false));
+          }, 1000);
+          setPending(false);
+        })
+        .catch(() => {
+          dispatch(setRemoveAndAddModalError(true));
+          dispatch(setModalAddReservations());
+          setTimeout(() => {
+            dispatch(setRemoveAndAddModalError(false));
+          }, 1000);
+          setPending(true);
+        });
+    }
   }
 
   const [value, setValue] = React.useState(null);
@@ -165,6 +171,9 @@ const ReservationSave = () => {
                   setValue(newValue);
                 }}
                 ampm={false}
+                minTime={new Date(0, 0, 0, 8)}
+                maxTime={new Date(0, 0, 0, 18)}
+                onError={((error)=>{setError(error)})}
               />
             </LocalizationProvider>
           </Grid>
