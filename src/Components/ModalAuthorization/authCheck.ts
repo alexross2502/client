@@ -11,11 +11,11 @@ export async function authCheck(formData) {
     login: formData.email,
   };
 
-  let answer = await instance({
+  let answer: AuthCheck = await instance({
     url: `/admin`,
     method: "post",
     data: data,
-  }).then((res: AuthCheck) => res);
+  })
   sessionStorage.setItem("token", answer.token);
   return answer;
 }
