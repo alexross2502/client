@@ -29,13 +29,13 @@ export function LeftSideMenu(props) {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
+  console.log(props);
   return (
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
       <CustomAppBar position="fixed">
         <Toolbar>
-          <Typography variant="h6" noWrap>
+          <Typography variant="h6" noWrap sx={{ marginLeft: "50%" }}>
             {t("adminPage.header")} {t(`adminPage.${props.name}`)}
           </Typography>
         </Toolbar>

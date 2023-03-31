@@ -20,7 +20,7 @@ const ModalOrderSuccess = () => {
     if (isActive) {
       setTimeout(() => {
         windowClose();
-      }, 2000);
+      }, 1500);
     }
   }, [isActive]);
 

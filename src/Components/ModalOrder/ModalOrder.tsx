@@ -18,7 +18,15 @@ import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { instance, InstanceResponse } from "../../AdminComponents/axios-utils";
 import { RootState } from "../../redux/rootReducer";
-import { StaticDateTimePicker } from "@mui/x-date-pickers";
+import {
+  DateCalendar,
+  StaticDateTimePicker,
+  TimeClock,
+} from "@mui/x-date-pickers";
+import LightModeIcon from "@mui/icons-material/LightMode";
+import AcUnitIcon from "@mui/icons-material/AcUnit";
+import ArrowSwitcherComponent from "./clock";
+import DateComponent from "./DateComponent";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -61,10 +69,15 @@ const ModalOrder = () => {
 
   const [value, setValue] = React.useState(null);
   const [pending, setPending] = useState(false);
-  const [isError, setError] = useState<null | string>(null)
+  const [isError, setError] = useState<null | string>(null);
+  const [isOpen, setOpen] = useState<boolean>(false);
+  let [isDateDone, setDateDone] = useState<boolean>(false);
+  let [currentDate, setCurrentDate] = useState(new Date());
 
   async function submitFunction(atr) {
-    if(!!isError){throw new Error('error')}
+    if (!!isError) {
+      throw new Error("error");
+    }
     let data = { ...atr };
     data.day = value.getTime();
     setPending(true);
@@ -90,13 +103,16 @@ const ModalOrder = () => {
         setPending(false);
       })
       .catch((e) => {
-        console.log(e)
+        console.log(e);
       });
   }
 
   return (
     <div
-      onClick={(e) => e.stopPropagation()}
+      onClick={(e) => {
+        e.stopPropagation();
+        setOpen(false);
+      }}
       className={isActive ? `${style.active}` : `${style.inactive}`}
     >
       <form onSubmit={handleSubmit(submitFunction)}>
@@ -134,70 +150,67 @@ const ModalOrder = () => {
               />
             </Grid>
           </Grid>
-          <Grid item marginTop={3} sx={{width:300}}>
-          <TextField
-          type={"text"}
-          variant="outlined"
-          placeholder="Имя"
-          sx={{ backgroundColor: "white" }}
-          fullWidth = {true}
-          name="name"
-          {...register("name", {
-            required: `${t("adminPopup.emptyField")}`,
-          })}
-        />
+          <Grid item marginTop={3} sx={{ width: 300 }}>
+            <TextField
+              type={"text"}
+              variant="outlined"
+              placeholder="Имя"
+              sx={{ backgroundColor: "white" }}
+              fullWidth={true}
+              name="name"
+              {...register("name", {
+                required: `${t("adminPopup.emptyField")}`,
+              })}
+            />
           </Grid>
-          <Grid item marginTop={3} sx={{width:300}}>
-          <TextField
-            type={"text"}
-            variant="outlined"
-            placeholder="Email"
-            sx={{ backgroundColor: "white" }}
-            name="email"
-            fullWidth = {true}
-            {...register("email", {
-              required: `${t("adminPopup.emptyField")}`,
-              pattern: {
-                value:
-                  /^([a-z0-9_-]+.)*[a-z0-9_-]+@[a-z0-9_-]+(.[a-z0-9_-]+)*.[a-z]{2,6}$/,
-                message: `${t("adminPopup.vrongFormat")}`,
-              },
-            })}
-          />
+          <Grid item marginTop={3} sx={{ width: 300 }}>
+            <TextField
+              type={"text"}
+              variant="outlined"
+              placeholder="Email"
+              sx={{ backgroundColor: "white" }}
+              name="email"
+              fullWidth={true}
+              {...register("email", {
+                required: `${t("adminPopup.emptyField")}`,
+                pattern: {
+                  value:
+                    /^([a-z0-9_-]+.)*[a-z0-9_-]+@[a-z0-9_-]+(.[a-z0-9_-]+)*.[a-z]{2,6}$/,
+                  message: `${t("adminPopup.vrongFormat")}`,
+                },
+              })}
+            />
           </Grid>
-          <LocalizationProvider dateAdapter={AdapterDateFns}>
-          <StaticDateTimePicker
-          
-          views={['year', 'month', 'day', 'hours']}
-          disablePast={true}
-                value={value}
-                onChange={(newValue) => {
-                  setValue(newValue);
-                }}
-                ampm={false}
-                minTime={new Date(0, 0, 0, 8)}
-                maxTime={new Date(0, 0, 0, 18)}
-                onError={((error)=>{setError(error)})}
-          />
-          </LocalizationProvider>
-         
           <Grid item marginTop={3}>
             <LocalizationProvider dateAdapter={AdapterDateFns}>
-              <DateTimePicker
-                views={['year', 'month', 'day', 'hours']}
-                disablePast={true}
-                value={value}
-                onChange={(newValue) => {
-                  setValue(newValue);
-                }}
-                ampm={false}
-                minTime={new Date(0, 0, 0, 8)}
-                maxTime={new Date(0, 0, 0, 18)}
-                onError={((error)=>{setError(error)})}
-              />
+              {!isDateDone ? (
+                <DateCalendar
+                  defaultValue={new Date()}
+                  disablePast={true}
+                  onChange={(newValue) => {
+                    setCurrentDate(newValue);
+                    setDateDone(true);
+                  }}
+                />
+              ) : (
+                <Box sx={{ position: "relative" }}>
+                  <TimeClock
+                    defaultValue={new Date(currentDate)}
+                    view="hours"
+                    onChange={(newValue) => {
+                      setCurrentDate(newValue);
+                      console.log(newValue);
+                    }}
+                    ampm={false}
+                    minTime={new Date(0, 0, 0, 8)}
+                    maxTime={new Date(0, 0, 0, 18)}
+                  />
+                </Box>
+              )}
             </LocalizationProvider>
           </Grid>
-          <Grid item marginTop={3} sx={{width:300}}>
+
+          <Grid item marginTop={3} sx={{ width: 300 }}>
             <InputLabel variant="standard" htmlFor="towns_id">
               Город
             </InputLabel>
@@ -205,9 +218,8 @@ const ModalOrder = () => {
               inputProps={{
                 name: "towns_id",
                 id: "towns_id",
-              }} 
-              fullWidth = {true}
-              
+              }}
+              fullWidth={true}
               {...register("towns_id", {
                 required: `${t("adminPopup.emptyField")}`,
               })}
@@ -221,7 +233,7 @@ const ModalOrder = () => {
               })}
             </NativeSelect>
           </Grid>
-          <Grid item marginTop={3} sx={{width:300}}>
+          <Grid item marginTop={3} sx={{ width: 300 }}>
             <InputLabel variant="standard" htmlFor="size">
               Размер часов
             </InputLabel>
@@ -230,7 +242,7 @@ const ModalOrder = () => {
                 name: "size",
                 id: "size",
               }}
-              fullWidth = {true}
+              fullWidth={true}
               {...register("size", {
                 required: `${t("adminPopup.emptyField")}`,
               })}
@@ -240,7 +252,6 @@ const ModalOrder = () => {
               })}
             </NativeSelect>
           </Grid>
-
           <Button
             sx={{
               background: "rgba(180,58,58,1)",
