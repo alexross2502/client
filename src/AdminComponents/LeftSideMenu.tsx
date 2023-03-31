@@ -29,7 +29,6 @@ export function LeftSideMenu(props) {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  console.log(props);
   return (
     <Box sx={{ display: "flex" }}>
       <CssBaseline />

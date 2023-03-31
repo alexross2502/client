@@ -14,19 +14,15 @@ import InputLabel from "@mui/material/InputLabel";
 import NativeSelect from "@mui/material/NativeSelect";
 import repairTime from "../../AdminComponents/Components/repairTime.json";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { instance, InstanceResponse } from "../../AdminComponents/axios-utils";
 import { RootState } from "../../redux/rootReducer";
 import {
   DateCalendar,
-  StaticDateTimePicker,
   TimeClock,
 } from "@mui/x-date-pickers";
-import LightModeIcon from "@mui/icons-material/LightMode";
-import AcUnitIcon from "@mui/icons-material/AcUnit";
-import ArrowSwitcherComponent from "./clock";
-import DateComponent from "./DateComponent";
+import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
+
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -67,19 +63,16 @@ const ModalOrder = () => {
     asyncFunc();
   }, [isActive]);
 
-  const [value, setValue] = React.useState(null);
-  const [pending, setPending] = useState(false);
-  const [isError, setError] = useState<null | string>(null);
-  const [isOpen, setOpen] = useState<boolean>(false);
-  let [isDateDone, setDateDone] = useState<boolean>(false);
+  const [pending, setPending] = useState<boolean>(false);
+  const [isDateDone, setDateDone] = useState<boolean>(false);
   let [currentDate, setCurrentDate] = useState(new Date());
 
   async function submitFunction(atr) {
-    if (!!isError) {
+    if (new Date() > currentDate) {
       throw new Error("error");
     }
     let data = { ...atr };
-    data.day = value.getTime();
+    data.day = currentDate.getTime();
     setPending(true);
     await instance({
       url: `/reservation/available`,
@@ -92,7 +85,7 @@ const ModalOrder = () => {
         dispatch({
           type: "setOrderData",
           payload: {
-            day: value.getTime(),
+            day: currentDate.getTime(),
             size: atr.size,
             recipient: atr.email,
             clientName: atr.name,
@@ -109,10 +102,9 @@ const ModalOrder = () => {
 
   return (
     <div
-      onClick={(e) => {
-        e.stopPropagation();
-        setOpen(false);
-      }}
+      onClick={(e) => 
+        e.stopPropagation()
+      }
       className={isActive ? `${style.active}` : `${style.inactive}`}
     >
       <form onSubmit={handleSubmit(submitFunction)}>
@@ -129,7 +121,7 @@ const ModalOrder = () => {
           boxShadow={"5px 5px 10px #ccc"}
           sx={{
             backgroundColor: "#a0a0a0",
-
+            
             ":hover": {
               boxShadow: "10px 10px 20px #ccc",
             },
@@ -194,12 +186,12 @@ const ModalOrder = () => {
                 />
               ) : (
                 <Box sx={{ position: "relative" }}>
+                  <ArrowBackIosNewIcon onClick={()=>setDateDone(false)} sx={{cursor: 'pointer'}} />
                   <TimeClock
                     defaultValue={new Date(currentDate)}
                     view="hours"
                     onChange={(newValue) => {
                       setCurrentDate(newValue);
-                      console.log(newValue);
                     }}
                     ampm={false}
                     minTime={new Date(0, 0, 0, 8)}
