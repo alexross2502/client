@@ -20,9 +20,13 @@ import { setModalOrder } from "../../redux/orderReducer";
 import { getToken } from "../../AdminComponents/token";
 import { useNavigate } from "react-router-dom";
 import React from "react";
+import { setRegistrationModalReducer } from "../../redux/registrationModalReducer";
 
 const Header = () => {
   const dispatch = useDispatch();
+  function onClickRegistration() {
+    dispatch(setRegistrationModalReducer());
+  }
   function onClickLogin() {
     dispatch(setModalActive());
   }
@@ -41,8 +45,7 @@ const Header = () => {
       sx={{
         backgroundImage:
           "linear-gradient(90deg, rgba(180,58,58,1) 2%, rgba(49,49,116,1) 36%, rgba(105,0,161,1) 73%, rgba(166,69,252,1) 100%)",
-      }}
-    >
+      }}>
       <Toolbar>
         {isMatch ? (
           <>
@@ -67,48 +70,42 @@ const Header = () => {
                 onChange={(e, val) => {
                   setValue(val);
                 }}
-                centered={true}
-              >
+                centered={true}>
                 <Tab
                   sx={{ marginLeft: "40px", fontSize: "15px" }}
-                  label={t("header.portfolio")}
-                ></Tab>
+                  label={t("header.portfolio")}></Tab>
                 <Tab
                   sx={{ marginLeft: "40px", fontSize: "15px" }}
-                  label={t("header.registration")}
-                ></Tab>
+                  label={t("header.about us")}></Tab>
                 <Tab
                   sx={{ marginLeft: "40px", fontSize: "15px" }}
                   label={t("order.header")}
-                  onClick={() => {
-                    onClickOrder();
-                  }}
-                ></Tab>
+                  onClick={onClickOrder}></Tab>
               </Tabs>
             </Grid>
             <Grid item xs={2}>
               <Box display={"flex"}>
-                
+                <Button
+                  sx={{ marginLeft: "auto", background: "rgba(180,58,58,1)" }}
+                  variant="contained"
+                  onClick={onClickRegistration}>
+                  {t("header.registration")}
+                </Button>
                 {getToken() !== null ? (
                   <Button
                     sx={{ marginLeft: "auto", background: "rgba(180,58,58,1)" }}
                     variant="contained"
-                    onClick={() => navigate("/reservation")}
-                  >
+                    onClick={() => navigate("/reservation")}>
                     {t("header.authorized")}
                   </Button>
                 ) : (
                   <Button
                     sx={{ marginLeft: "auto", background: "rgba(180,58,58,1)" }}
                     variant="contained"
-                    onClick={() => {
-                      onClickLogin();
-                    }}
-                  >
+                    onClick={onClickLogin}>
                     {t("header.login")}
                   </Button>
                 )}
-
               </Box>
             </Grid>
           </Grid>

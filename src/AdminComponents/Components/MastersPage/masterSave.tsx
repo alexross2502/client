@@ -14,6 +14,7 @@ import { setPageRerender } from "../../../redux/rerenderReducer";
 import { setRemoveAndAddModal } from "../../../redux/RemoveAndAddModalReducer";
 import { setRemoveAndAddModalError } from "../../../redux/RemoveAndAddModalErrorReducer";
 import { RootState } from "../../../redux/rootReducer";
+import { rating } from "../../../utils/constants";
 
 const MasterSave = () => {
   const dispatch = useDispatch();
@@ -155,11 +156,10 @@ const MasterSave = () => {
                 required: `${t("adminPopup.emptyField")}`,
               })}
             >
-              <option defaultValue={1}>1</option>
-              <option value={2}>2</option>
-              <option value={3}>3</option>
-              <option value={4}>4</option>
-              <option value={5}>5</option>
+              {rating.map((el)=>{
+                return <option value={el}>{el}</option>
+              })}
+              
             </NativeSelect>
           </Grid>
           <Grid item marginTop={3}>

@@ -1,7 +1,7 @@
 const setRegistrationModal = "setRegistrationModal";
 
 const defaultState = {
-  isActive: true,
+  isActive: false,
 };
 
 export default function registrationModalReducer(state = defaultState, action) {
