@@ -5,7 +5,8 @@
     "contacts": "Контакты",
     "about us": "О нас",
     "login": "Войти",
-    "authorized": "Админ"
+    "authorized": "Админ",
+    "registration": "Регистрация"
   },
   "mainText": {
     "part1": "Со временем все будет хорошо,",

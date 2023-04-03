@@ -75,25 +75,20 @@ const Header = () => {
                 ></Tab>
                 <Tab
                   sx={{ marginLeft: "40px", fontSize: "15px" }}
-                  label={t("header.contacts")}
+                  label={t("header.registration")}
                 ></Tab>
                 <Tab
                   sx={{ marginLeft: "40px", fontSize: "15px" }}
-                  label={t("header.about us")}
+                  label={t("order.header")}
+                  onClick={() => {
+                    onClickOrder();
+                  }}
                 ></Tab>
               </Tabs>
             </Grid>
             <Grid item xs={2}>
               <Box display={"flex"}>
-                <Button
-                  sx={{ background: "#82c434" }}
-                  variant="contained"
-                  onClick={() => {
-                    onClickOrder();
-                  }}
-                >
-                  {t("order.header")}
-                </Button>
+                
                 {getToken() !== null ? (
                   <Button
                     sx={{ marginLeft: "auto", background: "rgba(180,58,58,1)" }}
@@ -113,6 +108,7 @@ const Header = () => {
                     {t("header.login")}
                   </Button>
                 )}
+
               </Box>
             </Grid>
           </Grid>
