@@ -20,6 +20,7 @@ import Checkbox from "@mui/material/Checkbox";
 import { InstanceResponse } from "../../AdminComponents/axios-utils";
 import Api from "../../AdminComponents/Components/api";
 import registrationVariant from "./registrationVariant";
+import { rating } from "../../utils/constants";
 
 const ModalRegistration = () => {
   let isActive = useSelector(
@@ -50,18 +51,19 @@ const ModalRegistration = () => {
   const [isAgree, setAgree] = useState<boolean>(false);
 
   async function submitFunction(atr) {
+    
     (isMaster
       ? registrationVariant.master(
           atr.name,
           atr.surname,
           atr.post,
-          atr.rating,
+          Number(atr.rating),
           atr.password,
           atr.townId
         )
       : registrationVariant.client(atr.name, atr.post, atr.password)).then(()=>{
         console.log('1111')
-      })
+      }).catch((e)=>console.log(atr))
   }
 
   return (
@@ -117,6 +119,7 @@ const ModalRegistration = () => {
             />
           </Grid>
           {isMaster && (
+            <>
             <Grid item marginTop={3} sx={{ width: 300 }}>
               <TextField
                 margin="normal"
@@ -131,6 +134,27 @@ const ModalRegistration = () => {
                 })}
               />
             </Grid>
+            <Grid item marginTop={3} sx={{ width: 300 }}>
+            <InputLabel variant="standard" htmlFor="rating">
+              Рейтинг
+            </InputLabel>
+            <NativeSelect
+              inputProps={{
+                name: "rating",
+                id: "rating",
+              }}
+              fullWidth={true}
+              {...register("rating", {
+                required: `${t("adminPopup.emptyField")}`,
+              })}
+            >
+              {rating.map((el)=>{
+                return <option value={el}>{el}</option>
+              })}
+              
+            </NativeSelect>
+          </Grid>
+          </>
           )}
           <Grid item marginTop={3} sx={{ width: 300, alignContent: "center" }}>
             <TextField

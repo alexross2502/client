@@ -1,7 +1,6 @@
 .active {
   scale: 1;
-  position: fixed;
-  top: 10%;
+  position: relative;
   left: 50%;
   transform: translateX(-50%);
   background-color: rgba(0, 0, 0, 0.4);
