@@ -16,6 +16,7 @@ const MainPage = () => {
         <ModalAuthorization />
         <ModalOrder />
         <ModalAvailableMasters />
+        
         <ModalRegistration />
       </div>
     </div>
