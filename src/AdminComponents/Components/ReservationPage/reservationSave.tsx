@@ -16,9 +16,10 @@ import { setRemoveAndAddModal } from "../../../redux/RemoveAndAddModalReducer";
 import { setRemoveAndAddModalError } from "../../../redux/RemoveAndAddModalErrorReducer";
 import { instance, InstanceResponse } from "../../axios-utils";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { RootState } from "../../../redux/rootReducer";
+import { DateCalendar, TimeClock } from "@mui/x-date-pickers";
+import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -54,6 +55,9 @@ const ReservationSave = () => {
   const [townsList, setTownsList] = useState<InstanceResponse | []>([]);
   const [mastersList, setMastersList] = useState<InstanceResponse | []>([]);
   const [clientsList, setClientsList] = useState<InstanceResponse | []>([]);
+  const [pending, setPending] = useState<boolean>(false);
+  const [isDateDone, setDateDone] = useState<boolean>(false);
+  let [currentDate, setCurrentDate] = useState(new Date());
 
   useEffect(() => {
     let asyncFunc = async () => {
@@ -68,32 +72,37 @@ const ReservationSave = () => {
   }, [rerender]);
 
   ////Сохранение нового резерва
-  const [pending, setPending] = useState<boolean>(false);
+
   async function reservationSave(atr) {
-    atr.day = value.getTime();
-    let data = { ...atr };
-    setPending(true);
-    await instance({ url: `/reservation`, method: "post", data: data })
-      .then(() => {
-        dispatch(setPageRerender());
-        dispatch(setRemoveAndAddModal(true));
-        dispatch(setModalAddReservations());
-        setTimeout(() => {
-          dispatch(setRemoveAndAddModal(false));
-        }, 1000);
-        setPending(false);
-      })
-      .catch(() => {
-        dispatch(setRemoveAndAddModalError(true));
-        dispatch(setModalAddReservations());
-        setTimeout(() => {
-          dispatch(setRemoveAndAddModalError(false));
-        }, 1000);
-        setPending(true);
-      });
+    if (new Date() > currentDate) {
+      throw new Error("error");
+    
+    }else{
+      atr.day = currentDate.getTime();
+      let data = { ...atr };
+      setPending(true);
+      await instance({ url: `/reservation`, method: "post", data: data })
+        .then(() => {
+          dispatch(setPageRerender());
+          dispatch(setRemoveAndAddModal(true));
+          dispatch(setModalAddReservations());
+          setTimeout(() => {
+            dispatch(setRemoveAndAddModal(false));
+          }, 1000);
+          setPending(false);
+        })
+        .catch(() => {
+          dispatch(setRemoveAndAddModalError(true));
+          dispatch(setModalAddReservations());
+          setTimeout(() => {
+            dispatch(setRemoveAndAddModalError(false));
+          }, 1000);
+          setPending(true);
+        });
+    }
   }
 
-  const [value, setValue] = React.useState(null);
+  
 
   return (
     <div
@@ -156,16 +165,31 @@ const ReservationSave = () => {
             </NativeSelect>
           </Grid>
           <Grid item marginTop={3}>
-            <LocalizationProvider dateAdapter={AdapterDateFns}>
-              <DateTimePicker
-                views={["year", "month", "day", "hours"]}
-                disablePast={true}
-                value={value}
-                onChange={(newValue) => {
-                  setValue(newValue);
-                }}
-                ampm={false}
-              />
+          <LocalizationProvider dateAdapter={AdapterDateFns}>
+              {!isDateDone ? (
+                <DateCalendar
+                  defaultValue={new Date()}
+                  disablePast={true}
+                  onChange={(newValue) => {
+                    setCurrentDate(newValue);
+                    setDateDone(true);
+                  }}
+                />
+              ) : (
+                <Box sx={{ position: "relative" }}>
+                  <ArrowBackIosNewIcon onClick={()=>setDateDone(false)} sx={{cursor: 'pointer'}} />
+                  <TimeClock
+                    defaultValue={new Date(currentDate)}
+                    view="hours"
+                    onChange={(newValue) => {
+                      setCurrentDate(newValue);
+                    }}
+                    ampm={false}
+                    minTime={new Date(0, 0, 0, 8)}
+                    maxTime={new Date(0, 0, 0, 18)}
+                  />
+                </Box>
+              )}
             </LocalizationProvider>
           </Grid>
           <Grid item marginTop={3}>
