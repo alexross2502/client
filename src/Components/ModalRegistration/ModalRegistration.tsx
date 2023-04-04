@@ -114,7 +114,7 @@ const ModalRegistration = () => {
               name="name"
               fullWidth={true}
               {...register("name", {
-                //required: `${t("adminPopup.emptyField")}`,
+                required: `${t("adminPopup.emptyField")}`,
               })}
             />
           </Grid>
@@ -130,7 +130,7 @@ const ModalRegistration = () => {
                 name="surname"
                 fullWidth={true}
                 {...register("surname", {
-                  //required: `${t("adminPopup.emptyField")}`,
+                  required: `${t("adminPopup.emptyField")}`,
                 })}
               />
             </Grid>
@@ -166,7 +166,7 @@ const ModalRegistration = () => {
               name="email"
               fullWidth={true}
               {...register("email", {
-                //required: `${t("adminPopup.emptyField")}`,
+                required: `${t("adminPopup.emptyField")}`,
                 pattern: {
                   value:
                     /^([a-z0-9_-]+.)*[a-z0-9_-]+@[a-z0-9_-]+(.[a-z0-9_-]+)*.[a-z]{2,6}$/,
@@ -185,7 +185,7 @@ const ModalRegistration = () => {
               name="password"
               fullWidth={true}
               {...register("password", {
-                //required: `${t("adminPopup.emptyField")}`,
+                required: `${t("adminPopup.emptyField")}`,
               })}
             />
           </Grid>
@@ -198,7 +198,7 @@ const ModalRegistration = () => {
               sx={{ backgroundColor: "white" }}
               fullWidth={true}
               {...register("rePassword", {
-                //required: `${t("adminPopup.emptyField")}`,
+                required: `${t("adminPopup.emptyField")}`,
               })}
             />
           </Grid>
