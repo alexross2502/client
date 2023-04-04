@@ -56,12 +56,12 @@ const ModalRegistration = () => {
       ? registrationVariant.master(
           atr.name,
           atr.surname,
-          atr.post,
+          atr.email,
           Number(atr.rating),
           atr.password,
           atr.townId
         )
-      : registrationVariant.client(atr.name, atr.post, atr.password)).then(()=>{
+      : registrationVariant.client(atr.name, atr.email, atr.password)).then(()=>{
         console.log('1111')
       }).catch((e)=>console.log(atr))
   }
@@ -207,16 +207,16 @@ const ModalRegistration = () => {
               item
               marginTop={3}
               sx={{ width: 300, alignContent: "center" }}>
-              <InputLabel variant="standard" htmlFor="towns_id">
+              <InputLabel variant="standard" htmlFor="townId">
                 Город
               </InputLabel>
               <NativeSelect
                 inputProps={{
-                  name: "towns_id",
-                  id: "towns_id",
+                  name: "townId",
+                  id: "townId",
                 }}
                 style={{ width: 300 }}
-                {...register("towns_id", {
+                {...register("townId", {
                   required: `${t("adminPopup.emptyField")}`,
                 })}>
                 {townsList.map((el) => {

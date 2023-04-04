@@ -142,6 +142,43 @@ const MasterSave = () => {
               },
             })}
           />
+          {
+            <Typography color={"red"}>
+              {errors?.email && errors?.email.message}
+            </Typography>
+          }
+          <TextField
+            margin="normal"
+            type={"text"}
+            variant="outlined"
+            placeholder="Почта"
+            sx={{ backgroundColor: "white" }}
+            name="email"
+            {...register("email", {
+              required: `${t("adminPopup.emptyField")}`,
+              pattern: {
+                value:
+                  /^([a-z0-9_-]+.)*[a-z0-9_-]+@[a-z0-9_-]+(.[a-z0-9_-]+)*.[a-z]{2,6}$/,
+                message: `${t("adminPopup.vrongFormat")}`,
+              },
+            })}
+          />
+          {
+            <Typography color={"red"}>
+              {errors?.password && errors?.password.message}
+            </Typography>
+          }
+          <TextField
+            margin="normal"
+            type={"text"}
+            variant="outlined"
+            placeholder="Пароль"
+            sx={{ backgroundColor: "white" }}
+            name="password"
+            {...register("password", {
+              required: `${t("adminPopup.emptyField")}`,
+            })}
+          />
           <Grid item marginTop={3}>
             <InputLabel variant="standard" htmlFor="rating">
               Рейтинг

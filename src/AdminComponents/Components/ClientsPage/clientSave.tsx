@@ -129,6 +129,22 @@ const ClientSave = () => {
               },
             })}
           />
+            {
+            <Typography color={"red"}>
+              {errors?.password && errors?.password.message}
+            </Typography>
+          }
+          <TextField
+            margin="normal"
+            type={"text"}
+            variant="outlined"
+            placeholder="Пароль"
+            sx={{ backgroundColor: "white" }}
+            name="password"
+            {...register("password", {
+              required: `${t("adminPopup.emptyField")}`,
+            })}
+          />
           <Button
             sx={{
               background: "rgba(180,58,58,1)",

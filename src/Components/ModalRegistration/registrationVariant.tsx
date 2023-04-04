@@ -2,24 +2,24 @@ import { AxiosResponse } from "axios"
 import { instance } from "../../AdminComponents/axios-utils"
 
 interface IRegistration {
-    client: (name: string, post: string, password: string) => Promise<AxiosResponse<object[], number>>
-    master: (name: string, surname:string, post: string, rating: number, password: string, townId: string) => Promise<AxiosResponse<number, number>>
+    client: (name: string, email: string, password: string) => Promise<AxiosResponse<object[], number>>
+    master: (name: string, surname:string, email: string, rating: number, password: string, townId: string) => Promise<AxiosResponse<number, number>>
   }
 
 const registrationVariant:IRegistration = {
-    client: async function (name, post, password) {
+    client: async function (name, email, password) {
         const data = {
             name,
-            post,
+            email,
             password
         }
         return await instance({ url: `/clients/registration`, method: 'POST', data: data })
     },
-    master: async function (name, surname, post, rating, password, townId) {
+    master: async function (name, surname, email, rating, password, townId) {
         const data = {
             name,
             surname,
-            post,
+            email,
             rating,
             password,
             townId
