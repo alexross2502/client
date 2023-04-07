@@ -14,6 +14,7 @@ import { setPageRerender } from "../../../redux/rerenderReducer";
 import { setRemoveAndAddModal } from "../../../redux/RemoveAndAddModalReducer";
 import { setRemoveAndAddModalError } from "../../../redux/RemoveAndAddModalErrorReducer";
 import { RootState } from "../../../redux/rootReducer";
+import { rating } from "../../../utils/constants";
 
 const MasterSave = () => {
   const dispatch = useDispatch();
@@ -141,6 +142,43 @@ const MasterSave = () => {
               },
             })}
           />
+          {
+            <Typography color={"red"}>
+              {errors?.email && errors?.email.message}
+            </Typography>
+          }
+          <TextField
+            margin="normal"
+            type={"text"}
+            variant="outlined"
+            placeholder="Почта"
+            sx={{ backgroundColor: "white" }}
+            name="email"
+            {...register("email", {
+              required: `${t("adminPopup.emptyField")}`,
+              pattern: {
+                value:
+                  /^([a-z0-9_-]+.)*[a-z0-9_-]+@[a-z0-9_-]+(.[a-z0-9_-]+)*.[a-z]{2,6}$/,
+                message: `${t("adminPopup.vrongFormat")}`,
+              },
+            })}
+          />
+          {
+            <Typography color={"red"}>
+              {errors?.password && errors?.password.message}
+            </Typography>
+          }
+          <TextField
+            margin="normal"
+            type={"text"}
+            variant="outlined"
+            placeholder="Пароль"
+            sx={{ backgroundColor: "white" }}
+            name="password"
+            {...register("password", {
+              required: `${t("adminPopup.emptyField")}`,
+            })}
+          />
           <Grid item marginTop={3}>
             <InputLabel variant="standard" htmlFor="rating">
               Рейтинг
@@ -155,11 +193,10 @@ const MasterSave = () => {
                 required: `${t("adminPopup.emptyField")}`,
               })}
             >
-              <option defaultValue={1}>1</option>
-              <option value={2}>2</option>
-              <option value={3}>3</option>
-              <option value={4}>4</option>
-              <option value={5}>5</option>
+              {rating.map((el)=>{
+                return <option value={el}>{el}</option>
+              })}
+              
             </NativeSelect>
           </Grid>
           <Grid item marginTop={3}>

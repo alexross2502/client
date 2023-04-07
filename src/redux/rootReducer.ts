@@ -21,6 +21,7 @@ import modalAddTownsReducer from "./townsReducer";
 import modalDeleteReducer from "./deleteReducer";
 import RemoveAndAddModalReducer from "./RemoveAndAddModalReducer";
 import RemoveAndAddModalErrorReducer from "./RemoveAndAddModalErrorReducer";
+import registrationModalReducer from "./registrationModalReducer";
 
 const rootReducer = combineReducers({
   modalWindow: modalWindowReducer,
@@ -38,6 +39,7 @@ const rootReducer = combineReducers({
   delete: modalDeleteReducer,
   removeAndAdd: RemoveAndAddModalReducer,
   removeAndAddError: RemoveAndAddModalErrorReducer,
+  registrationModal: registrationModalReducer
 });
 
 const persistConfig = {
