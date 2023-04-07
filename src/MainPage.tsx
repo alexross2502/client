@@ -5,7 +5,9 @@ import ModalAuthorization from "./Components/ModalAuthorization/ModalAuthorizati
 import ModalOrder from "./Components/ModalOrder/ModalOrder";
 import ModalAvailableMasters from "./Components/ModalAvailableMasters/ModalAvailableMasters";
 import React from "react";
+import ModalOrderSuccess from "./Components/ModalAvailableMasters/ModalOrderSuccess";
 import ModalRegistration from "./Components/ModalRegistration/ModalRegistration";
+
 
 const MainPage = () => {
   return (
@@ -16,7 +18,7 @@ const MainPage = () => {
         <ModalAuthorization />
         <ModalOrder />
         <ModalAvailableMasters />
-        
+        <ModalOrderSuccess />
         <ModalRegistration />
       </div>
     </div>

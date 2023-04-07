@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { instance } from "../../AdminComponents/axios-utils";
 import { setModalMasters } from "../../redux/modalMastersReducer";
 import { RootState } from "../../redux/rootReducer";
+import { setOrderSuccessReducer } from "../../redux/orderSuccessReducer";
 
 const AvailableMastersForm = (props) => {
   let dispatch = useDispatch();
@@ -32,7 +33,8 @@ const AvailableMastersForm = (props) => {
           method: "post",
           data: data,
         })
-          .then(() => {
+          .then((res) => {
+            dispatch(setOrderSuccessReducer(true));
             dispatch(setModalMasters());
           })
           .catch((err) => {
