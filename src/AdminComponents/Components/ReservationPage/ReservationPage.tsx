@@ -114,8 +114,7 @@ const ReservationPage = () => {
                     variant="contained"
                     onClick={() => {
                       dispatch(setModalAddReservations());
-                    }}
-                  >
+                    }}>
                     {t("table.add")}
                   </Button>
                 </TableCell>
@@ -124,8 +123,7 @@ const ReservationPage = () => {
             <TableBody>
               {isLoading && (
                 <Grid
-                  sx={{ position: "absolute", left: "50%", marginTop: "20px" }}
-                >
+                  sx={{ position: "absolute", left: "50%", marginTop: "20px" }}>
                   <Watch
                     height="80"
                     width="80"
@@ -138,18 +136,18 @@ const ReservationPage = () => {
                 </Grid>
               )}
               {reservationList?.length === 0 ? (
-                <Typography>Нет записей</Typography>
+                <TableCell>
+                  <Typography>Таблица пуста</Typography>
+                </TableCell>
               ) : (
                 reservationList?.map((row) => (
                   <TableRow
                     key={row.id}
-                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                  >
+                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
                     <TableCell component="th" scope="row">
                       <Typography
                         className={style.clue}
-                        data-clue={`${row.id}`}
-                      >
+                        data-clue={`${row.id}`}>
                         {row.id.slice(0, 15) + "..."}
                       </Typography>
                       <CopyIcon data={row.id} />
@@ -167,8 +165,7 @@ const ReservationPage = () => {
                         onClick={() => {
                           setItemForRemove([row.id, "reservation"]);
                           dispatch(setModalDelete());
-                        }}
-                      >
+                        }}>
                         <DeleteForeverIcon></DeleteForeverIcon>
                       </IconButton>
                     </TableCell>

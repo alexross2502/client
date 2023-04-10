@@ -19,7 +19,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { RootState } from "../../../redux/rootReducer";
 import { DateCalendar, TimeClock } from "@mui/x-date-pickers";
-import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
+import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -76,8 +76,7 @@ const ReservationSave = () => {
   async function reservationSave(atr) {
     if (new Date() > currentDate) {
       throw new Error("error");
-    
-    }else{
+    } else {
       atr.day = currentDate.getTime();
       let data = { ...atr };
       setPending(true);
@@ -102,13 +101,10 @@ const ReservationSave = () => {
     }
   }
 
-  
-
   return (
     <div
       onClick={(e) => e.stopPropagation()}
-      className={isActive ? `${style.active}` : `${style.inactive}`}
-    >
+      className={isActive ? `${style.active}` : `${style.inactive}`}>
       <form onSubmit={handleSubmit(reservationSave)}>
         <Box
           display="flex"
@@ -127,8 +123,7 @@ const ReservationSave = () => {
             ":hover": {
               boxShadow: "10px 10px 20px #ccc",
             },
-          }}
-        >
+          }}>
           <Grid container>
             <Grid item xs={1}></Grid>
             <Grid item xs={10}>
@@ -153,8 +148,7 @@ const ReservationSave = () => {
               style={{ width: 200 }}
               {...register("towns_id", {
                 required: `${t("adminPopup.emptyField")}`,
-              })}
-            >
+              })}>
               {townsList.map((el) => {
                 return (
                   <option value={el.id} key={el.id}>
@@ -164,8 +158,8 @@ const ReservationSave = () => {
               })}
             </NativeSelect>
           </Grid>
-          <Grid item marginTop={3}>
-          <LocalizationProvider dateAdapter={AdapterDateFns}>
+          <Grid item marginTop={3} sx={{ width: 300 }}>
+            <LocalizationProvider dateAdapter={AdapterDateFns}>
               {!isDateDone ? (
                 <DateCalendar
                   defaultValue={new Date()}
@@ -177,7 +171,10 @@ const ReservationSave = () => {
                 />
               ) : (
                 <Box sx={{ position: "relative" }}>
-                  <ArrowBackIosNewIcon onClick={()=>setDateDone(false)} sx={{cursor: 'pointer'}} />
+                  <ArrowBackIosNewIcon
+                    onClick={() => setDateDone(false)}
+                    sx={{ cursor: "pointer" }}
+                  />
                   <TimeClock
                     defaultValue={new Date(currentDate)}
                     view="hours"
@@ -204,8 +201,7 @@ const ReservationSave = () => {
               style={{ width: 200 }}
               {...register("clientId", {
                 required: `${t("adminPopup.emptyField")}`,
-              })}
-            >
+              })}>
               {clientsList.map((el) => {
                 return (
                   <option value={el.id} key={el.id}>
@@ -228,8 +224,7 @@ const ReservationSave = () => {
               style={{ width: 200 }}
               {...register("size", {
                 required: `${t("adminPopup.emptyField")}`,
-              })}
-            >
+              })}>
               {Object.keys(repairTime).map((el) => {
                 return <option value={el}>{t(`size.${el}`)}</option>;
               })}
@@ -248,8 +243,7 @@ const ReservationSave = () => {
               style={{ width: 200 }}
               {...register("master_id", {
                 required: `${t("adminPopup.emptyField")}`,
-              })}
-            >
+              })}>
               {mastersList.map((el) => {
                 return (
                   <option value={el.id} key={el.id}>
@@ -271,8 +265,7 @@ const ReservationSave = () => {
             variant="contained"
             color="warning"
             type="submit"
-            disabled={pending}
-          >
+            disabled={pending}>
             Добавить
           </Button>
         </Box>

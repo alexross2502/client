@@ -21,6 +21,9 @@ import { InstanceResponse } from "../../AdminComponents/axios-utils";
 import Api from "../../AdminComponents/Components/api";
 import registrationVariant from "./registrationVariant";
 import { rating } from "../../utils/constants";
+import { setRemoveAndAddModal } from "../../redux/RemoveAndAddModalReducer";
+import { setOrderSuccessReducer } from "../../redux/orderSuccessReducer";
+import VisibilityIcon from "@mui/icons-material/Visibility";
 
 const ModalRegistration = () => {
   let isActive = useSelector(
@@ -49,9 +52,14 @@ const ModalRegistration = () => {
   const [pending, setPending] = useState<boolean>(false);
   const [isMaster, setMaster] = useState<boolean>(false);
   const [isAgree, setAgree] = useState<boolean>(false);
+  let [passwordType, setPasswordType] = useState("password");
+
+  function changePasswordType() {
+    dispatch(setPasswordType(passwordType == "password" ? "text" : "password"));
+  }
 
   async function submitFunction(atr) {
-    
+    setPending(true);
     (isMaster
       ? registrationVariant.master(
           atr.name,
@@ -61,9 +69,18 @@ const ModalRegistration = () => {
           atr.password,
           atr.townId
         )
-      : registrationVariant.client(atr.name, atr.email, atr.password)).then(()=>{
-        console.log('1111')
-      }).catch((e)=>console.log(atr))
+      : registrationVariant.client(atr.name, atr.email, atr.password)
+    )
+      .then(() => {
+        setPending(false);
+        dispatch(setRegistrationModalReducer());
+        alert("done");
+      })
+      .catch((e) => {
+        setPending(false);
+        dispatch(setRegistrationModalReducer());
+        alert("error");
+      });
   }
 
   return (
@@ -120,41 +137,39 @@ const ModalRegistration = () => {
           </Grid>
           {isMaster && (
             <>
-            <Grid item marginTop={3} sx={{ width: 300 }}>
-              <TextField
-                margin="normal"
-                type={"text"}
-                variant="outlined"
-                placeholder="Фамилия"
-                sx={{ backgroundColor: "white" }}
-                name="surname"
-                fullWidth={true}
-                {...register("surname", {
-                  required: `${t("adminPopup.emptyField")}`,
-                })}
-              />
-            </Grid>
-            <Grid item marginTop={3} sx={{ width: 300 }}>
-            <InputLabel variant="standard" htmlFor="rating">
-              Рейтинг
-            </InputLabel>
-            <NativeSelect
-              inputProps={{
-                name: "rating",
-                id: "rating",
-              }}
-              fullWidth={true}
-              {...register("rating", {
-                required: `${t("adminPopup.emptyField")}`,
-              })}
-            >
-              {rating.map((el)=>{
-                return <option value={el}>{el}</option>
-              })}
-              
-            </NativeSelect>
-          </Grid>
-          </>
+              <Grid item marginTop={3} sx={{ width: 300 }}>
+                <TextField
+                  margin="normal"
+                  type={"text"}
+                  variant="outlined"
+                  placeholder="Фамилия"
+                  sx={{ backgroundColor: "white" }}
+                  name="surname"
+                  fullWidth={true}
+                  {...register("surname", {
+                    required: `${t("adminPopup.emptyField")}`,
+                  })}
+                />
+              </Grid>
+              <Grid item marginTop={3} sx={{ width: 300 }}>
+                <InputLabel variant="standard" htmlFor="rating">
+                  Рейтинг
+                </InputLabel>
+                <NativeSelect
+                  inputProps={{
+                    name: "rating",
+                    id: "rating",
+                  }}
+                  fullWidth={true}
+                  {...register("rating", {
+                    required: `${t("adminPopup.emptyField")}`,
+                  })}>
+                  {rating.map((el) => {
+                    return <option value={el}>{el}</option>;
+                  })}
+                </NativeSelect>
+              </Grid>
+            </>
           )}
           <Grid item marginTop={3} sx={{ width: 300, alignContent: "center" }}>
             <TextField
@@ -178,7 +193,7 @@ const ModalRegistration = () => {
           <Grid item marginTop={3} sx={{ width: 300, alignContent: "center" }}>
             <TextField
               margin="normal"
-              type={"password"}
+              type={passwordType}
               variant="outlined"
               placeholder="Пароль"
               sx={{ backgroundColor: "white" }}
@@ -188,19 +203,11 @@ const ModalRegistration = () => {
                 required: `${t("adminPopup.emptyField")}`,
               })}
             />
-          </Grid>
-          <Grid item marginTop={3} sx={{ width: 300, alignContent: "center" }}>
-            <TextField
-              margin="normal"
-              type={"password"}
-              variant="outlined"
-              placeholder="Повторите пароль"
-              sx={{ backgroundColor: "white" }}
-              fullWidth={true}
-              {...register("rePassword", {
-                required: `${t("adminPopup.emptyField")}`,
-              })}
-            />
+            <VisibilityIcon
+              sx={{ position: "absolute", marginTop: "30px" }}
+              onClick={() => {
+                changePasswordType();
+              }}></VisibilityIcon>
           </Grid>
           {isMaster && (
             <Grid
@@ -234,6 +241,7 @@ const ModalRegistration = () => {
               control={<Checkbox />}
               label="Со всем согласен"
               checked={isAgree}
+              sx={{ width: 200 }}
               onChange={() => {
                 setAgree(!isAgree);
               }}
@@ -244,6 +252,7 @@ const ModalRegistration = () => {
               control={<Checkbox />}
               label="Зарегистрироваться как мастер"
               checked={isMaster}
+              sx={{ width: 200 }}
               onChange={() => {
                 setMaster(!isMaster);
               }}

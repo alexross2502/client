@@ -31,14 +31,18 @@ const ModalAuthorization = () => {
   );
 
   const [isAuthData, setAuthData] = useState("");
+  const [pending, setPending] = useState<boolean>(false);
 
   async function authController(data) {
+    setPending(true);
     await authCheck(data)
       .then((response) => {
+        setPending(false);
         dispatch(setAuthorized(true));
         navigate("/reservation");
       })
       .catch(() => {
+        setPending(false);
         reset();
         setAuthData(`${t("adminPopup.vrongAuth")}`);
       });
@@ -52,8 +56,7 @@ const ModalAuthorization = () => {
   return (
     <div
       onClick={(e) => e.stopPropagation()}
-      className={isActive ? `${style.active}` : `${style.inactive}`}
-    >
+      className={isActive ? `${style.active}` : `${style.inactive}`}>
       <form onSubmit={handleSubmit(authController)}>
         <Box
           display="flex"
@@ -72,8 +75,7 @@ const ModalAuthorization = () => {
             ":hover": {
               boxShadow: "10px 10px 20px #ccc",
             },
-          }}
-        >
+          }}>
           <Grid container>
             <Grid item xs={1}></Grid>
             <Grid item xs={10}>
@@ -125,15 +127,13 @@ const ModalAuthorization = () => {
               name="password"
               {...register("password", {
                 required: `${t("adminPopup.emptyField")}`,
-              })}
-            ></TextField>
+              })}></TextField>
 
             <VisibilityIcon
               sx={{ position: "absolute", marginTop: "30px" }}
               onClick={() => {
                 changePasswordType();
-              }}
-            ></VisibilityIcon>
+              }}></VisibilityIcon>
           </Box>
 
           <Button
@@ -145,10 +145,10 @@ const ModalAuthorization = () => {
               paddingLeft: 4,
               paddingRight: 4,
             }}
+            disabled={pending}
             variant="contained"
             color="warning"
-            type="submit"
-          >
+            type="submit">
             Войти
           </Button>
         </Box>
