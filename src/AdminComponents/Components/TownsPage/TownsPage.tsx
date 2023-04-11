@@ -97,7 +97,11 @@ const TownsPage = () => {
                 </Grid>
               )}
               {townsList?.length === 0 ? (
-                <Typography>Нет записей</Typography>
+                <TableRow>
+                <TableCell>
+                <Typography>Таблица пуста</Typography>
+                </TableCell>
+              </TableRow>
               ) : (
                 townsList?.map((row) => (
                   <TableRow

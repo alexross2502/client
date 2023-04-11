@@ -17,12 +17,8 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { instance, InstanceResponse } from "../../AdminComponents/axios-utils";
 import { RootState } from "../../redux/rootReducer";
-import {
-  DateCalendar,
-  TimeClock,
-} from "@mui/x-date-pickers";
-import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
-
+import { DateCalendar, TimeClock } from "@mui/x-date-pickers";
+import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -102,11 +98,8 @@ const ModalOrder = () => {
 
   return (
     <div
-      onClick={(e) => 
-        e.stopPropagation()
-      }
-      className={isActive ? `${style.active}` : `${style.inactive}`}
-    >
+      onClick={(e) => e.stopPropagation()}
+      className={isActive ? `${style.active}` : `${style.inactive}`}>
       <form onSubmit={handleSubmit(submitFunction)}>
         <Box
           display="flex"
@@ -121,13 +114,12 @@ const ModalOrder = () => {
           boxShadow={"5px 5px 10px #ccc"}
           sx={{
             backgroundColor: "#a0a0a0",
-            
+
             ":hover": {
               boxShadow: "10px 10px 20px #ccc",
             },
-          }}
-        >
-          <Grid container>
+          }}>
+          <Grid container maxHeight={200}>
             <Grid item xs={1}></Grid>
             <Grid item xs={10}>
               <Typography variant="h3" padding={3} textAlign="center">
@@ -186,7 +178,10 @@ const ModalOrder = () => {
                 />
               ) : (
                 <Box sx={{ position: "relative" }}>
-                  <ArrowBackIosNewIcon onClick={()=>setDateDone(false)} sx={{cursor: 'pointer'}} />
+                  <ArrowBackIosNewIcon
+                    onClick={() => setDateDone(false)}
+                    sx={{ cursor: "pointer" }}
+                  />
                   <TimeClock
                     defaultValue={new Date(currentDate)}
                     view="hours"
@@ -214,8 +209,7 @@ const ModalOrder = () => {
               fullWidth={true}
               {...register("towns_id", {
                 required: `${t("adminPopup.emptyField")}`,
-              })}
-            >
+              })}>
               {townsList.map((el) => {
                 return (
                   <option value={el.id} key={el.id}>
@@ -237,8 +231,7 @@ const ModalOrder = () => {
               fullWidth={true}
               {...register("size", {
                 required: `${t("adminPopup.emptyField")}`,
-              })}
-            >
+              })}>
               {Object.keys(repairTime).map((el) => {
                 return <option value={el}>{t(`size.${el}`)}</option>;
               })}
@@ -256,8 +249,7 @@ const ModalOrder = () => {
             variant="contained"
             color="warning"
             type="submit"
-            disabled={pending}
-          >
+            disabled={pending}>
             Заказать
           </Button>
         </Box>

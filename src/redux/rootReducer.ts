@@ -12,7 +12,6 @@ import { orderDataReducer } from "./orderDataReducer";
 import orderSuccessReducer from "./orderSuccessReducer";
 import { PersistConfig, persistReducer } from "redux-persist";
 import sessionStorage from "redux-persist/es/storage/session";
-
 import persistStore from "redux-persist/es/persistStore";
 import modalAddMastersReducer from "./mastersReducer";
 import modalAddReservationsReducer from "./reservationsReducer";
@@ -21,6 +20,8 @@ import modalAddTownsReducer from "./townsReducer";
 import modalDeleteReducer from "./deleteReducer";
 import RemoveAndAddModalReducer from "./RemoveAndAddModalReducer";
 import RemoveAndAddModalErrorReducer from "./RemoveAndAddModalErrorReducer";
+import registrationModalReducer from "./registrationModalReducer";
+import modalUpdatePasswordReducer from "./updatePasswordReducer";
 
 const rootReducer = combineReducers({
   modalWindow: modalWindowReducer,
@@ -38,6 +39,8 @@ const rootReducer = combineReducers({
   delete: modalDeleteReducer,
   removeAndAdd: RemoveAndAddModalReducer,
   removeAndAddError: RemoveAndAddModalErrorReducer,
+  registrationModal: registrationModalReducer,
+  updatePassword: modalUpdatePasswordReducer
 });
 
 const persistConfig = {

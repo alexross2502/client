@@ -29,6 +29,9 @@ import { instance, InstanceResponse } from "../../axios-utils";
 import RemoveAndAddModalError from "../../RemoveAndAddModalError";
 import CopyIcon from "../CopyIcon";
 import { RootState } from "../../../redux/rootReducer";
+import CachedIcon from "@mui/icons-material/Cached";
+import { setModalUpdatePassword } from "../../../redux/updatePasswordReducer";
+import UpdatePasswordModal from "../UpdatePasswordModal";
 
 const ClientPage = () => {
   const { t } = useTranslation();
@@ -36,6 +39,7 @@ const ClientPage = () => {
   const rerender = useSelector((state: RootState) => state.rerender.isRerender);
   const [clientsList, setClientsList] = useState<InstanceResponse | []>();
   const [itemForRemove, setItemForRemove] = useState([]);
+  const [itemForUpdatePassword, setItemForUpdatePassword] = useState([]);
   const [isLoading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
@@ -55,6 +59,7 @@ const ClientPage = () => {
   return (
     <>
       <DeleteModal props={itemForRemove} />
+      <UpdatePasswordModal props={itemForUpdatePassword} />
       <ClientSave />
       <Box height={70} />
       <Box sx={{ display: "flex" }}>
@@ -67,15 +72,14 @@ const ClientPage = () => {
                 <TableCell>Номер клиента</TableCell>
                 <TableCell align="left">Имя</TableCell>
                 <TableCell align="left">Почта</TableCell>
-
+                <TableCell></TableCell>
                 <TableCell align="right">
                   <Button
                     sx={{ marginLeft: "auto", background: "rgba(180,58,58,1)" }}
                     variant="contained"
                     onClick={() => {
                       dispatch(setModalAddClients());
-                    }}
-                  >
+                    }}>
                     {t("table.add")}
                   </Button>
                 </TableCell>
@@ -84,8 +88,7 @@ const ClientPage = () => {
             <TableBody>
               {isLoading && (
                 <Grid
-                  sx={{ position: "absolute", left: "50%", marginTop: "20px" }}
-                >
+                  sx={{ position: "absolute", left: "50%", marginTop: "20px" }}>
                   <Watch
                     height="80"
                     width="80"
@@ -98,32 +101,44 @@ const ClientPage = () => {
                 </Grid>
               )}
               {clientsList?.length === 0 ? (
-                <Typography>Нет записей</Typography>
+                <TableRow>
+                  <TableCell>
+                    <Typography>Таблица пуста</Typography>
+                  </TableCell>
+                </TableRow>
               ) : (
                 clientsList?.map((row) => (
                   <TableRow
                     key={row.id}
-                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                  >
+                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
                     <TableCell component="th" scope="row">
                       <Typography
                         className={style.clue}
-                        data-clue={`${row.id}`}
-                      >
+                        data-clue={`${row.id}`}>
                         {row.id.slice(0, 15) + "..."}
                       </Typography>
                       <CopyIcon data={row.id} />
                     </TableCell>
 
                     <TableCell align="left">{row.name}</TableCell>
+
                     <TableCell align="left">{row.email}</TableCell>
+
+                    <TableCell align="right">
+                      <CachedIcon
+                        onClick={() => {
+                          setItemForUpdatePassword([row.email, "clients"]);
+                          dispatch(setModalUpdatePassword());
+                        }}
+                      />
+                    </TableCell>
+
                     <TableCell align="right">
                       <IconButton
                         onClick={() => {
                           setItemForRemove([row.id, "clients"]);
                           dispatch(setModalDelete());
-                        }}
-                      >
+                        }}>
                         <DeleteForeverIcon></DeleteForeverIcon>
                       </IconButton>
                     </TableCell>
