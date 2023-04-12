@@ -12,6 +12,15 @@ import { useState } from "react";
 import CloseIcon from "@mui/icons-material/Close";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import { RootState } from "../../redux/rootReducer";
+import { decodeToken } from "react-jwt";
+
+interface MyToken {
+  login: string;
+  role: string;
+  id: string;
+  iat: number;
+  exp: number;
+}
 
 const ModalAuthorization = () => {
   const dispatch = useDispatch();
@@ -36,10 +45,23 @@ const ModalAuthorization = () => {
   async function authController(data) {
     setPending(true);
     await authCheck(data)
-      .then((response) => {
+      .then((res) => {
         setPending(false);
         dispatch(setAuthorized(true));
-        navigate("/reservation");
+        const token = res.token.split(" ")[1];
+        const decodedToken = decodeToken<MyToken>(token);
+        console.log(decodedToken.role);
+        switch (decodedToken.role) {
+          case "admin":
+            navigate("/reservation");
+            break;
+          case "client":
+            navigate("/clientaccount");
+            break;
+          case "master":
+            navigate("/masteraccount");
+            break;
+        }
       })
       .catch(() => {
         setPending(false);
