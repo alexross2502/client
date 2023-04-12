@@ -11,6 +11,7 @@ import {
   TableBody,
   Typography,
   CssBaseline,
+  ListItemIcon,
 } from "@mui/material";
 import TableContainer from "@mui/material/TableContainer";
 import Paper from "@mui/material/Paper";
@@ -20,9 +21,20 @@ import { RootState } from "../redux/rootReducer";
 import { CustomAppBar } from "../AdminComponents/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import { dateConverter } from "../AdminComponents/Components/dateConverter";
+import LogoutIcon from "@mui/icons-material/Logout";
+import HomeIcon from "@mui/icons-material/Home";
+import { DrawerHeader } from "../AdminComponents/DrawerHeader";
+import Divider from "@mui/material/Divider";
+import ListItem from "@mui/material/ListItem";
+import ListItemButton from "@mui/material/ListItemButton";
+import ListItemText from "@mui/material/ListItemText";
+import Drawer from "@mui/material/Drawer";
+import { useNavigate } from "react-router-dom";
 
 const MasterAccount = () => {
   const { t } = useTranslation();
+  const drawerWidth = 240;
+  const navigate = useNavigate();
   const rerender = useSelector((state: RootState) => state.rerender.isRerender);
   const [mastersList, setMastersList] = useState<InstanceResponse | []>();
   const [isLoading, setLoading] = useState<boolean>(false);
@@ -51,6 +63,45 @@ const MasterAccount = () => {
               Личный кабинет
             </Typography>
           </Toolbar>
+          <Drawer
+            sx={{
+              width: drawerWidth,
+              flexShrink: 0,
+              "& .MuiDrawer-paper": {
+                width: drawerWidth,
+                boxSizing: "border-box",
+              },
+            }}
+            variant="persistent"
+            anchor="left"
+            open={true}>
+            <DrawerHeader></DrawerHeader>
+            <Divider />
+            <ListItem disablePadding>
+              <ListItemButton
+                onClick={() => {
+                  sessionStorage.removeItem("token");
+                  sessionStorage.removeItem("persist:main-root");
+                  navigate("/");
+                }}>
+                <ListItemIcon>
+                  <LogoutIcon></LogoutIcon>
+                </ListItemIcon>
+                <ListItemText primary={t("adminPage.logout")} />
+              </ListItemButton>
+            </ListItem>
+            <ListItem disablePadding>
+              <ListItemButton
+                onClick={() => {
+                  navigate("/");
+                }}>
+                <ListItemIcon>
+                  <HomeIcon></HomeIcon>
+                </ListItemIcon>
+                <ListItemText primary={"На главную страницу"} />
+              </ListItemButton>
+            </ListItem>
+          </Drawer>
         </CustomAppBar>
         <TableContainer component={Paper}>
           <Table sx={{ minWidth: 650 }} aria-label="simple table">
