@@ -50,8 +50,7 @@ export function LeftSideMenu(props) {
         }}
         variant="persistent"
         anchor="left"
-        open={true}
-      >
+        open={true}>
         <DrawerHeader></DrawerHeader>
         <Divider />
         <List>
@@ -96,8 +95,7 @@ export function LeftSideMenu(props) {
               sessionStorage.removeItem("persist:main-root");
               dispatch(setAuthorized(false));
               navigate("/");
-            }}
-          >
+            }}>
             <ListItemIcon>
               <LogoutIcon></LogoutIcon>
             </ListItemIcon>
@@ -108,8 +106,7 @@ export function LeftSideMenu(props) {
           <ListItemButton
             onClick={() => {
               navigate("/");
-            }}
-          >
+            }}>
             <ListItemIcon>
               <HomeIcon></HomeIcon>
             </ListItemIcon>

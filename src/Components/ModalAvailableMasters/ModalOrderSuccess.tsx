@@ -30,8 +30,7 @@ const ModalOrderSuccess = () => {
         isActive
           ? `${style.modal_popup} ${style.active}`
           : `${style.modal_popup}`
-      }
-    >
+      }>
       <p className={style.h1}>{t("success.content")}</p>
     </div>
   );

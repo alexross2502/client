@@ -31,8 +31,7 @@ const DeleteModal = (props) => {
   return (
     <div
       onClick={(e) => e.stopPropagation()}
-      className={isActive ? `${style.active}` : `${style.inactive}`}
-    >
+      className={isActive ? `${style.active}` : `${style.inactive}`}>
       <Box
         display="flex"
         flexDirection={"column"}
@@ -49,8 +48,7 @@ const DeleteModal = (props) => {
           ":hover": {
             boxShadow: "10px 10px 20px #ccc",
           },
-        }}
-      >
+        }}>
         <Grid container>
           <Grid item xs={1}></Grid>
           <Grid item xs={10}>
@@ -97,8 +95,7 @@ const DeleteModal = (props) => {
                     setPending(false);
                     dispatch(setModalDelete());
                   });
-              }}
-            >
+              }}>
               Да
             </Button>
           </Grid>
@@ -117,8 +114,7 @@ const DeleteModal = (props) => {
               disabled={pending}
               onClick={() => {
                 dispatch(setModalDelete());
-              }}
-            >
+              }}>
               Нет
             </Button>
           </Grid>

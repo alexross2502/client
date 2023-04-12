@@ -31,7 +31,7 @@ const Api: IApi = {
     return await instance({
       url: `${url}/changepassword`,
       method: "put",
-      data: email ,
+      data: email,
     });
   },
 };

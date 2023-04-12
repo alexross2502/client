@@ -40,8 +40,7 @@ const AvailableMastersForm = (props) => {
           .catch((err) => {
             console.log(err);
           });
-      }}
-    >
+      }}>
       <Grid item xs={4}>
         <Typography variant="h6" padding={3} textAlign="center">
           {props.data.name}

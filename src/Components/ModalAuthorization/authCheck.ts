@@ -15,7 +15,7 @@ export async function authCheck(formData) {
     url: `/admin`,
     method: "post",
     data: data,
-  })
+  });
   sessionStorage.setItem("token", answer.token);
   return answer;
 }

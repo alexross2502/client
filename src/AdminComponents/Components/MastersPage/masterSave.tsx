@@ -69,8 +69,7 @@ const MasterSave = () => {
   return (
     <div
       onClick={(e) => e.stopPropagation()}
-      className={isActive ? `${style.active}` : `${style.inactive}`}
-    >
+      className={isActive ? `${style.active}` : `${style.inactive}`}>
       <form onSubmit={handleSubmit(masterSave)}>
         <Box
           display="flex"
@@ -89,8 +88,7 @@ const MasterSave = () => {
             ":hover": {
               boxShadow: "10px 10px 20px #ccc",
             },
-          }}
-        >
+          }}>
           <Grid container>
             <Grid item xs={1}></Grid>
             <Grid item xs={10}>
@@ -191,12 +189,10 @@ const MasterSave = () => {
               style={{ width: 200 }}
               {...register("rating", {
                 required: `${t("adminPopup.emptyField")}`,
+              })}>
+              {rating.map((el) => {
+                return <option value={el}>{el}</option>;
               })}
-            >
-              {rating.map((el)=>{
-                return <option value={el}>{el}</option>
-              })}
-              
             </NativeSelect>
           </Grid>
           <Grid item marginTop={3}>
@@ -211,8 +207,7 @@ const MasterSave = () => {
               style={{ width: 200 }}
               {...register("townId", {
                 required: `${t("adminPopup.emptyField")}`,
-              })}
-            >
+              })}>
               {townsList.map((el) => {
                 return (
                   <option value={el.id} key={el.id}>
@@ -234,8 +229,7 @@ const MasterSave = () => {
             variant="contained"
             color="warning"
             type="submit"
-            disabled={pending}
-          >
+            disabled={pending}>
             Добавить
           </Button>
         </Box>

@@ -15,8 +15,7 @@ const CopyIcon = (props) => {
         setTimeout(() => {
           setCopy(false);
         }, 1500);
-      }}
-    ></ContentCopyIcon>
+      }}></ContentCopyIcon>
   ) : (
     <DoneIcon />
   );

@@ -28,8 +28,7 @@ const ModalAvailableMasters = () => {
   return (
     <div
       onClick={(e) => e.stopPropagation()}
-      className={isActive ? `${style.active}` : `${style.inactive}`}
-    >
+      className={isActive ? `${style.active}` : `${style.inactive}`}>
       <form>
         <Box
           display="flex"
@@ -48,8 +47,7 @@ const ModalAvailableMasters = () => {
             ":hover": {
               boxShadow: "10px 10px 20px #ccc",
             },
-          }}
-        >
+          }}>
           <Grid container>
             <Grid item xs={1}></Grid>
             <Grid item xs={10}>
