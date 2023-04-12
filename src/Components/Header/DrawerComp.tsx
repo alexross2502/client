@@ -18,8 +18,7 @@ export const DrawerComp = () => {
       <Drawer
         PaperProps={{ sx: { backgroundColor: "rgba(49,49,116,1)" } }}
         open={open}
-        onClose={() => setOpen(false)}
-      >
+        onClose={() => setOpen(false)}>
         <List>
           <ListItemButton>
             <ListItemIcon>
@@ -42,8 +41,7 @@ export const DrawerComp = () => {
       </Drawer>
       <IconButton
         sx={{ marginLeft: "auto", color: "white" }}
-        onClick={() => setOpen(!open)}
-      >
+        onClick={() => setOpen(!open)}>
         <MenuRoundedIcon />
       </IconButton>
     </>

@@ -25,8 +25,7 @@ const RemoveAndAddModal = () => {
       sx={{
         backgroundColor: "#f3f7c8",
       }}
-      position="absolute"
-    >
+      position="absolute">
       <Grid container>
         <Typography variant="h6" padding={3} textAlign="center">
           Готово

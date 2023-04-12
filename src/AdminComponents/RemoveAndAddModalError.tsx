@@ -25,8 +25,7 @@ const RemoveAndAddModalError = () => {
       sx={{
         backgroundColor: "#FF0000",
       }}
-      position="absolute"
-    >
+      position="absolute">
       <Grid container>
         <Typography variant="h6" padding={3} textAlign="center">
           Ошибка

@@ -60,8 +60,7 @@ const TownSave = () => {
   return (
     <div
       onClick={(e) => e.stopPropagation()}
-      className={isActive ? `${style.active}` : `${style.inactive}`}
-    >
+      className={isActive ? `${style.active}` : `${style.inactive}`}>
       <form onSubmit={handleSubmit(townSave)}>
         <Box
           display="flex"
@@ -80,8 +79,7 @@ const TownSave = () => {
             ":hover": {
               boxShadow: "10px 10px 20px #ccc",
             },
-          }}
-        >
+          }}>
           <Grid container>
             <Grid item xs={1}></Grid>
             <Grid item xs={10}>
@@ -126,8 +124,7 @@ const TownSave = () => {
             variant="contained"
             color="warning"
             type="submit"
-            disabled={pending}
-          >
+            disabled={pending}>
             Добавить
           </Button>
         </Box>

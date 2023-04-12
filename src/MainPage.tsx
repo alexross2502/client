@@ -8,7 +8,6 @@ import React from "react";
 import ModalOrderSuccess from "./Components/ModalAvailableMasters/ModalOrderSuccess";
 import ModalRegistration from "./Components/ModalRegistration/ModalRegistration";
 
-
 const MainPage = () => {
   return (
     <div>

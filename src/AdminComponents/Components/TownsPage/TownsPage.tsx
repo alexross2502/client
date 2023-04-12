@@ -73,8 +73,7 @@ const TownsPage = () => {
                     variant="contained"
                     onClick={() => {
                       dispatch(setModalAddTowns());
-                    }}
-                  >
+                    }}>
                     {t("table.add")}
                   </Button>
                 </TableCell>
@@ -83,8 +82,7 @@ const TownsPage = () => {
             <TableBody>
               {isLoading && (
                 <Grid
-                  sx={{ position: "absolute", left: "50%", marginTop: "20px" }}
-                >
+                  sx={{ position: "absolute", left: "50%", marginTop: "20px" }}>
                   <Watch
                     height="80"
                     width="80"
@@ -98,21 +96,19 @@ const TownsPage = () => {
               )}
               {townsList?.length === 0 ? (
                 <TableRow>
-                <TableCell>
-                <Typography>Таблица пуста</Typography>
-                </TableCell>
-              </TableRow>
+                  <TableCell>
+                    <Typography>Таблица пуста</Typography>
+                  </TableCell>
+                </TableRow>
               ) : (
                 townsList?.map((row) => (
                   <TableRow
                     key={row.id}
-                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                  >
+                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
                     <TableCell component="th" scope="row">
                       <Typography
                         className={style.clue}
-                        data-clue={`${row.id}`}
-                      >
+                        data-clue={`${row.id}`}>
                         {row.id.slice(0, 15) + "..."}
                       </Typography>
                       <CopyIcon data={row.id} />
@@ -123,8 +119,7 @@ const TownsPage = () => {
                         onClick={() => {
                           setItemForRemove([row.id, "towns"]);
                           dispatch(setModalDelete());
-                        }}
-                      >
+                        }}>
                         <DeleteForeverIcon></DeleteForeverIcon>
                       </IconButton>
                     </TableCell>
