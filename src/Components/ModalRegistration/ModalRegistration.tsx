@@ -20,9 +20,6 @@ import Checkbox from "@mui/material/Checkbox";
 import { InstanceResponse } from "../../AdminComponents/axios-utils";
 import Api from "../../AdminComponents/Components/api";
 import registrationVariant from "./registrationVariant";
-import { rating } from "../../utils/constants";
-import { setRemoveAndAddModal } from "../../redux/RemoveAndAddModalReducer";
-import { setOrderSuccessReducer } from "../../redux/orderSuccessReducer";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 
 const ModalRegistration = () => {
@@ -55,7 +52,9 @@ const ModalRegistration = () => {
   let [passwordType, setPasswordType] = useState("password");
 
   function changePasswordType() {
-    dispatch(setPasswordType(passwordType == "password" ? "text" : "password"));
+    dispatch(
+      setPasswordType(passwordType === "password" ? "text" : "password")
+    );
   }
 
   async function submitFunction(atr) {
@@ -65,7 +64,7 @@ const ModalRegistration = () => {
           atr.name,
           atr.surname,
           atr.email,
-          Number(atr.rating),
+          5,
           atr.password,
           atr.townId
         )
@@ -150,24 +149,6 @@ const ModalRegistration = () => {
                     required: `${t("adminPopup.emptyField")}`,
                   })}
                 />
-              </Grid>
-              <Grid item marginTop={3} sx={{ width: 300 }}>
-                <InputLabel variant="standard" htmlFor="rating">
-                  Рейтинг
-                </InputLabel>
-                <NativeSelect
-                  inputProps={{
-                    name: "rating",
-                    id: "rating",
-                  }}
-                  fullWidth={true}
-                  {...register("rating", {
-                    required: `${t("adminPopup.emptyField")}`,
-                  })}>
-                  {rating.map((el) => {
-                    return <option value={el}>{el}</option>;
-                  })}
-                </NativeSelect>
               </Grid>
             </>
           )}
