@@ -21,6 +21,7 @@ import { getToken } from "../../AdminComponents/token";
 import { useNavigate } from "react-router-dom";
 import React from "react";
 import { setRegistrationModalReducer } from "../../redux/registrationModalReducer";
+import { loginSwitchCase } from "../../utils/loginSwitchCase";
 
 const Header = () => {
   const dispatch = useDispatch();
@@ -95,7 +96,9 @@ const Header = () => {
                   <Button
                     sx={{ marginLeft: "auto", background: "rgba(180,58,58,1)" }}
                     variant="contained"
-                    onClick={() => navigate("/reservation")}>
+                    onClick={() => {
+                      navigate(loginSwitchCase(getToken()));
+                    }}>
                     {t("header.authorized")}
                   </Button>
                 ) : (

@@ -12,6 +12,7 @@ import { useState } from "react";
 import CloseIcon from "@mui/icons-material/Close";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import { RootState } from "../../redux/rootReducer";
+import { loginSwitchCase } from "../../utils/loginSwitchCase";
 
 const ModalAuthorization = () => {
   const dispatch = useDispatch();
@@ -36,10 +37,10 @@ const ModalAuthorization = () => {
   async function authController(data) {
     setPending(true);
     await authCheck(data)
-      .then((response) => {
+      .then((res) => {
         setPending(false);
         dispatch(setAuthorized(true));
-        navigate("/reservation");
+        navigate(loginSwitchCase(res.token));
       })
       .catch(() => {
         setPending(false);
@@ -50,7 +51,9 @@ const ModalAuthorization = () => {
   ///Глазик в пароле
   let [passwordType, setPasswordType] = useState("password");
   function changePasswordType() {
-    dispatch(setPasswordType(passwordType == "password" ? "text" : "password"));
+    dispatch(
+      setPasswordType(passwordType === "password" ? "text" : "password")
+    );
   }
 
   return (

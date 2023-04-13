@@ -29,9 +29,9 @@ import { Watch } from "react-loader-spinner";
 import RemoveAndAddModal from "../../RemoveAndAddModal";
 import RemoveAndAddModalError from "../../RemoveAndAddModalError";
 import CopyIcon from "../CopyIcon";
-import repairTime from "../repairTime.json";
 import { RootState } from "../../../redux/rootReducer";
 import { InstanceResponse } from "../../axios-utils";
+import { dateConverter } from "../dateConverter";
 
 const ReservationPage = () => {
   const { t } = useTranslation();
@@ -57,14 +57,7 @@ const ReservationPage = () => {
       setTownsList(towns);
       let reservation: any = await Api.getAll("reservation");
       reservation.forEach((el) => {
-        el.end = `${new Date(el.day).getHours()}-${
-          new Date(el.day).getHours() + repairTime[el.size]
-        }`;
-        el.day = new Date(el.day).toLocaleString("ru", {
-          year: "numeric",
-          month: "numeric",
-          day: "numeric",
-        });
+        dateConverter(el);
       });
       setReservationList(reservation);
       setLoading(false);

@@ -8,6 +8,8 @@ import MastersPage from "./AdminComponents/Components/MastersPage/MastersPage";
 import TownsPage from "./AdminComponents/Components/TownsPage/TownsPage";
 import ReservationPage from "./AdminComponents/Components/ReservationPage/ReservationPage";
 import React from "react";
+import ClientAccount from "./ClientAccount/ClientAccount";
+import MasterAccount from "./MasterAccount/MasterAccount";
 
 function App() {
   return (
@@ -48,6 +50,8 @@ function App() {
                 </RequireAuth>
               }
             />
+            <Route path="/clientaccount" element={<ClientAccount />} />
+            <Route path="/masteraccount" element={<MasterAccount />} />
           </Routes>
         </Router>
       </div>
