@@ -12,15 +12,7 @@ import { useState } from "react";
 import CloseIcon from "@mui/icons-material/Close";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import { RootState } from "../../redux/rootReducer";
-import { decodeToken } from "react-jwt";
-
-interface MyToken {
-  login: string;
-  role: string;
-  id: string;
-  iat: number;
-  exp: number;
-}
+import { loginSwitchCase } from "../../utils/loginSwitchCase";
 
 const ModalAuthorization = () => {
   const dispatch = useDispatch();
@@ -48,20 +40,7 @@ const ModalAuthorization = () => {
       .then((res) => {
         setPending(false);
         dispatch(setAuthorized(true));
-        const token = res.token.split(" ")[1];
-        const decodedToken = decodeToken<MyToken>(token);
-        console.log(decodedToken.role);
-        switch (decodedToken.role) {
-          case "admin":
-            navigate("/reservation");
-            break;
-          case "client":
-            navigate("/clientaccount");
-            break;
-          case "master":
-            navigate("/masteraccount");
-            break;
-        }
+        navigate(loginSwitchCase(res.token));
       })
       .catch(() => {
         setPending(false);
@@ -72,7 +51,9 @@ const ModalAuthorization = () => {
   ///Глазик в пароле
   let [passwordType, setPasswordType] = useState("password");
   function changePasswordType() {
-    dispatch(setPasswordType(passwordType == "password" ? "text" : "password"));
+    dispatch(
+      setPasswordType(passwordType === "password" ? "text" : "password")
+    );
   }
 
   return (
