@@ -56,12 +56,11 @@ const ClientAccount = () => {
   return (
     <>
       <Box height={70} />
-      <Box sx={{ display: "flex" }}>
+      <Box>
         <CssBaseline />
-
         <CustomAppBar position="fixed">
           <Toolbar>
-            <Typography variant="h6" noWrap>
+            <Typography variant="h6" noWrap marginLeft={"235px"}>
               Личный кабинет
             </Typography>
           </Toolbar>
@@ -105,8 +104,10 @@ const ClientAccount = () => {
             </ListItem>
           </Drawer>
         </CustomAppBar>
-        <TableContainer component={Paper}>
-          <Table sx={{ minWidth: 650 }} aria-label="simple table">
+      </Box>
+      <Box sx={{ width: "calc(100vw - 240px)" }}>
+        <TableContainer component={Paper} sx={{ marginLeft: "240px" }}>
+          <Table aria-label="simple table">
             <TableHead sx={{ background: "#a1a1a1" }}>
               <TableRow>
                 <TableCell>Имя мастера</TableCell>
@@ -118,7 +119,11 @@ const ClientAccount = () => {
             <TableBody>
               {isLoading && (
                 <Grid
-                  sx={{ position: "absolute", left: "50%", marginTop: "20px" }}>
+                  sx={{
+                    position: "absolute",
+                    left: "50%",
+                    marginTop: "20px",
+                  }}>
                   <Watch
                     height="80"
                     width="80"
@@ -140,7 +145,9 @@ const ClientAccount = () => {
                 clientsList?.map((row) => (
                   <TableRow
                     key={row.id}
-                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
+                    sx={{
+                      "&:last-child td, &:last-child th": { border: 0 },
+                    }}>
                     <TableCell align="left">{row.master.name}</TableCell>
                     <TableCell align="left">{t(`size.${row.size}`)}</TableCell>
                     <TableCell align="left">{row.day}</TableCell>

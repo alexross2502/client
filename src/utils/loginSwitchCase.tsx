@@ -4,6 +4,7 @@ import { MyToken } from "../interfaces/myToken";
 export function loginSwitchCase(res) {
   const token = res.split(" ")[1];
   const decodedToken = decodeToken<MyToken>(token);
+  console.log(decodedToken);
   let url: string;
   switch (decodedToken.role) {
     case "admin":
@@ -16,5 +17,6 @@ export function loginSwitchCase(res) {
       url = "/masteraccount";
       break;
   }
+  console.log(url);
   return url;
 }

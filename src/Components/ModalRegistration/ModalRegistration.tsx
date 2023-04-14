@@ -21,6 +21,7 @@ import { InstanceResponse } from "../../AdminComponents/axios-utils";
 import Api from "../../AdminComponents/Components/api";
 import registrationVariant from "./registrationVariant";
 import VisibilityIcon from "@mui/icons-material/Visibility";
+import { Validator } from "../../utils/constants";
 
 const ModalRegistration = () => {
   let isActive = useSelector(
@@ -121,6 +122,11 @@ const ModalRegistration = () => {
             </Grid>
           </Grid>
           <Grid item marginTop={3} sx={{ width: 300 }}>
+            {
+              <Typography color={"red"}>
+                {errors?.name && errors?.name.message}
+              </Typography>
+            }
             <TextField
               margin="normal"
               type={"text"}
@@ -131,12 +137,20 @@ const ModalRegistration = () => {
               fullWidth={true}
               {...register("name", {
                 required: `${t("adminPopup.emptyField")}`,
+                minLength: Validator.minLength(3),
+                maxLength: Validator.maxLength(12),
+                pattern: Validator.name,
               })}
             />
           </Grid>
           {isMaster && (
             <>
               <Grid item marginTop={3} sx={{ width: 300 }}>
+                {
+                  <Typography color={"red"}>
+                    {errors?.surname && errors?.surname.message}
+                  </Typography>
+                }
                 <TextField
                   margin="normal"
                   type={"text"}
@@ -147,12 +161,20 @@ const ModalRegistration = () => {
                   fullWidth={true}
                   {...register("surname", {
                     required: `${t("adminPopup.emptyField")}`,
+                    minLength: Validator.minLength(3),
+                    maxLength: Validator.maxLength(12),
+                    pattern: Validator.name,
                   })}
                 />
               </Grid>
             </>
           )}
           <Grid item marginTop={3} sx={{ width: 300, alignContent: "center" }}>
+            {
+              <Typography color={"red"}>
+                {errors?.email && errors?.email.message}
+              </Typography>
+            }
             <TextField
               margin="normal"
               type={"text"}
@@ -163,15 +185,18 @@ const ModalRegistration = () => {
               fullWidth={true}
               {...register("email", {
                 required: `${t("adminPopup.emptyField")}`,
-                pattern: {
-                  value:
-                    /^([a-z0-9_-]+.)*[a-z0-9_-]+@[a-z0-9_-]+(.[a-z0-9_-]+)*.[a-z]{2,6}$/,
-                  message: `${t("adminPopup.vrongFormat")}`,
-                },
+                minLength: Validator.minLength(10),
+                maxLength: Validator.maxLength(30),
+                pattern: Validator.email,
               })}
             />
           </Grid>
           <Grid item marginTop={3} sx={{ width: 300, alignContent: "center" }}>
+            {
+              <Typography color={"red"}>
+                {errors?.password && errors?.password.message}
+              </Typography>
+            }
             <TextField
               margin="normal"
               type={passwordType}
@@ -182,6 +207,9 @@ const ModalRegistration = () => {
               fullWidth={true}
               {...register("password", {
                 required: `${t("adminPopup.emptyField")}`,
+                minLength: Validator.minLength(5),
+                maxLength: Validator.maxLength(15),
+                pattern: Validator.password,
               })}
             />
             <VisibilityIcon

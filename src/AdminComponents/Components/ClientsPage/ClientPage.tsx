@@ -64,7 +64,6 @@ const ClientPage = () => {
       <Box height={70} />
       <Box sx={{ display: "flex" }}>
         <LeftSideMenu name={"clients"} />
-
         <TableContainer component={Paper}>
           <Table sx={{ minWidth: 650 }} aria-label="simple table">
             <TableHead sx={{ background: "#a1a1a1" }}>
@@ -72,7 +71,7 @@ const ClientPage = () => {
                 <TableCell>Номер клиента</TableCell>
                 <TableCell align="left">Имя</TableCell>
                 <TableCell align="left">Почта</TableCell>
-                <TableCell></TableCell>
+                <TableCell>Сбросить пароль</TableCell>
                 <TableCell align="right">
                   <Button
                     sx={{ marginLeft: "auto", background: "rgba(180,58,58,1)" }}
@@ -124,7 +123,7 @@ const ClientPage = () => {
 
                     <TableCell align="left">{row.email}</TableCell>
 
-                    <TableCell align="right">
+                    <TableCell align="left">
                       <CachedIcon
                         onClick={() => {
                           setItemForUpdatePassword([row.email, "clients"]);

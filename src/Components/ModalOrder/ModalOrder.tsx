@@ -19,6 +19,7 @@ import { instance, InstanceResponse } from "../../AdminComponents/axios-utils";
 import { RootState } from "../../redux/rootReducer";
 import { DateCalendar, TimeClock } from "@mui/x-date-pickers";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
+import { Validator } from "../../utils/constants";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -135,6 +136,11 @@ const ModalOrder = () => {
             </Grid>
           </Grid>
           <Grid item marginTop={3} sx={{ width: 300 }}>
+            {
+              <Typography color={"red"}>
+                {errors?.name && errors?.name.message}
+              </Typography>
+            }
             <TextField
               type={"text"}
               variant="outlined"
@@ -144,10 +150,18 @@ const ModalOrder = () => {
               name="name"
               {...register("name", {
                 required: `${t("adminPopup.emptyField")}`,
+                minLength: Validator.minLength(3),
+                maxLength: Validator.maxLength(12),
+                pattern: Validator.name,
               })}
             />
           </Grid>
           <Grid item marginTop={3} sx={{ width: 300 }}>
+            {
+              <Typography color={"red"}>
+                {errors?.email && errors?.email.message}
+              </Typography>
+            }
             <TextField
               type={"text"}
               variant="outlined"
@@ -157,11 +171,9 @@ const ModalOrder = () => {
               fullWidth={true}
               {...register("email", {
                 required: `${t("adminPopup.emptyField")}`,
-                pattern: {
-                  value:
-                    /^([a-z0-9_-]+.)*[a-z0-9_-]+@[a-z0-9_-]+(.[a-z0-9_-]+)*.[a-z]{2,6}$/,
-                  message: `${t("adminPopup.vrongFormat")}`,
-                },
+                minLength: Validator.minLength(10),
+                maxLength: Validator.maxLength(30),
+                pattern: Validator.email,
               })}
             />
           </Grid>

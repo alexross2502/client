@@ -84,7 +84,7 @@ const MastersPage = () => {
                 <TableCell align="left">ФИО</TableCell>
                 <TableCell align="left">Город</TableCell>
                 <TableCell align="left">Рейтинг</TableCell>
-                <TableCell></TableCell>
+                <TableCell>Сбросить пароль</TableCell>
                 <TableCell align="right">
                   <Button
                     sx={{ marginLeft: "auto", background: "rgba(180,58,58,1)" }}
@@ -139,10 +139,10 @@ const MastersPage = () => {
                       {townsIdToName[row.townId]}
                     </TableCell>
                     <TableCell align="left">{row.rating}</TableCell>
-                    <TableCell align="right">
+                    <TableCell align="left">
                       <CachedIcon
                         onClick={() => {
-                          setItemForUpdatePassword([row.email, "clients"]);
+                          setItemForUpdatePassword([row.email, "masters"]);
                           dispatch(setModalUpdatePassword());
                         }}
                       />
