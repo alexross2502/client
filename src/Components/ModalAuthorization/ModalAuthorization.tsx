@@ -40,7 +40,6 @@ const ModalAuthorization = () => {
     await authCheck(data)
       .then((res) => {
         dispatch(setAuthorized(true));
-        console.log(res.token);
         navigate(loginSwitchCase(res.token));
       })
       .catch(() => {
