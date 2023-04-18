@@ -84,14 +84,14 @@ const DeleteModal = (props) => {
                     setTimeout(() => {
                       dispatch(setRemoveAndAddModal(false));
                     }, 1000);
-                    setPending(false);
-                    dispatch(setModalDelete());
                   })
                   .catch(() => {
                     dispatch(setRemoveAndAddModalError(true));
                     setTimeout(() => {
                       dispatch(setRemoveAndAddModalError(false));
                     }, 1000);
+                  })
+                  .finally(() => {
                     setPending(false);
                     dispatch(setModalDelete());
                   });

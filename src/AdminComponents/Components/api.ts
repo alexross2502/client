@@ -28,10 +28,13 @@ const Api: IApi = {
     });
   },
   updatePassword: async function (url, email) {
+    let data = {
+      email,
+    };
     return await instance({
       url: `${url}/changepassword`,
       method: "put",
-      data: email,
+      data,
     });
   },
 };

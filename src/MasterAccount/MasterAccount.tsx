@@ -55,11 +55,11 @@ const MasterAccount = () => {
   return (
     <>
       <Box height={70} />
-      <Box sx={{ display: "flex" }}>
+      <Box>
         <CssBaseline />
         <CustomAppBar position="fixed">
           <Toolbar>
-            <Typography variant="h6" noWrap>
+            <Typography variant="h6" noWrap marginLeft={"235px"}>
               Личный кабинет
             </Typography>
           </Toolbar>
@@ -103,52 +103,62 @@ const MasterAccount = () => {
             </ListItem>
           </Drawer>
         </CustomAppBar>
-        <TableContainer component={Paper}>
-          <Table sx={{ minWidth: 650 }} aria-label="simple table">
-            <TableHead sx={{ background: "#a1a1a1" }}>
-              <TableRow>
-                <TableCell>Имя клиента</TableCell>
-                <TableCell align="left">Тип услуги</TableCell>
-                <TableCell align="left">День</TableCell>
-                <TableCell align="left">Время</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {isLoading && (
-                <Grid
-                  sx={{ position: "absolute", left: "50%", marginTop: "20px" }}>
-                  <Watch
-                    height="80"
-                    width="80"
-                    radius="48"
-                    color="#4fa94d"
-                    ariaLabel="watch-loading"
-                    wrapperStyle={{}}
-                    visible={true}
-                  />
-                </Grid>
-              )}
-              {mastersList?.length === 0 ? (
+        <Box sx={{ width: "calc(100vw - 240px)" }}>
+          <TableContainer component={Paper} sx={{ marginLeft: "240px" }}>
+            <Table sx={{ minWidth: 650 }} aria-label="simple table">
+              <TableHead sx={{ background: "#a1a1a1" }}>
                 <TableRow>
-                  <TableCell>
-                    <Typography>Таблица пуста</Typography>
-                  </TableCell>
+                  <TableCell>Имя клиента</TableCell>
+                  <TableCell align="left">Тип услуги</TableCell>
+                  <TableCell align="left">День</TableCell>
+                  <TableCell align="left">Время</TableCell>
                 </TableRow>
-              ) : (
-                mastersList?.map((row) => (
-                  <TableRow
-                    key={row.id}
-                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
-                    <TableCell align="left">{row.client.name}</TableCell>
-                    <TableCell align="left">{t(`size.${row.size}`)}</TableCell>
-                    <TableCell align="left">{row.day}</TableCell>
-                    <TableCell align="left">{row.end}</TableCell>
+              </TableHead>
+              <TableBody>
+                {isLoading && (
+                  <Grid
+                    sx={{
+                      position: "absolute",
+                      left: "50%",
+                      marginTop: "20px",
+                    }}>
+                    <Watch
+                      height="80"
+                      width="80"
+                      radius="48"
+                      color="#4fa94d"
+                      ariaLabel="watch-loading"
+                      wrapperStyle={{}}
+                      visible={true}
+                    />
+                  </Grid>
+                )}
+                {mastersList?.length === 0 ? (
+                  <TableRow>
+                    <TableCell>
+                      <Typography>Таблица пуста</Typography>
+                    </TableCell>
                   </TableRow>
-                ))
-              )}
-            </TableBody>
-          </Table>
-        </TableContainer>
+                ) : (
+                  mastersList?.map((row) => (
+                    <TableRow
+                      key={row.id}
+                      sx={{
+                        "&:last-child td, &:last-child th": { border: 0 },
+                      }}>
+                      <TableCell align="left">{row.client.name}</TableCell>
+                      <TableCell align="left">
+                        {t(`size.${row.size}`)}
+                      </TableCell>
+                      <TableCell align="left">{row.day}</TableCell>
+                      <TableCell align="left">{row.end}</TableCell>
+                    </TableRow>
+                  ))
+                )}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </Box>
       </Box>
     </>
   );

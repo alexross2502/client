@@ -88,7 +88,6 @@ const ReservationSave = () => {
           setTimeout(() => {
             dispatch(setRemoveAndAddModal(false));
           }, 1000);
-          setPending(false);
         })
         .catch(() => {
           dispatch(setRemoveAndAddModalError(true));
@@ -96,8 +95,8 @@ const ReservationSave = () => {
           setTimeout(() => {
             dispatch(setRemoveAndAddModalError(false));
           }, 1000);
-          setPending(true);
-        });
+        })
+        .finally(() => setPending(false));
     }
   }
 
