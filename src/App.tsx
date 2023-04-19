@@ -10,6 +10,7 @@ import ReservationPage from "./AdminComponents/Components/ReservationPage/Reserv
 import React from "react";
 import ClientAccount from "./ClientAccount/ClientAccount";
 import MasterAccount from "./MasterAccount/MasterAccount";
+import ConfirmationPage from "./Components/ConfirmationPage/ConfirmationPage";
 
 function App() {
   return (
@@ -52,6 +53,10 @@ function App() {
             />
             <Route path="/clientaccount" element={<ClientAccount />} />
             <Route path="/masteraccount" element={<MasterAccount />} />
+            <Route
+              path="/mailconfirmation/token=:token/url=:url"
+              element={<ConfirmationPage />}
+            />
           </Routes>
         </Router>
       </div>
