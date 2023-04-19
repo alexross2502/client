@@ -12,6 +12,7 @@ import { setPageRerender } from "../../../redux/rerenderReducer";
 import { setRemoveAndAddModal } from "../../../redux/RemoveAndAddModalReducer";
 import { setRemoveAndAddModalError } from "../../../redux/RemoveAndAddModalErrorReducer";
 import { RootState } from "../../../redux/rootReducer";
+import { Validator } from "../../../utils/constants";
 
 const ClientSave = () => {
   const dispatch = useDispatch();
@@ -40,7 +41,6 @@ const ClientSave = () => {
         setTimeout(() => {
           dispatch(setRemoveAndAddModal(false));
         }, 1000);
-        setPending(false);
       })
       .catch(() => {
         dispatch(setRemoveAndAddModalError(true));
@@ -48,6 +48,8 @@ const ClientSave = () => {
         setTimeout(() => {
           dispatch(setRemoveAndAddModalError(false));
         }, 1000);
+      })
+      .finally(() => {
         setPending(false);
       });
   }
@@ -100,10 +102,9 @@ const ClientSave = () => {
             name="name"
             {...register("name", {
               required: `${t("adminPopup.emptyField")}`,
-              pattern: {
-                value: /^[А-я]{2,20}$/,
-                message: `${t("adminPopup.onlyCyrillic")}`,
-              },
+              minLength: Validator.minLength(3),
+              maxLength: Validator.maxLength(12),
+              pattern: Validator.name,
             })}
           />
           {
@@ -120,11 +121,9 @@ const ClientSave = () => {
             name="email"
             {...register("email", {
               required: `${t("adminPopup.emptyField")}`,
-              pattern: {
-                value:
-                  /^([a-z0-9_-]+.)*[a-z0-9_-]+@[a-z0-9_-]+(.[a-z0-9_-]+)*.[a-z]{2,6}$/,
-                message: `${t("adminPopup.vrongFormat")}`,
-              },
+              minLength: Validator.minLength(10),
+              maxLength: Validator.maxLength(30),
+              pattern: Validator.email,
             })}
           />
           {
@@ -141,6 +140,9 @@ const ClientSave = () => {
             name="password"
             {...register("password", {
               required: `${t("adminPopup.emptyField")}`,
+              minLength: Validator.minLength(5),
+              maxLength: Validator.maxLength(15),
+              pattern: Validator.password,
             })}
           />
           <Button

@@ -12,6 +12,7 @@ import { setPageRerender } from "../../../redux/rerenderReducer";
 import { setRemoveAndAddModal } from "../../../redux/RemoveAndAddModalReducer";
 import { setRemoveAndAddModalError } from "../../../redux/RemoveAndAddModalErrorReducer";
 import { RootState } from "../../../redux/rootReducer";
+import { Validator } from "../../../utils/constants";
 
 const TownSave = () => {
   const dispatch = useDispatch();
@@ -44,7 +45,6 @@ const TownSave = () => {
         setTimeout(() => {
           dispatch(setRemoveAndAddModal(false));
         }, 1000);
-        setPending(false);
       })
       .catch(() => {
         dispatch(setRemoveAndAddModalError(true));
@@ -52,8 +52,8 @@ const TownSave = () => {
         setTimeout(() => {
           dispatch(setRemoveAndAddModalError(false));
         }, 1000);
-        setPending(false);
-      });
+      })
+      .finally(() => setPending(false));
   }
   /////////
 
@@ -105,10 +105,9 @@ const TownSave = () => {
             name="name"
             {...register("name", {
               required: `${t("adminPopup.emptyField")}`,
-              pattern: {
-                value: /^[А-я]{2,20}$/,
-                message: `${t("adminPopup.onlyCyrillic")}`,
-              },
+              minLength: Validator.minLength(3),
+              maxLength: Validator.maxLength(12),
+              pattern: Validator.name,
             })}
           />
 

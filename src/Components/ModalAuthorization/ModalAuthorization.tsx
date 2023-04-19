@@ -13,6 +13,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import { RootState } from "../../redux/rootReducer";
 import { loginSwitchCase } from "../../utils/loginSwitchCase";
+import { Validator } from "../../utils/constants";
 
 const ModalAuthorization = () => {
   const dispatch = useDispatch();
@@ -38,15 +39,14 @@ const ModalAuthorization = () => {
     setPending(true);
     await authCheck(data)
       .then((res) => {
-        setPending(false);
         dispatch(setAuthorized(true));
         navigate(loginSwitchCase(res.token));
       })
       .catch(() => {
-        setPending(false);
         reset();
         setAuthData(`${t("adminPopup.vrongAuth")}`);
-      });
+      })
+      .finally(() => setPending(false));
   }
   ///Глазик в пароле
   let [passwordType, setPasswordType] = useState("password");
@@ -108,11 +108,9 @@ const ModalAuthorization = () => {
             name="email"
             {...register("email", {
               required: `${t("adminPopup.emptyField")}`,
-              pattern: {
-                value:
-                  /^([a-z0-9_-]+.)*[a-z0-9_-]+@[a-z0-9_-]+(.[a-z0-9_-]+)*.[a-z]{2,6}$/,
-                message: `${t("adminPopup.vrongFormat")}`,
-              },
+              minLength: Validator.minLength(10),
+              maxLength: Validator.maxLength(30),
+              pattern: Validator.email,
             })}
           />
           {
@@ -130,6 +128,9 @@ const ModalAuthorization = () => {
               name="password"
               {...register("password", {
                 required: `${t("adminPopup.emptyField")}`,
+                minLength: Validator.minLength(5),
+                maxLength: Validator.maxLength(15),
+                pattern: Validator.password,
               })}></TextField>
 
             <VisibilityIcon

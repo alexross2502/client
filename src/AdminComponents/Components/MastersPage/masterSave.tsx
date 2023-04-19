@@ -14,7 +14,7 @@ import { setPageRerender } from "../../../redux/rerenderReducer";
 import { setRemoveAndAddModal } from "../../../redux/RemoveAndAddModalReducer";
 import { setRemoveAndAddModalError } from "../../../redux/RemoveAndAddModalErrorReducer";
 import { RootState } from "../../../redux/rootReducer";
-import { rating } from "../../../utils/constants";
+import { rating, Validator } from "../../../utils/constants";
 
 const MasterSave = () => {
   const dispatch = useDispatch();
@@ -53,7 +53,6 @@ const MasterSave = () => {
         setTimeout(() => {
           dispatch(setRemoveAndAddModal(false));
         }, 1000);
-        setPending(false);
       })
       .catch(() => {
         dispatch(setRemoveAndAddModalError(true));
@@ -61,8 +60,8 @@ const MasterSave = () => {
         setTimeout(() => {
           dispatch(setRemoveAndAddModalError(false));
         }, 1000);
-        setPending(false);
-      });
+      })
+      .finally(() => setPending(false));
   }
   ///////////
 
@@ -114,10 +113,9 @@ const MasterSave = () => {
             name="name"
             {...register("name", {
               required: `${t("adminPopup.emptyField")}`,
-              pattern: {
-                value: /^[А-я]{2,20}$/,
-                message: `${t("adminPopup.onlyCyrillic")}`,
-              },
+              minLength: Validator.minLength(3),
+              maxLength: Validator.maxLength(12),
+              pattern: Validator.name,
             })}
           />
           {
@@ -134,10 +132,9 @@ const MasterSave = () => {
             name="surname"
             {...register("surname", {
               required: `${t("adminPopup.emptyField")}`,
-              pattern: {
-                value: /^[А-я]{2,20}$/,
-                message: `${t("adminPopup.onlyCyrillic")}`,
-              },
+              minLength: Validator.minLength(3),
+              maxLength: Validator.maxLength(12),
+              pattern: Validator.name,
             })}
           />
           {
@@ -154,11 +151,9 @@ const MasterSave = () => {
             name="email"
             {...register("email", {
               required: `${t("adminPopup.emptyField")}`,
-              pattern: {
-                value:
-                  /^([a-z0-9_-]+.)*[a-z0-9_-]+@[a-z0-9_-]+(.[a-z0-9_-]+)*.[a-z]{2,6}$/,
-                message: `${t("adminPopup.vrongFormat")}`,
-              },
+              minLength: Validator.minLength(10),
+              maxLength: Validator.maxLength(30),
+              pattern: Validator.email,
             })}
           />
           {
@@ -175,6 +170,9 @@ const MasterSave = () => {
             name="password"
             {...register("password", {
               required: `${t("adminPopup.emptyField")}`,
+              minLength: Validator.minLength(5),
+              maxLength: Validator.maxLength(15),
+              pattern: Validator.password,
             })}
           />
           <Grid item marginTop={3}>
