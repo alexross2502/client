@@ -29,10 +29,13 @@ import RemoveAndAddModal from "../../RemoveAndAddModal";
 import RemoveAndAddModalError from "../../RemoveAndAddModalError";
 import CopyIcon from "../CopyIcon";
 import { RootState } from "../../../redux/rootReducer";
-import { InstanceResponse } from "../../axios-utils";
+import { instance, InstanceResponse } from "../../axios-utils";
 import CachedIcon from "@mui/icons-material/Cached";
 import UpdatePasswordModal from "../UpdatePasswordModal";
 import { setModalUpdatePassword } from "../../../redux/updatePasswordReducer";
+import ThumbUpIcon from "@mui/icons-material/ThumbUp";
+import { setRemoveAndAddModalError } from "../../../redux/RemoveAndAddModalErrorReducer";
+import { setRemoveAndAddModal } from "../../../redux/RemoveAndAddModalReducer";
 
 const MastersPage = () => {
   const { t } = useTranslation();
@@ -84,7 +87,8 @@ const MastersPage = () => {
                 <TableCell align="left">ФИО</TableCell>
                 <TableCell align="left">Город</TableCell>
                 <TableCell align="left">Рейтинг</TableCell>
-                <TableCell></TableCell>
+                <TableCell align="left">Сбросить пароль</TableCell>
+                <TableCell align="left">Подтвердить</TableCell>
                 <TableCell align="right">
                   <Button
                     sx={{ marginLeft: "auto", background: "rgba(180,58,58,1)" }}
@@ -139,13 +143,41 @@ const MastersPage = () => {
                       {townsIdToName[row.townId]}
                     </TableCell>
                     <TableCell align="left">{row.rating}</TableCell>
-                    <TableCell align="right">
+                    <TableCell align="left">
                       <CachedIcon
                         onClick={() => {
-                          setItemForUpdatePassword([row.email, "clients"]);
+                          setItemForUpdatePassword([row.email, "masters"]);
                           dispatch(setModalUpdatePassword());
                         }}
                       />
+                    </TableCell>
+                    <TableCell align="left">
+                      {!row.adminApprove && (
+                        <ThumbUpIcon
+                          onClick={() => {
+                            instance({
+                              url: "masters/approveaccount",
+                              method: "PUT",
+                              data: { id: row.id },
+                            })
+                              .then(() => {
+                                dispatch(setRemoveAndAddModal(true));
+                                setTimeout(() => {
+                                  dispatch(setRemoveAndAddModal(false));
+                                }, 1000);
+                              })
+                              .catch(() => {
+                                dispatch(setRemoveAndAddModalError(true));
+                                setTimeout(() => {
+                                  dispatch(setRemoveAndAddModalError(false));
+                                }, 1000);
+                              })
+                              .finally(async () =>
+                                setMastersList(await Api.getAll("masters"))
+                              );
+                          }}
+                        />
+                      )}
                     </TableCell>
                     <TableCell align="right">
                       <IconButton
