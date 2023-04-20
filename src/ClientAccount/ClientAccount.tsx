@@ -114,6 +114,7 @@ const ClientAccount = () => {
                 <TableCell align="left">Тип услуги</TableCell>
                 <TableCell align="left">День</TableCell>
                 <TableCell align="left">Время</TableCell>
+                <TableCell align="left">Сумма</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -152,6 +153,7 @@ const ClientAccount = () => {
                     <TableCell align="left">{t(`size.${row.size}`)}</TableCell>
                     <TableCell align="left">{row.day}</TableCell>
                     <TableCell align="left">{row.end}</TableCell>
+                    <TableCell align="left">{row.price / 100}</TableCell>
                   </TableRow>
                 ))
               )}

@@ -67,6 +67,7 @@ const TownsPage = () => {
               <TableRow>
                 <TableCell>Номер города</TableCell>
                 <TableCell align="left">Имя</TableCell>
+                <TableCell align="left">Тариф</TableCell>
                 <TableCell align="right">
                   <Button
                     sx={{ marginLeft: "auto", background: "rgba(180,58,58,1)" }}
@@ -114,6 +115,7 @@ const TownsPage = () => {
                       <CopyIcon data={row.id} />
                     </TableCell>
                     <TableCell align="left">{row.name}</TableCell>
+                    <TableCell align="left">{row.tariff / 100}</TableCell>
                     <TableCell align="right">
                       <IconButton
                         onClick={() => {
