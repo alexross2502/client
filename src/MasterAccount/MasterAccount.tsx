@@ -111,7 +111,7 @@ const MasterAccount = () => {
       url: "/masters/changestatus",
       data: { id: id, status: status },
       method: "PUT",
-    }).then((res) => console.log(res));
+    });
   }
 
   function checkStatus(status) {
