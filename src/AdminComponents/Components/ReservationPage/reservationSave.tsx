@@ -63,9 +63,11 @@ const ReservationSave = () => {
     let asyncFunc = async () => {
       let towns = await Api.getAll("towns");
       setTownsList(towns);
-      let clients = await Api.getAll("clients/true");
+      let clients = await Api.getAll("clients/?mailConfirmation=true");
       setClientsList(clients);
-      let masters = await Api.getAll("masters");
+      let masters = await Api.getAll(
+        "masters/?mailConfirmation=true&adminApprove=true"
+      );
       setMastersList(masters);
     };
     asyncFunc();
