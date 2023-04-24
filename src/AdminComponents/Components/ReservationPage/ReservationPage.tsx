@@ -32,6 +32,7 @@ import CopyIcon from "../CopyIcon";
 import { RootState } from "../../../redux/rootReducer";
 import { InstanceResponse } from "../../axios-utils";
 import { dateConverter } from "../dateConverter";
+import { priceFormatterToFloat } from "../../../utils/priceFormatterToFloat";
 
 const ReservationPage = () => {
   const { t } = useTranslation();
@@ -58,7 +59,6 @@ const ReservationPage = () => {
       let reservation: any = await Api.getAll("reservation");
       reservation.forEach((el) => {
         dateConverter(el);
-        el.price /= 100;
       });
       setReservationList(reservation);
       setLoading(false);
@@ -156,7 +156,9 @@ const ReservationPage = () => {
                     </TableCell>
                     <TableCell align="left">{IdToName[row.towns_id]}</TableCell>
                     <TableCell align="left">{IdToName[row.clientId]}</TableCell>
-                    <TableCell align="left">{row.price}</TableCell>
+                    <TableCell align="left">
+                      {priceFormatterToFloat(row.price)}
+                    </TableCell>
                     <TableCell align="left">
                       {t(`status.${row.status}`)}
                     </TableCell>

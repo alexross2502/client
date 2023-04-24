@@ -32,6 +32,7 @@ import Drawer from "@mui/material/Drawer";
 import { useNavigate } from "react-router-dom";
 import { styled } from "@mui/material/styles";
 import Switch, { SwitchProps } from "@mui/material/Switch";
+import { priceFormatterToFloat } from "../utils/priceFormatterToFloat";
 
 const IOSSwitch = styled((props: SwitchProps) => (
   <Switch focusVisibleClassName=".Mui-focusVisible" disableRipple {...props} />
@@ -98,7 +99,6 @@ const MasterAccount = () => {
       let tableData = await instance({ url: `/masters/data`, method: "GET" });
       tableData.data.forEach((el) => {
         dateConverter(el);
-        el /= 100;
       });
       setMastersList(tableData.data);
       setLoading(false);
@@ -225,7 +225,9 @@ const MasterAccount = () => {
                       </TableCell>
                       <TableCell align="left">{row.day}</TableCell>
                       <TableCell align="left">{row.end}</TableCell>
-                      <TableCell align="left">{row.price}</TableCell>
+                      <TableCell align="left">
+                        {priceFormatterToFloat(row.price)}
+                      </TableCell>
                       <TableCell align="left">
                         {hideCanceledStatus(row.status) ? (
                           "отменен"

@@ -31,6 +31,7 @@ import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
 import Drawer from "@mui/material/Drawer";
 import { useNavigate } from "react-router-dom";
+import { priceFormatterToFloat } from "../utils/priceFormatterToFloat";
 
 const ClientAccount = () => {
   const { t } = useTranslation();
@@ -46,7 +47,6 @@ const ClientAccount = () => {
       let tableData = await instance({ url: `/clients/data`, method: "GET" });
       tableData.data.forEach((el) => {
         dateConverter(el);
-        el.price /= 100;
       });
       setClientsList(tableData.data);
       setLoading(false);
@@ -154,7 +154,9 @@ const ClientAccount = () => {
                     <TableCell align="left">{t(`size.${row.size}`)}</TableCell>
                     <TableCell align="left">{row.day}</TableCell>
                     <TableCell align="left">{row.end}</TableCell>
-                    <TableCell align="left">{row.price}</TableCell>
+                    <TableCell align="left">
+                      {priceFormatterToFloat(row.price)}
+                    </TableCell>
                   </TableRow>
                 ))
               )}

@@ -30,6 +30,7 @@ import RemoveAndAddModalError from "../../RemoveAndAddModalError";
 import CopyIcon from "../CopyIcon";
 import { RootState } from "../../../redux/rootReducer";
 import { InstanceResponse } from "../../axios-utils";
+import { priceFormatterToFloat } from "../../../utils/priceFormatterToFloat";
 
 const TownsPage = () => {
   const { t } = useTranslation();
@@ -43,9 +44,7 @@ const TownsPage = () => {
     let asyncFunc = async () => {
       setLoading(true);
       let towns: any = await Api.getAll("towns");
-      towns.forEach((el) => {
-        el.tariff /= 100;
-      });
+      towns.forEach((el) => {});
       setTownsList(towns);
       setLoading(false);
     };
@@ -118,7 +117,9 @@ const TownsPage = () => {
                       <CopyIcon data={row.id} />
                     </TableCell>
                     <TableCell align="left">{row.name}</TableCell>
-                    <TableCell align="left">{row.tariff}</TableCell>
+                    <TableCell align="left">
+                      {priceFormatterToFloat(row.tariff)}
+                    </TableCell>
                     <TableCell align="right">
                       <IconButton
                         onClick={() => {
