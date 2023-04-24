@@ -44,7 +44,6 @@ const TownsPage = () => {
     let asyncFunc = async () => {
       setLoading(true);
       let towns: any = await Api.getAll("towns");
-      towns.forEach((el) => {});
       setTownsList(towns);
       setLoading(false);
     };
