@@ -22,7 +22,6 @@ import { setModalAddClients } from "../../../redux/clientsReducer";
 import TableContainer from "@mui/material/TableContainer";
 import Paper from "@mui/material/Paper";
 import DeleteModal from "../../../Components/Modals/DeleteModal";
-import { setModalDelete } from "../../../redux/deleteReducer";
 import { Watch } from "react-loader-spinner";
 import RemoveAndAddModal from "../../RemoveAndAddModal";
 import { instance, InstanceResponse } from "../../axios-utils";
@@ -30,8 +29,7 @@ import RemoveAndAddModalError from "../../RemoveAndAddModalError";
 import CopyIcon from "../CopyIcon";
 import { RootState } from "../../../redux/rootReducer";
 import CachedIcon from "@mui/icons-material/Cached";
-import { setModalUpdatePassword } from "../../../redux/updatePasswordReducer";
-import UpdatePasswordModal from "../UpdatePasswordModal";
+import UpdatePasswordModal from "../../../Components/Modals/UpdatePasswordModal";
 import TransitionsModal from "../../../Components/Modals/Modal";
 
 const ClientPage = () => {
@@ -43,9 +41,15 @@ const ClientPage = () => {
   const [itemForUpdatePassword, setItemForUpdatePassword] = useState([]);
   const [isLoading, setLoading] = useState<boolean>(false);
   const [isDeleteModalActive, setDeleteModalActive] = useState<boolean>(false);
+  const [isUpdatePasswordModalActive, setUpdatePasswordModalActive] =
+    useState<boolean>(false);
 
-  function modalHandler() {
+  function deleteModalHandler() {
     setDeleteModalActive(!isDeleteModalActive);
+  }
+
+  function updatePasswordModalHandler() {
+    setUpdatePasswordModalActive(!isUpdatePasswordModalActive);
   }
 
   useEffect(() => {
@@ -64,7 +68,6 @@ const ClientPage = () => {
 
   return (
     <>
-      <UpdatePasswordModal props={itemForUpdatePassword} />
       <ClientSave />
       <Box height={70} />
 
@@ -133,7 +136,7 @@ const ClientPage = () => {
                       <CachedIcon
                         onClick={() => {
                           setItemForUpdatePassword([row.email, "clients"]);
-                          dispatch(setModalUpdatePassword());
+                          updatePasswordModalHandler();
                         }}
                       />
                     </TableCell>
@@ -142,7 +145,7 @@ const ClientPage = () => {
                       <IconButton
                         onClick={() => {
                           setItemForRemove([row.id, "clients"]);
-                          modalHandler();
+                          deleteModalHandler();
                         }}>
                         <DeleteForeverIcon></DeleteForeverIcon>
                       </IconButton>
@@ -155,7 +158,13 @@ const ClientPage = () => {
         </TableContainer>
       </Box>
       {isDeleteModalActive && (
-        <DeleteModal props={itemForRemove} onClose={modalHandler} />
+        <DeleteModal props={itemForRemove} onClose={deleteModalHandler} />
+      )}
+      {isUpdatePasswordModalActive && (
+        <UpdatePasswordModal
+          props={itemForUpdatePassword}
+          onClose={updatePasswordModalHandler}
+        />
       )}
       <TransitionsModal />
       <RemoveAndAddModal />

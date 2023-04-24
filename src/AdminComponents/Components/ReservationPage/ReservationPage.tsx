@@ -47,7 +47,7 @@ const ReservationPage = () => {
   const [isLoading, setLoading] = useState<boolean>(false);
   const [isDeleteModalActive, setDeleteModalActive] = useState<boolean>(false);
 
-  function modalHandler() {
+  function deleteModalHandler() {
     setDeleteModalActive(!isDeleteModalActive);
   }
 
@@ -160,7 +160,7 @@ const ReservationPage = () => {
                       <IconButton
                         onClick={() => {
                           setItemForRemove([row.id, "reservation"]);
-                          modalHandler();
+                          deleteModalHandler();
                         }}>
                         <DeleteForeverIcon></DeleteForeverIcon>
                       </IconButton>
@@ -173,7 +173,7 @@ const ReservationPage = () => {
         </TableContainer>
       </Box>
       {isDeleteModalActive && (
-        <DeleteModal props={itemForRemove} onClose={modalHandler} />
+        <DeleteModal props={itemForRemove} onClose={deleteModalHandler} />
       )}
       <RemoveAndAddModal />
       <RemoveAndAddModalError />

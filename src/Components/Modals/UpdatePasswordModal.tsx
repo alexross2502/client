@@ -23,7 +23,7 @@ const style = {
   zIndex: 999,
 };
 
-const DeleteModal = (props) => {
+const UpdatePasswordModal = (props) => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
   const {
@@ -43,7 +43,7 @@ const DeleteModal = (props) => {
           <Grid item xs={1}></Grid>
           <Grid item xs={10}>
             <Typography variant="h4" padding={3} textAlign="center">
-              Точно удалить?
+              Точно сбросить пароль?
             </Typography>
           </Grid>
         </Grid>
@@ -65,8 +65,8 @@ const DeleteModal = (props) => {
                 disabled={pending}
                 onClick={() => {
                   setPending(true);
-                  let [id, url] = props.props;
-                  Api.delete(url, id)
+                  let [email, url] = props.props;
+                  Api.updatePassword(url, email)
                     .then((res) => {
                       dispatch(setPageRerender());
                       dispatch(setRemoveAndAddModal(true));
@@ -114,4 +114,4 @@ const DeleteModal = (props) => {
   );
 };
 
-export default DeleteModal;
+export default UpdatePasswordModal;

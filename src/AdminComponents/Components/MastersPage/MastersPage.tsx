@@ -31,7 +31,7 @@ import CopyIcon from "../CopyIcon";
 import { RootState } from "../../../redux/rootReducer";
 import { instance, InstanceResponse } from "../../axios-utils";
 import CachedIcon from "@mui/icons-material/Cached";
-import UpdatePasswordModal from "../UpdatePasswordModal";
+import UpdatePasswordModal from "../../../Components/Modals/UpdatePasswordModal";
 import { setModalUpdatePassword } from "../../../redux/updatePasswordReducer";
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 import { setRemoveAndAddModalError } from "../../../redux/RemoveAndAddModalErrorReducer";
@@ -47,9 +47,15 @@ const MastersPage = () => {
   const [itemForUpdatePassword, setItemForUpdatePassword] = useState([]);
   const [isLoading, setLoading] = useState<boolean>(false);
   const [isDeleteModalActive, setDeleteModalActive] = useState<boolean>(false);
+  const [isUpdatePasswordModalActive, setUpdatePasswordModalActive] =
+    useState<boolean>(false);
 
-  function modalHandler() {
+  function deleteModalHandler() {
     setDeleteModalActive(!isDeleteModalActive);
+  }
+
+  function updatePasswordModalHandler() {
+    setUpdatePasswordModalActive(!isUpdatePasswordModalActive);
   }
 
   useEffect(() => {
@@ -77,7 +83,6 @@ const MastersPage = () => {
 
   return (
     <>
-      <UpdatePasswordModal props={itemForUpdatePassword} />
       <MasterSave />
       <Box height={70} />
       <Box sx={{ display: "flex" }}>
@@ -151,7 +156,7 @@ const MastersPage = () => {
                       <CachedIcon
                         onClick={() => {
                           setItemForUpdatePassword([row.email, "masters"]);
-                          dispatch(setModalUpdatePassword());
+                          updatePasswordModalHandler();
                         }}
                       />
                     </TableCell>
@@ -187,7 +192,7 @@ const MastersPage = () => {
                       <IconButton
                         onClick={() => {
                           setItemForRemove([row.id, "masters"]);
-                          modalHandler();
+                          deleteModalHandler();
                         }}>
                         <DeleteForeverIcon></DeleteForeverIcon>
                       </IconButton>
@@ -200,7 +205,13 @@ const MastersPage = () => {
         </TableContainer>
       </Box>
       {isDeleteModalActive && (
-        <DeleteModal props={itemForRemove} onClose={modalHandler} />
+        <DeleteModal props={itemForRemove} onClose={deleteModalHandler} />
+      )}
+      {isUpdatePasswordModalActive && (
+        <UpdatePasswordModal
+          props={itemForUpdatePassword}
+          onClose={updatePasswordModalHandler}
+        />
       )}
       <RemoveAndAddModal />
       <RemoveAndAddModalError />

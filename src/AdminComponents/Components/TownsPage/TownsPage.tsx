@@ -40,7 +40,7 @@ const TownsPage = () => {
   const [isLoading, setLoading] = useState<boolean>(false);
   const [isDeleteModalActive, setDeleteModalActive] = useState<boolean>(false);
 
-  function modalHandler() {
+  function deleteModalHandler() {
     setDeleteModalActive(!isDeleteModalActive);
   }
 
@@ -121,7 +121,7 @@ const TownsPage = () => {
                       <IconButton
                         onClick={() => {
                           setItemForRemove([row.id, "towns"]);
-                          modalHandler();
+                          deleteModalHandler();
                         }}>
                         <DeleteForeverIcon></DeleteForeverIcon>
                       </IconButton>
@@ -134,7 +134,7 @@ const TownsPage = () => {
         </TableContainer>
       </Box>
       {isDeleteModalActive && (
-        <DeleteModal props={itemForRemove} onClose={modalHandler} />
+        <DeleteModal props={itemForRemove} onClose={deleteModalHandler} />
       )}
       <RemoveAndAddModal />
       <RemoveAndAddModalError />
