@@ -1,6 +1,10 @@
 export const rating = [1, 2, 3, 4, 5];
 
-export const statusVariant = ["canceled", "confirmed", "executed"];
+export enum StatusVariant {
+  Canceled = "canceled",
+  Confirmed = "confirmed",
+  Executed = "executed",
+}
 
 export const Validator = {
   name: {

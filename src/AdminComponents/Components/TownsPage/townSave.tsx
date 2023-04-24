@@ -35,6 +35,7 @@ const TownSave = () => {
   ////Сохранение города
   const [pending, setPending] = useState<boolean>(false);
   async function townSave(atr) {
+    atr.tariff *= 100;
     let data = { ...atr };
     setPending(true);
     await instance({ url: `/towns`, method: "post", data: data })

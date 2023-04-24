@@ -42,7 +42,10 @@ const TownsPage = () => {
   useEffect(() => {
     let asyncFunc = async () => {
       setLoading(true);
-      let towns = await Api.getAll("towns");
+      let towns: any = await Api.getAll("towns");
+      towns.forEach((el) => {
+        el.tariff /= 100;
+      });
       setTownsList(towns);
       setLoading(false);
     };
@@ -115,7 +118,7 @@ const TownsPage = () => {
                       <CopyIcon data={row.id} />
                     </TableCell>
                     <TableCell align="left">{row.name}</TableCell>
-                    <TableCell align="left">{row.tariff / 100}</TableCell>
+                    <TableCell align="left">{row.tariff}</TableCell>
                     <TableCell align="right">
                       <IconButton
                         onClick={() => {

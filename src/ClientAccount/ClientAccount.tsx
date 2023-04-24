@@ -46,6 +46,7 @@ const ClientAccount = () => {
       let tableData = await instance({ url: `/clients/data`, method: "GET" });
       tableData.data.forEach((el) => {
         dateConverter(el);
+        el.price /= 100;
       });
       setClientsList(tableData.data);
       setLoading(false);
@@ -153,7 +154,7 @@ const ClientAccount = () => {
                     <TableCell align="left">{t(`size.${row.size}`)}</TableCell>
                     <TableCell align="left">{row.day}</TableCell>
                     <TableCell align="left">{row.end}</TableCell>
-                    <TableCell align="left">{row.price / 100}</TableCell>
+                    <TableCell align="left">{row.price}</TableCell>
                   </TableRow>
                 ))
               )}

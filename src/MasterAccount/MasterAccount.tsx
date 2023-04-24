@@ -98,6 +98,7 @@ const MasterAccount = () => {
       let tableData = await instance({ url: `/masters/data`, method: "GET" });
       tableData.data.forEach((el) => {
         dateConverter(el);
+        el /= 100;
       });
       setMastersList(tableData.data);
       setLoading(false);
@@ -224,7 +225,7 @@ const MasterAccount = () => {
                       </TableCell>
                       <TableCell align="left">{row.day}</TableCell>
                       <TableCell align="left">{row.end}</TableCell>
-                      <TableCell align="left">{row.price / 100}</TableCell>
+                      <TableCell align="left">{row.price}</TableCell>
                       <TableCell align="left">
                         {hideCanceledStatus(row.status) ? (
                           "отменен"

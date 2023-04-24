@@ -58,6 +58,7 @@ const ReservationPage = () => {
       let reservation: any = await Api.getAll("reservation");
       reservation.forEach((el) => {
         dateConverter(el);
+        el.price /= 100;
       });
       setReservationList(reservation);
       setLoading(false);
@@ -155,7 +156,7 @@ const ReservationPage = () => {
                     </TableCell>
                     <TableCell align="left">{IdToName[row.towns_id]}</TableCell>
                     <TableCell align="left">{IdToName[row.clientId]}</TableCell>
-                    <TableCell align="left">{row.price / 100}</TableCell>
+                    <TableCell align="left">{row.price}</TableCell>
                     <TableCell align="left">
                       {t(`status.${row.status}`)}
                     </TableCell>
