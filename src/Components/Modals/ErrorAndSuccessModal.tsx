@@ -12,15 +12,15 @@ import { useDispatch } from "react-redux";
 
 const style = {
   position: "absolute" as "absolute",
-  top: "50%",
-  left: "50%",
+  top: "90%",
+  left: "90%",
   transform: "translate(-50%, -50%)",
   width: 400,
   bgcolor: "#c9c9cc",
   border: "2px solid #000",
   boxShadow: 24,
   p: 4,
-  zIndex: 999,
+  zIndex: 1999,
 };
 
 const ErrorAndSuccessModal = (props) => {
@@ -40,8 +40,8 @@ const ErrorAndSuccessModal = (props) => {
     <Box sx={style}>
       <Grid container>
         <Grid item xs={10}>
-          <Typography variant="h6" padding={3} textAlign="center">
-            Точно удалить?
+          <Typography variant="h1" padding={3} textAlign="center">
+            dsadadsdsadasdasadsdsasddsasdasdadsadsasdadasdsadas
           </Typography>
         </Grid>
       </Grid>
