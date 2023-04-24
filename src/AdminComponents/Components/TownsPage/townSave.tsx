@@ -35,6 +35,7 @@ const TownSave = () => {
   ////Сохранение города
   const [pending, setPending] = useState<boolean>(false);
   async function townSave(atr) {
+    atr.tariff *= 100;
     let data = { ...atr };
     setPending(true);
     await instance({ url: `/towns`, method: "post", data: data })
@@ -91,6 +92,7 @@ const TownSave = () => {
               <CloseIcon onClick={() => dispatch(setModalAddTowns())} />
             </Grid>
           </Grid>
+
           {
             <Typography color={"red"}>
               {errors?.name && errors?.name.message}
@@ -108,6 +110,28 @@ const TownSave = () => {
               minLength: Validator.minLength(3),
               maxLength: Validator.maxLength(12),
               pattern: Validator.name,
+            })}
+          />
+
+          {
+            <Typography color={"red"}>
+              {errors?.tariff && errors?.tariff.message}
+            </Typography>
+          }
+          <TextField
+            margin="normal"
+            type={"number"}
+            variant="outlined"
+            placeholder="Тариф"
+            sx={{ backgroundColor: "white", width: "209px" }}
+            name="tariff"
+            inputProps={{
+              step: 0.01,
+              min: 100,
+              max: 999999,
+            }}
+            {...register("tariff", {
+              required: `${t("adminPopup.emptyField")}`,
             })}
           />
 
