@@ -21,7 +21,7 @@ import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import { setModalAddClients } from "../../../redux/clientsReducer";
 import TableContainer from "@mui/material/TableContainer";
 import Paper from "@mui/material/Paper";
-import DeleteModal from "../DeleteModal";
+import DeleteModal from "../../../Components/Modals/DeleteModal";
 import { setModalDelete } from "../../../redux/deleteReducer";
 import { Watch } from "react-loader-spinner";
 import RemoveAndAddModal from "../../RemoveAndAddModal";
@@ -47,7 +47,6 @@ const ClientPage = () => {
   function modalHandler() {
     setDeleteModalActive(!isDeleteModalActive);
   }
-  console.log(isDeleteModalActive);
 
   useEffect(() => {
     let asyncFunc = async () => {

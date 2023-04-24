@@ -22,7 +22,7 @@ import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import { setModalAddMasters } from "../../../redux/mastersReducer";
 import TableContainer from "@mui/material/TableContainer";
 import Paper from "@mui/material/Paper";
-import DeleteModal from "../DeleteModal";
+import DeleteModal from "../../../Components/Modals/DeleteModal";
 import { setModalDelete } from "../../../redux/deleteReducer";
 import { Watch } from "react-loader-spinner";
 import RemoveAndAddModal from "../../RemoveAndAddModal";
@@ -46,6 +46,11 @@ const MastersPage = () => {
   const [itemForRemove, setItemForRemove] = useState([]);
   const [itemForUpdatePassword, setItemForUpdatePassword] = useState([]);
   const [isLoading, setLoading] = useState<boolean>(false);
+  const [isDeleteModalActive, setDeleteModalActive] = useState<boolean>(false);
+
+  function modalHandler() {
+    setDeleteModalActive(!isDeleteModalActive);
+  }
 
   useEffect(() => {
     let asyncFunc = async () => {
@@ -72,7 +77,6 @@ const MastersPage = () => {
 
   return (
     <>
-      <DeleteModal props={itemForRemove} />
       <UpdatePasswordModal props={itemForUpdatePassword} />
       <MasterSave />
       <Box height={70} />
@@ -183,7 +187,7 @@ const MastersPage = () => {
                       <IconButton
                         onClick={() => {
                           setItemForRemove([row.id, "masters"]);
-                          dispatch(setModalDelete());
+                          modalHandler();
                         }}>
                         <DeleteForeverIcon></DeleteForeverIcon>
                       </IconButton>
@@ -195,6 +199,9 @@ const MastersPage = () => {
           </Table>
         </TableContainer>
       </Box>
+      {isDeleteModalActive && (
+        <DeleteModal props={itemForRemove} onClose={modalHandler} />
+      )}
       <RemoveAndAddModal />
       <RemoveAndAddModalError />
     </>

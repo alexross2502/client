@@ -23,7 +23,7 @@ import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import { setModalAddReservations } from "../../../redux/reservationsReducer";
 import TableContainer from "@mui/material/TableContainer";
 import Paper from "@mui/material/Paper";
-import DeleteModal from "../DeleteModal";
+import DeleteModal from "../../../Components/Modals/DeleteModal";
 import { setModalDelete } from "../../../redux/deleteReducer";
 import { Watch } from "react-loader-spinner";
 import RemoveAndAddModal from "../../RemoveAndAddModal";
@@ -45,6 +45,11 @@ const ReservationPage = () => {
   >();
   const [itemForRemove, setItemForRemove] = useState([]);
   const [isLoading, setLoading] = useState<boolean>(false);
+  const [isDeleteModalActive, setDeleteModalActive] = useState<boolean>(false);
+
+  function modalHandler() {
+    setDeleteModalActive(!isDeleteModalActive);
+  }
 
   useEffect(() => {
     let asyncFunc = async () => {
@@ -84,7 +89,6 @@ const ReservationPage = () => {
 
   return (
     <>
-      <DeleteModal props={itemForRemove} />
       <ReservationSave />
       <Box height={70} />
       <Box sx={{ display: "flex" }}>
@@ -156,7 +160,7 @@ const ReservationPage = () => {
                       <IconButton
                         onClick={() => {
                           setItemForRemove([row.id, "reservation"]);
-                          dispatch(setModalDelete());
+                          modalHandler();
                         }}>
                         <DeleteForeverIcon></DeleteForeverIcon>
                       </IconButton>
@@ -168,6 +172,9 @@ const ReservationPage = () => {
           </Table>
         </TableContainer>
       </Box>
+      {isDeleteModalActive && (
+        <DeleteModal props={itemForRemove} onClose={modalHandler} />
+      )}
       <RemoveAndAddModal />
       <RemoveAndAddModalError />
     </>
