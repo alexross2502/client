@@ -59,7 +59,7 @@ const ModalAuthorization = () => {
   return (
     <div
       onClick={(e) => e.stopPropagation()}
-      className={isActive ? `${style.active}` : `${style.inactive}`}>
+      className={!isActive ? `${style.active}` : `${style.inactive}`}>
       <form onSubmit={handleSubmit(authController)}>
         <Box
           display="flex"

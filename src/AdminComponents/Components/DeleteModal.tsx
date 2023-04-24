@@ -29,9 +29,7 @@ const DeleteModal = (props) => {
   const isActive = useSelector((state: RootState) => state.delete.isActive);
 
   return (
-    <div
-      onClick={(e) => e.stopPropagation()}
-      className={isActive ? `${style.active}` : `${style.inactive}`}>
+    <div onClick={(e) => e.stopPropagation()} className={`${style.active}`}>
       <Box
         display="flex"
         flexDirection={"column"}
@@ -112,9 +110,7 @@ const DeleteModal = (props) => {
               variant="contained"
               color="warning"
               disabled={pending}
-              onClick={() => {
-                dispatch(setModalDelete());
-              }}>
+              onClick={props.onClose}>
               Нет
             </Button>
           </Grid>

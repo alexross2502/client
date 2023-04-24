@@ -4,28 +4,20 @@ import Content from "./Components/Content/Content";
 import ModalAuthorization from "./Components/ModalAuthorization/ModalAuthorization";
 import ModalOrder from "./Components/ModalOrder/ModalOrder";
 import ModalAvailableMasters from "./Components/ModalAvailableMasters/ModalAvailableMasters";
-import React, { useState } from "react";
+import React from "react";
 import ModalOrderSuccess from "./Components/ModalAvailableMasters/ModalOrderSuccess";
 import ModalRegistration from "./Components/ModalRegistration/ModalRegistration";
-import Modal from "./Components/Modals/Modal";
 
 const MainPage = () => {
-  const [isOpen, setIsOpen] = useState(false);
-  setTimeout(() => {
-    setIsOpen(true);
-  }, 2000);
   return (
-    <div>
-      <div className={style.background}>
-        <Header />
-        <Content />
-        <ModalAuthorization />
-        <ModalOrder />
-        <ModalAvailableMasters />
-        <ModalOrderSuccess />
-        <ModalRegistration />
-      </div>
-      <Modal open={isOpen} <ModalOrder/> ></Modal>
+    <div className={style.background}>
+      <Header />
+      <Content />
+      <ModalAuthorization />
+      <ModalOrder />
+      <ModalAvailableMasters />
+      <ModalOrderSuccess />
+      <ModalRegistration />
     </div>
   );
 };

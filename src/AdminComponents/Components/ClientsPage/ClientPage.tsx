@@ -32,6 +32,7 @@ import { RootState } from "../../../redux/rootReducer";
 import CachedIcon from "@mui/icons-material/Cached";
 import { setModalUpdatePassword } from "../../../redux/updatePasswordReducer";
 import UpdatePasswordModal from "../UpdatePasswordModal";
+import TransitionsModal from "../../../Components/Modals/Modal";
 
 const ClientPage = () => {
   const { t } = useTranslation();
@@ -41,6 +42,12 @@ const ClientPage = () => {
   const [itemForRemove, setItemForRemove] = useState([]);
   const [itemForUpdatePassword, setItemForUpdatePassword] = useState([]);
   const [isLoading, setLoading] = useState<boolean>(false);
+  const [isDeleteModalActive, setDeleteModalActive] = useState<boolean>(false);
+
+  function modalHandler() {
+    setDeleteModalActive(!isDeleteModalActive);
+  }
+  console.log(isDeleteModalActive);
 
   useEffect(() => {
     let asyncFunc = async () => {
@@ -58,10 +65,10 @@ const ClientPage = () => {
 
   return (
     <>
-      <DeleteModal props={itemForRemove} />
       <UpdatePasswordModal props={itemForUpdatePassword} />
       <ClientSave />
       <Box height={70} />
+
       <Box sx={{ display: "flex" }}>
         <LeftSideMenu name={"clients"} />
         <TableContainer component={Paper}>
@@ -136,7 +143,7 @@ const ClientPage = () => {
                       <IconButton
                         onClick={() => {
                           setItemForRemove([row.id, "clients"]);
-                          dispatch(setModalDelete());
+                          modalHandler();
                         }}>
                         <DeleteForeverIcon></DeleteForeverIcon>
                       </IconButton>
@@ -148,6 +155,10 @@ const ClientPage = () => {
           </Table>
         </TableContainer>
       </Box>
+      {isDeleteModalActive && (
+        <DeleteModal props={itemForRemove} onClose={modalHandler} />
+      )}
+      <TransitionsModal />
       <RemoveAndAddModal />
       <RemoveAndAddModalError />
     </>

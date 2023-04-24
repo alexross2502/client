@@ -89,7 +89,6 @@ const ReservationPage = () => {
       <Box height={70} />
       <Box sx={{ display: "flex" }}>
         <LeftSideMenu name={"reservation"} />
-
         <TableContainer component={Paper}>
           <Table sx={{ minWidth: 650 }} aria-label="simple table">
             <TableHead sx={{ background: "#a1a1a1" }}>
