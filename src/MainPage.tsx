@@ -7,18 +7,28 @@ import ModalAvailableMasters from "./Components/ModalAvailableMasters/ModalAvail
 import React from "react";
 import ModalOrderSuccess from "./Components/ModalAvailableMasters/ModalOrderSuccess";
 import ModalRegistration from "./Components/ModalRegistration/ModalRegistration";
+import ErrorAndSuccessModal from "./Components/Modals/ErrorAndSuccessModal";
 
 const MainPage = () => {
   return (
-    <div className={style.background}>
-      <Header />
-      <Content />
-      <ModalAuthorization />
-      <ModalOrder />
-      <ModalAvailableMasters />
-      <ModalOrderSuccess />
-      <ModalRegistration />
-    </div>
+    <>
+      <div className={style.background}>
+        <Header />
+        <Content />
+        <ModalAuthorization />
+        <ModalOrder />
+        <ModalAvailableMasters />
+        <ModalOrderSuccess />
+        <ModalRegistration />
+      </div>
+      {isErrorAndSuccessModalActive && (
+        <ErrorAndSuccessModal
+          onClose={errorAndSuccessModalHandler}
+          type={ErrorAndSuccessModalData?.type}
+          message={ErrorAndSuccessModalData?.message}
+        />
+      )}
+    </>
   );
 };
 
