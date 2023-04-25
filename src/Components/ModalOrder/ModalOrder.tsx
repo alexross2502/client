@@ -172,7 +172,7 @@ const ModalOrder = () => {
               {...register("email", {
                 required: `${t("adminPopup.emptyField")}`,
                 minLength: Validator.minLength(10),
-                maxLength: Validator.maxLength(36),
+                maxLength: Validator.maxLength(30),
                 pattern: Validator.email,
               })}
             />

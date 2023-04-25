@@ -30,60 +30,6 @@ import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
 import Drawer from "@mui/material/Drawer";
 import { useNavigate } from "react-router-dom";
-import { styled } from "@mui/material/styles";
-import Switch, { SwitchProps } from "@mui/material/Switch";
-import { priceFormatterToFloat } from "../utils/priceFormatterToFloat";
-
-const IOSSwitch = styled((props: SwitchProps) => (
-  <Switch focusVisibleClassName=".Mui-focusVisible" disableRipple {...props} />
-))(({ theme }) => ({
-  width: 42,
-  height: 26,
-  padding: 0,
-  "& .MuiSwitch-switchBase": {
-    padding: 0,
-    margin: 2,
-    transitionDuration: "300ms",
-    "&.Mui-checked": {
-      transform: "translateX(16px)",
-      color: "#fff",
-      "& + .MuiSwitch-track": {
-        backgroundColor: theme.palette.mode === "dark" ? "#2ECA45" : "#65C466",
-        opacity: 1,
-        border: 0,
-      },
-      "&.Mui-disabled + .MuiSwitch-track": {
-        opacity: 0.5,
-      },
-    },
-    "&.Mui-focusVisible .MuiSwitch-thumb": {
-      color: "#33cf4d",
-      border: "6px solid #fff",
-    },
-    "&.Mui-disabled .MuiSwitch-thumb": {
-      color:
-        theme.palette.mode === "light"
-          ? theme.palette.grey[100]
-          : theme.palette.grey[600],
-    },
-    "&.Mui-disabled + .MuiSwitch-track": {
-      opacity: theme.palette.mode === "light" ? 0.7 : 0.3,
-    },
-  },
-  "& .MuiSwitch-thumb": {
-    boxSizing: "border-box",
-    width: 22,
-    height: 22,
-  },
-  "& .MuiSwitch-track": {
-    borderRadius: 26 / 2,
-    backgroundColor: theme.palette.mode === "light" ? "#E9E9EA" : "#39393D",
-    opacity: 1,
-    transition: theme.transitions.create(["background-color"], {
-      duration: 500,
-    }),
-  },
-}));
 
 const MasterAccount = () => {
   const { t } = useTranslation();
@@ -105,23 +51,6 @@ const MasterAccount = () => {
     };
     asyncFunc();
   }, [rerender]);
-
-  async function changeOrderStatus(id, checked) {
-    const status = checked ? "executed" : "confirmed";
-    instance({
-      url: "/masters/changestatus",
-      data: { id: id, status: status },
-      method: "PUT",
-    });
-  }
-
-  function checkStatus(status) {
-    return status === "executed";
-  }
-
-  function hideCanceledStatus(status) {
-    return status === "canceled";
-  }
 
   return (
     <>
@@ -183,8 +112,6 @@ const MasterAccount = () => {
                   <TableCell align="left">Тип услуги</TableCell>
                   <TableCell align="left">День</TableCell>
                   <TableCell align="left">Время</TableCell>
-                  <TableCell align="left">Сумма</TableCell>
-                  <TableCell align="left">Подтвержден/выполнен</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -225,26 +152,6 @@ const MasterAccount = () => {
                       </TableCell>
                       <TableCell align="left">{row.day}</TableCell>
                       <TableCell align="left">{row.end}</TableCell>
-                      <TableCell align="left">
-                        {priceFormatterToFloat(row.price)}
-                      </TableCell>
-                      <TableCell align="left">
-                        {hideCanceledStatus(row.status) ? (
-                          "отменен"
-                        ) : (
-                          <IOSSwitch
-                            sx={{ m: 1 }}
-                            defaultChecked={checkStatus(row.status)}
-                            value={row.id}
-                            onChange={(event) => {
-                              changeOrderStatus(
-                                event.target.value,
-                                event.target.checked
-                              );
-                            }}
-                          />
-                        )}
-                      </TableCell>
                     </TableRow>
                   ))
                 )}

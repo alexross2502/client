@@ -48,7 +48,6 @@ const TownSave = () => {
   const [pending, setPending] = useState<boolean>(false);
 
   async function townSave(atr) {
-    atr.tariff *= 100;
     let data = { ...atr };
     setPending(true);
     await instance({ url: `/towns`, method: "post", data: data })
@@ -102,68 +101,44 @@ const TownSave = () => {
                 <CloseIcon onClick={() => dispatch(setModalAddTowns())} />
               </Grid>
             </Grid>
-          </Grid>
+            {
+              <Typography color={"red"}>
+                {errors?.name && errors?.name.message}
+              </Typography>
+            }
+            <TextField
+              margin="normal"
+              type={"text"}
+              variant="outlined"
+              placeholder="Город"
+              sx={{ backgroundColor: "white" }}
+              name="name"
+              {...register("name", {
+                required: `${t("adminPopup.emptyField")}`,
+                minLength: Validator.minLength(3),
+                maxLength: Validator.maxLength(12),
+                pattern: Validator.name,
+              })}
+            />
 
-          {
-            <Typography color={"red"}>
-              {errors?.name && errors?.name.message}
-            </Typography>
-          }
-          <TextField
-            margin="normal"
-            type={"text"}
-            variant="outlined"
-            placeholder="Город"
-            sx={{ backgroundColor: "white" }}
-            name="name"
-            {...register("name", {
-              required: `${t("adminPopup.emptyField")}`,
-              minLength: Validator.minLength(3),
-              maxLength: Validator.maxLength(12),
-              pattern: Validator.name,
-            })}
-          />
-
-          {
-            <Typography color={"red"}>
-              {errors?.tariff && errors?.tariff.message}
-            </Typography>
-          }
-          <TextField
-            margin="normal"
-            type={"number"}
-            variant="outlined"
-            placeholder="Тариф"
-            sx={{ backgroundColor: "white", width: "209px" }}
-            name="tariff"
-            inputProps={{
-              step: 0.01,
-              min: 100,
-              max: 999999,
-            }}
-            {...register("tariff", {
-              required: `${t("adminPopup.emptyField")}`,
-            })}
-          />
-
-          <Button
-            sx={{
-              background: "rgba(180,58,58,1)",
-              marginTop: 3,
-              borderRadius: 3,
-              padding: 1,
-              paddingLeft: 4,
-              paddingRight: 4,
-            }}
-            variant="contained"
-            color="warning"
-            type="submit"
-            disabled={pending}>
-            Добавить
-          </Button>
-        </Box>
-      </form>
-    </div>
+            <Button
+              sx={{
+                background: "rgba(180,58,58,1)",
+                marginTop: 3,
+                borderRadius: 3,
+                padding: 1,
+                paddingLeft: 4,
+                paddingRight: 4,
+              }}
+              variant="contained"
+              color="warning"
+              type="submit"
+              disabled={pending}>
+              Добавить
+            </Button>
+          </Box>
+        </form>
+      </div>
       {isErrorAndSuccessModalActive && (
         <ErrorAndSuccessModal
           onClose={ErrorAndSuccessModalHandler}
