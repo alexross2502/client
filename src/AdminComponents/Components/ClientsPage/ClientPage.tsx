@@ -28,6 +28,7 @@ import CopyIcon from "../CopyIcon";
 import { RootState } from "../../../redux/rootReducer";
 import CachedIcon from "@mui/icons-material/Cached";
 import UpdatePasswordModal from "../../../Components/Modals/UpdatePasswordModal";
+import TransitionsModal from "../../../Components/Modals/Modal";
 import ErrorAndSuccessModal from "../../../Components/Modals/ErrorAndSuccessModal";
 
 const ClientPage = () => {

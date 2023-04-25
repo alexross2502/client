@@ -144,25 +144,24 @@ const TownSave = () => {
                 required: `${t("adminPopup.emptyField")}`,
               })}
             />
-
-            <Button
-              sx={{
-                background: "rgba(180,58,58,1)",
-                marginTop: 3,
-                borderRadius: 3,
-                padding: 1,
-                paddingLeft: 4,
-                paddingRight: 4,
-              }}
-              variant="contained"
-              color="warning"
-              type="submit"
-              disabled={pending}>
-              Добавить
-            </Button>
-          </Box>
-        </form>
-      </div>
+          <Button
+            sx={{
+              background: "rgba(180,58,58,1)",
+              marginTop: 3,
+              borderRadius: 3,
+              padding: 1,
+              paddingLeft: 4,
+              paddingRight: 4,
+            }}
+            variant="contained"
+            color="warning"
+            type="submit"
+            disabled={pending}>
+            Добавить
+          </Button>
+        </Box>
+      </form>
+    </div>
       {isErrorAndSuccessModalActive && (
         <ErrorAndSuccessModal
           onClose={ErrorAndSuccessModalHandler}
