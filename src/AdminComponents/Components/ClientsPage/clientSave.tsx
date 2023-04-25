@@ -98,82 +98,83 @@ const ClientSave = () => {
                 <CloseIcon onClick={() => dispatch(setModalAddClients())} />
               </Grid>
             </Grid>
-            {
-              <Typography color={"red"}>
-                {errors?.name && errors?.name.message}
-              </Typography>
-            }
-            <TextField
-              margin="normal"
-              type={"text"}
-              variant="outlined"
-              placeholder="Имя"
-              sx={{ backgroundColor: "white" }}
-              name="name"
-              {...register("name", {
-                required: `${t("adminPopup.emptyField")}`,
-                minLength: Validator.minLength(3),
-                maxLength: Validator.maxLength(12),
-                pattern: Validator.name,
-              })}
-            />
-            {
-              <Typography color={"red"}>
-                {errors?.email && errors?.email.message}
-              </Typography>
-            }
-            <TextField
-              margin="normal"
-              type={"text"}
-              variant="outlined"
-              placeholder="Почта"
-              sx={{ backgroundColor: "white" }}
-              name="email"
-              {...register("email", {
-                required: `${t("adminPopup.emptyField")}`,
-                minLength: Validator.minLength(10),
-                maxLength: Validator.maxLength(30),
-                pattern: Validator.email,
-              })}
-            />
-            {
-              <Typography color={"red"}>
-                {errors?.password && errors?.password.message}
-              </Typography>
-            }
-            <TextField
-              margin="normal"
-              type={"text"}
-              variant="outlined"
-              placeholder="Пароль"
-              sx={{ backgroundColor: "white" }}
-              name="password"
-              {...register("password", {
-                required: `${t("adminPopup.emptyField")}`,
-                minLength: Validator.minLength(5),
-                maxLength: Validator.maxLength(15),
-                pattern: Validator.password,
-              })}
-            />
-            <Button
-              sx={{
-                background: "rgba(180,58,58,1)",
-                marginTop: 3,
-                borderRadius: 3,
-                padding: 1,
-                paddingLeft: 4,
-                paddingRight: 4,
-              }}
-              variant="contained"
-              color="warning"
-              type="submit"
-              disabled={pending}>
-              Добавить
-            </Button>
-          </Box>
-        </form>
-      </div>
-      {isErrorAndSuccessModalActive && (
+          </Grid>
+          {
+            <Typography color={"red"}>
+              {errors?.name && errors?.name.message}
+            </Typography>
+          }
+          <TextField
+            margin="normal"
+            type={"text"}
+            variant="outlined"
+            placeholder="Имя"
+            sx={{ backgroundColor: "white" }}
+            name="name"
+            {...register("name", {
+              required: `${t("adminPopup.emptyField")}`,
+              minLength: Validator.minLength(3),
+              maxLength: Validator.maxLength(12),
+              pattern: Validator.name,
+            })}
+          />
+          {
+            <Typography color={"red"}>
+              {errors?.email && errors?.email.message}
+            </Typography>
+          }
+          <TextField
+            margin="normal"
+            type={"text"}
+            variant="outlined"
+            placeholder="Почта"
+            sx={{ backgroundColor: "white" }}
+            name="email"
+            {...register("email", {
+              required: `${t("adminPopup.emptyField")}`,
+              minLength: Validator.minLength(10),
+              maxLength: Validator.maxLength(36),
+              pattern: Validator.email,
+            })}
+          />
+          {
+            <Typography color={"red"}>
+              {errors?.password && errors?.password.message}
+            </Typography>
+          }
+          <TextField
+            margin="normal"
+            type={"text"}
+            variant="outlined"
+            placeholder="Пароль"
+            sx={{ backgroundColor: "white" }}
+            name="password"
+            {...register("password", {
+              required: `${t("adminPopup.emptyField")}`,
+              minLength: Validator.minLength(5),
+              maxLength: Validator.maxLength(15),
+              pattern: Validator.password,
+            })}
+          />
+          <Button
+            sx={{
+              background: "rgba(180,58,58,1)",
+              marginTop: 3,
+              borderRadius: 3,
+              padding: 1,
+              paddingLeft: 4,
+              paddingRight: 4,
+            }}
+            variant="contained"
+            color="warning"
+            type="submit"
+            disabled={pending}>
+            Добавить
+          </Button>
+        </Box>
+      </form>
+    </div>
+    {isErrorAndSuccessModalActive && (
         <ErrorAndSuccessModal
           onClose={ErrorAndSuccessModalHandler}
           type={ErrorAndSuccessModalData.type}

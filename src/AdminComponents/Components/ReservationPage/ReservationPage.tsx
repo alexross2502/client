@@ -32,6 +32,7 @@ import CopyIcon from "../CopyIcon";
 import { RootState } from "../../../redux/rootReducer";
 import { InstanceResponse } from "../../axios-utils";
 import { dateConverter } from "../dateConverter";
+import { priceFormatterToFloat } from "../../../utils/priceFormatterToFloat";
 import ErrorAndSuccessModal from "../../../Components/Modals/ErrorAndSuccessModal";
 
 const ReservationPage = () => {
@@ -116,6 +117,8 @@ const ReservationPage = () => {
                 <TableCell align="left">Мастер</TableCell>
                 <TableCell align="left">Город</TableCell>
                 <TableCell align="left">Клиент</TableCell>
+                <TableCell align="left">Цена</TableCell>
+                <TableCell align="left">Статус</TableCell>
                 <TableCell align="right">
                   <Button
                     sx={{ marginLeft: "auto", background: "rgba(180,58,58,1)" }}
@@ -168,6 +171,13 @@ const ReservationPage = () => {
                     </TableCell>
                     <TableCell align="left">{IdToName[row.towns_id]}</TableCell>
                     <TableCell align="left">{IdToName[row.clientId]}</TableCell>
+                    <TableCell align="left">
+                      {priceFormatterToFloat(row.price)}
+                    </TableCell>
+                    <TableCell align="left">
+                      {t(`status.${row.status}`)}
+                    </TableCell>
+
                     <TableCell align="right">
                       <IconButton
                         onClick={() => {

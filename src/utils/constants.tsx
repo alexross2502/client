@@ -1,5 +1,11 @@
 export const rating = [1, 2, 3, 4, 5];
 
+export enum statusVariant {
+  Canceled = "canceled",
+  Confirmed = "confirmed",
+  Executed = "executed",
+}
+
 export const Validator = {
   name: {
     value: /^[А-я]+$/,
