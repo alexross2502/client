@@ -13,6 +13,7 @@ import { setRemoveAndAddModal } from "../../../redux/RemoveAndAddModalReducer";
 import { setRemoveAndAddModalError } from "../../../redux/RemoveAndAddModalErrorReducer";
 import { RootState } from "../../../redux/rootReducer";
 import { Validator } from "../../../utils/constants";
+import ErrorAndSuccessModal from "../../../Components/Modals/ErrorAndSuccessModal";
 
 const TownSave = () => {
   const dispatch = useDispatch();
@@ -28,12 +29,24 @@ const TownSave = () => {
   //Открытие\закрытие модального окна
   const isActive = useSelector((state: RootState) => state.addTown.isActive);
 
+  const [isErrorAndSuccessModalActive, setErrorAndSuccessModalActive] =
+    useState<boolean>(false);
+  const [ErrorAndSuccessModalData, setErrorAndSuccessModalData] = useState({
+    type: "",
+    message: "",
+  });
+
+  function ErrorAndSuccessModalHandler() {
+    setErrorAndSuccessModalActive(!isErrorAndSuccessModalActive);
+  }
+
   function onActiveClick() {
     dispatch(setModalAddTowns());
   }
 
   ////Сохранение города
   const [pending, setPending] = useState<boolean>(false);
+
   async function townSave(atr) {
     atr.tariff *= 100;
     let data = { ...atr };
@@ -41,55 +54,53 @@ const TownSave = () => {
     await instance({ url: `/towns`, method: "post", data: data })
       .then(() => {
         dispatch(setPageRerender());
-        dispatch(setRemoveAndAddModal(true));
         dispatch(setModalAddTowns());
-        setTimeout(() => {
-          dispatch(setRemoveAndAddModal(false));
-        }, 1000);
+        setErrorAndSuccessModalData({ type: "success", message: "Успешно" });
+        ErrorAndSuccessModalHandler();
       })
       .catch(() => {
-        dispatch(setRemoveAndAddModalError(true));
         dispatch(setModalAddTowns());
-        setTimeout(() => {
-          dispatch(setRemoveAndAddModalError(false));
-        }, 1000);
+        setErrorAndSuccessModalData({ type: "error", message: "Ошибка" });
+        ErrorAndSuccessModalHandler();
       })
       .finally(() => setPending(false));
   }
   /////////
 
   return (
-    <div
-      onClick={(e) => e.stopPropagation()}
-      className={isActive ? `${style.active}` : `${style.inactive}`}>
-      <form onSubmit={handleSubmit(townSave)}>
-        <Box
-          display="flex"
-          flexDirection={"column"}
-          maxWidth={400}
-          alignItems="center"
-          justifyContent={"center"}
-          margin="auto"
-          marginTop={5}
-          padding={3}
-          borderRadius={5}
-          boxShadow={"5px 5px 10px #ccc"}
-          sx={{
-            backgroundColor: "#696969",
+    <>
+      <div
+        onClick={(e) => e.stopPropagation()}
+        className={isActive ? `${style.active}` : `${style.inactive}`}>
+        <form onSubmit={handleSubmit(townSave)}>
+          <Box
+            display="flex"
+            flexDirection={"column"}
+            maxWidth={400}
+            alignItems="center"
+            justifyContent={"center"}
+            margin="auto"
+            marginTop={5}
+            padding={3}
+            borderRadius={5}
+            boxShadow={"5px 5px 10px #ccc"}
+            sx={{
+              backgroundColor: "#696969",
 
-            ":hover": {
-              boxShadow: "10px 10px 20px #ccc",
-            },
-          }}>
-          <Grid container>
-            <Grid item xs={1}></Grid>
-            <Grid item xs={10}>
-              <Typography variant="h4" padding={3} textAlign="center">
-                Добавить город
-              </Typography>
-            </Grid>
-            <Grid item xs={1}>
-              <CloseIcon onClick={() => dispatch(setModalAddTowns())} />
+              ":hover": {
+                boxShadow: "10px 10px 20px #ccc",
+              },
+            }}>
+            <Grid container>
+              <Grid item xs={1}></Grid>
+              <Grid item xs={10}>
+                <Typography variant="h4" padding={3} textAlign="center">
+                  Добавить город
+                </Typography>
+              </Grid>
+              <Grid item xs={1}>
+                <CloseIcon onClick={() => dispatch(setModalAddTowns())} />
+              </Grid>
             </Grid>
           </Grid>
 
@@ -153,6 +164,14 @@ const TownSave = () => {
         </Box>
       </form>
     </div>
+      {isErrorAndSuccessModalActive && (
+        <ErrorAndSuccessModal
+          onClose={ErrorAndSuccessModalHandler}
+          type={ErrorAndSuccessModalData.type}
+          message={ErrorAndSuccessModalData.message}
+        />
+      )}
+    </>
   );
 };
 

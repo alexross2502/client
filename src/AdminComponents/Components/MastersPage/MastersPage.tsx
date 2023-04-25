@@ -22,8 +22,7 @@ import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import { setModalAddMasters } from "../../../redux/mastersReducer";
 import TableContainer from "@mui/material/TableContainer";
 import Paper from "@mui/material/Paper";
-import DeleteModal from "../DeleteModal";
-import { setModalDelete } from "../../../redux/deleteReducer";
+import DeleteModal from "../../../Components/Modals/DeleteModal";
 import { Watch } from "react-loader-spinner";
 import RemoveAndAddModal from "../../RemoveAndAddModal";
 import RemoveAndAddModalError from "../../RemoveAndAddModalError";
@@ -31,11 +30,12 @@ import CopyIcon from "../CopyIcon";
 import { RootState } from "../../../redux/rootReducer";
 import { instance, InstanceResponse } from "../../axios-utils";
 import CachedIcon from "@mui/icons-material/Cached";
-import UpdatePasswordModal from "../UpdatePasswordModal";
+import UpdatePasswordModal from "../../../Components/Modals/UpdatePasswordModal";
 import { setModalUpdatePassword } from "../../../redux/updatePasswordReducer";
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 import { setRemoveAndAddModalError } from "../../../redux/RemoveAndAddModalErrorReducer";
 import { setRemoveAndAddModal } from "../../../redux/RemoveAndAddModalReducer";
+import ErrorAndSuccessModal from "../../../Components/Modals/ErrorAndSuccessModal";
 
 const MastersPage = () => {
   const { t } = useTranslation();
@@ -46,6 +46,28 @@ const MastersPage = () => {
   const [itemForRemove, setItemForRemove] = useState([]);
   const [itemForUpdatePassword, setItemForUpdatePassword] = useState([]);
   const [isLoading, setLoading] = useState<boolean>(false);
+  const [isDeleteModalActive, setDeleteModalActive] = useState<boolean>(false);
+  const [isUpdatePasswordModalActive, setUpdatePasswordModalActive] =
+    useState<boolean>(false);
+  const [isErrorAndSuccessModalActive, setErrorAndSuccessModalActive] =
+    useState<boolean>(false);
+  const [ErrorAndSuccessModalData, setErrorAndSuccessModalData] = useState({
+    type: "",
+    message: "",
+  });
+
+  function deleteModalHandler() {
+    setDeleteModalActive(!isDeleteModalActive);
+  }
+
+  function errorAndSuccessModalHandler(data) {
+    setErrorAndSuccessModalData(data);
+    setErrorAndSuccessModalActive(!isErrorAndSuccessModalActive);
+  }
+
+  function updatePasswordModalHandler() {
+    setUpdatePasswordModalActive(!isUpdatePasswordModalActive);
+  }
 
   useEffect(() => {
     let asyncFunc = async () => {
@@ -72,8 +94,6 @@ const MastersPage = () => {
 
   return (
     <>
-      <DeleteModal props={itemForRemove} />
-      <UpdatePasswordModal props={itemForUpdatePassword} />
       <MasterSave />
       <Box height={70} />
       <Box sx={{ display: "flex" }}>
@@ -147,7 +167,7 @@ const MastersPage = () => {
                       <CachedIcon
                         onClick={() => {
                           setItemForUpdatePassword([row.email, "masters"]);
-                          dispatch(setModalUpdatePassword());
+                          updatePasswordModalHandler();
                         }}
                       />
                     </TableCell>
@@ -183,7 +203,7 @@ const MastersPage = () => {
                       <IconButton
                         onClick={() => {
                           setItemForRemove([row.id, "masters"]);
-                          dispatch(setModalDelete());
+                          deleteModalHandler();
                         }}>
                         <DeleteForeverIcon></DeleteForeverIcon>
                       </IconButton>
@@ -195,6 +215,26 @@ const MastersPage = () => {
           </Table>
         </TableContainer>
       </Box>
+      {isDeleteModalActive && (
+        <DeleteModal
+          props={itemForRemove}
+          onClose={deleteModalHandler}
+          result={errorAndSuccessModalHandler}
+        />
+      )}
+      {isUpdatePasswordModalActive && (
+        <UpdatePasswordModal
+          props={itemForUpdatePassword}
+          onClose={updatePasswordModalHandler}
+        />
+      )}
+      {isErrorAndSuccessModalActive && (
+        <ErrorAndSuccessModal
+          onClose={errorAndSuccessModalHandler}
+          type={ErrorAndSuccessModalData?.type}
+          message={ErrorAndSuccessModalData?.message}
+        />
+      )}
       <RemoveAndAddModal />
       <RemoveAndAddModalError />
     </>
