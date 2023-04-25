@@ -18,19 +18,15 @@ import {
   Typography,
 } from "@mui/material";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
-import { setModalAddClients } from "../../../redux/clientsReducer";
 import TableContainer from "@mui/material/TableContainer";
 import Paper from "@mui/material/Paper";
 import DeleteModal from "../../../Components/Modals/DeleteModal";
 import { Watch } from "react-loader-spinner";
-import RemoveAndAddModal from "../../RemoveAndAddModal";
 import { instance, InstanceResponse } from "../../axios-utils";
-import RemoveAndAddModalError from "../../RemoveAndAddModalError";
 import CopyIcon from "../CopyIcon";
 import { RootState } from "../../../redux/rootReducer";
 import CachedIcon from "@mui/icons-material/Cached";
 import UpdatePasswordModal from "../../../Components/Modals/UpdatePasswordModal";
-import TransitionsModal from "../../../Components/Modals/Modal";
 import ErrorAndSuccessModal from "../../../Components/Modals/ErrorAndSuccessModal";
 
 const ClientPage = () => {
@@ -50,6 +46,12 @@ const ClientPage = () => {
     type: "",
     message: "",
   });
+  const [isClientSaveModalActive, setClientSaveModalActive] =
+    useState<boolean>(false);
+
+  function clientSaveModalHandler() {
+    setClientSaveModalActive(!isClientSaveModalActive);
+  }
 
   function deleteModalHandler() {
     setDeleteModalActive(!isDeleteModalActive);
@@ -80,7 +82,6 @@ const ClientPage = () => {
 
   return (
     <>
-      <ClientSave />
       <Box height={70} />
 
       <Box sx={{ display: "flex" }}>
@@ -98,7 +99,7 @@ const ClientPage = () => {
                     sx={{ marginLeft: "auto", background: "rgba(180,58,58,1)" }}
                     variant="contained"
                     onClick={() => {
-                      dispatch(setModalAddClients());
+                      clientSaveModalHandler();
                     }}>
                     {t("table.add")}
                   </Button>
@@ -180,6 +181,7 @@ const ClientPage = () => {
         <UpdatePasswordModal
           props={itemForUpdatePassword}
           onClose={updatePasswordModalHandler}
+          result={errorAndSuccessModalHandler}
         />
       )}
       {isErrorAndSuccessModalActive && (
@@ -189,9 +191,12 @@ const ClientPage = () => {
           message={ErrorAndSuccessModalData?.message}
         />
       )}
-      <TransitionsModal />
-      <RemoveAndAddModal />
-      <RemoveAndAddModalError />
+      {isClientSaveModalActive && (
+        <ClientSave
+          onClose={clientSaveModalHandler}
+          result={errorAndSuccessModalHandler}
+        />
+      )}
     </>
   );
 };

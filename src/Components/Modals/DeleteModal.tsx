@@ -24,15 +24,6 @@ const style = {
 
 const DeleteModal = (props) => {
   const dispatch = useDispatch();
-  const { t } = useTranslation();
-  const {
-    handleSubmit,
-    register,
-    formState: { errors },
-    reset,
-  } = useForm({
-    mode: "onBlur",
-  });
   const [pending, setPending] = useState(false);
 
   return (

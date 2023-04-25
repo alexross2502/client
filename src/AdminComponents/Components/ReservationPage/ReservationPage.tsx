@@ -20,14 +20,10 @@ import {
   Typography,
 } from "@mui/material";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
-import { setModalAddReservations } from "../../../redux/reservationsReducer";
 import TableContainer from "@mui/material/TableContainer";
 import Paper from "@mui/material/Paper";
 import DeleteModal from "../../../Components/Modals/DeleteModal";
-import { setModalDelete } from "../../../redux/deleteReducer";
 import { Watch } from "react-loader-spinner";
-import RemoveAndAddModal from "../../RemoveAndAddModal";
-import RemoveAndAddModalError from "../../RemoveAndAddModalError";
 import CopyIcon from "../CopyIcon";
 import { RootState } from "../../../redux/rootReducer";
 import { InstanceResponse } from "../../axios-utils";
@@ -54,6 +50,12 @@ const ReservationPage = () => {
     type: "",
     message: "",
   });
+  const [isReservationSaveModalActive, setReservationSaveModalActive] =
+    useState<boolean>(false);
+
+  function reservationSaveModalHandler() {
+    setReservationSaveModalActive(!isReservationSaveModalActive);
+  }
 
   function deleteModalHandler() {
     setDeleteModalActive(!isDeleteModalActive);
@@ -102,7 +104,6 @@ const ReservationPage = () => {
 
   return (
     <>
-      <ReservationSave />
       <Box height={70} />
       <Box sx={{ display: "flex" }}>
         <LeftSideMenu name={"reservation"} />
@@ -124,7 +125,7 @@ const ReservationPage = () => {
                     sx={{ marginLeft: "auto", background: "rgba(180,58,58,1)" }}
                     variant="contained"
                     onClick={() => {
-                      dispatch(setModalAddReservations());
+                      reservationSaveModalHandler();
                     }}>
                     {t("table.add")}
                   </Button>
@@ -208,8 +209,12 @@ const ReservationPage = () => {
           message={ErrorAndSuccessModalData?.message}
         />
       )}
-      <RemoveAndAddModal />
-      <RemoveAndAddModalError />
+      {isReservationSaveModalActive && (
+        <ReservationSave
+          onClose={reservationSaveModalHandler}
+          result={errorAndSuccessModalHandler}
+        />
+      )}
     </>
   );
 };

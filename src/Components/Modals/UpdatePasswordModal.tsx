@@ -69,16 +69,16 @@ const UpdatePasswordModal = (props) => {
                   Api.updatePassword(url, email)
                     .then((res) => {
                       dispatch(setPageRerender());
-                      dispatch(setRemoveAndAddModal(true));
-                      setTimeout(() => {
-                        dispatch(setRemoveAndAddModal(false));
-                      }, 1000);
+                      props.result({
+                        type: "success",
+                        message: "Успешно",
+                      });
                     })
                     .catch(() => {
-                      dispatch(setRemoveAndAddModalError(true));
-                      setTimeout(() => {
-                        dispatch(setRemoveAndAddModalError(false));
-                      }, 1000);
+                      props.result({
+                        type: "error",
+                        message: "Ошибка",
+                      });
                     })
                     .finally(() => {
                       setPending(false);
