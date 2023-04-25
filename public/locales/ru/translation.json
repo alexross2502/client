@@ -92,10 +92,5 @@
     "small": "Маленький",
     "medium": "Средний",
     "large": "Большой"
-  },
-  "status": {
-    "canceled": "Отменен",
-    "confirmed": "Подтвержден",
-    "executed": "Готов"
   }
 }
