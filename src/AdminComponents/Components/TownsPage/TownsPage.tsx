@@ -22,7 +22,7 @@ import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import { setModalAddTowns } from "../../../redux/townsReducer";
 import TableContainer from "@mui/material/TableContainer";
 import Paper from "@mui/material/Paper";
-import DeleteModal from "../DeleteModal";
+import DeleteModal from "../../../Components/Modals/DeleteModal";
 import { setModalDelete } from "../../../redux/deleteReducer";
 import { Watch } from "react-loader-spinner";
 import RemoveAndAddModal from "../../RemoveAndAddModal";
@@ -30,6 +30,7 @@ import RemoveAndAddModalError from "../../RemoveAndAddModalError";
 import CopyIcon from "../CopyIcon";
 import { RootState } from "../../../redux/rootReducer";
 import { InstanceResponse } from "../../axios-utils";
+import ErrorAndSuccessModal from "../../../Components/Modals/ErrorAndSuccessModal";
 
 const TownsPage = () => {
   const { t } = useTranslation();
@@ -38,6 +39,22 @@ const TownsPage = () => {
   const [townsList, setTownsList] = useState<InstanceResponse>();
   const [itemForRemove, setItemForRemove] = useState([]);
   const [isLoading, setLoading] = useState<boolean>(false);
+  const [isDeleteModalActive, setDeleteModalActive] = useState<boolean>(false);
+  const [isErrorAndSuccessModalActive, setErrorAndSuccessModalActive] =
+    useState<boolean>(false);
+  const [ErrorAndSuccessModalData, setErrorAndSuccessModalData] = useState({
+    type: "",
+    message: "",
+  });
+
+  function deleteModalHandler() {
+    setDeleteModalActive(!isDeleteModalActive);
+  }
+
+  function errorAndSuccessModalHandler(data) {
+    setErrorAndSuccessModalData(data);
+    setErrorAndSuccessModalActive(!isErrorAndSuccessModalActive);
+  }
 
   useEffect(() => {
     let asyncFunc = async () => {
@@ -55,12 +72,10 @@ const TownsPage = () => {
 
   return (
     <>
-      <DeleteModal props={itemForRemove} />
       <TownSave />
       <Box height={70} />
       <Box sx={{ display: "flex" }}>
         <LeftSideMenu name={"towns"} />
-
         <TableContainer component={Paper}>
           <Table sx={{ minWidth: 650 }} aria-label="simple table">
             <TableHead sx={{ background: "#a1a1a1" }}>
@@ -118,7 +133,7 @@ const TownsPage = () => {
                       <IconButton
                         onClick={() => {
                           setItemForRemove([row.id, "towns"]);
-                          dispatch(setModalDelete());
+                          deleteModalHandler();
                         }}>
                         <DeleteForeverIcon></DeleteForeverIcon>
                       </IconButton>
@@ -130,6 +145,20 @@ const TownsPage = () => {
           </Table>
         </TableContainer>
       </Box>
+      {isDeleteModalActive && (
+        <DeleteModal
+          props={itemForRemove}
+          onClose={deleteModalHandler}
+          result={errorAndSuccessModalHandler}
+        />
+      )}
+      {isErrorAndSuccessModalActive && (
+        <ErrorAndSuccessModal
+          onClose={errorAndSuccessModalHandler}
+          type={ErrorAndSuccessModalData?.type}
+          message={ErrorAndSuccessModalData?.message}
+        />
+      )}
       <RemoveAndAddModal />
       <RemoveAndAddModalError />
     </>

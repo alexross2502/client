@@ -10,16 +10,14 @@ import ModalRegistration from "./Components/ModalRegistration/ModalRegistration"
 
 const MainPage = () => {
   return (
-    <div>
-      <div className={style.background}>
-        <Header />
-        <Content />
-        <ModalAuthorization />
-        <ModalOrder />
-        <ModalAvailableMasters />
-        <ModalOrderSuccess />
-        <ModalRegistration />
-      </div>
+    <div className={style.background}>
+      <Header />
+      <Content />
+      <ModalAuthorization />
+      <ModalOrder />
+      <ModalAvailableMasters />
+      <ModalOrderSuccess />
+      <ModalRegistration />
     </div>
   );
 };
