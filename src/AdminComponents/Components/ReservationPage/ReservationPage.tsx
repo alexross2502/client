@@ -26,13 +26,12 @@ import Paper from "@mui/material/Paper";
 import DeleteModal from "../../../Components/Modals/DeleteModal";
 import { setModalDelete } from "../../../redux/deleteReducer";
 import { Watch } from "react-loader-spinner";
-import RemoveAndAddModal from "../../RemoveAndAddModal";
-import RemoveAndAddModalError from "../../RemoveAndAddModalError";
 import CopyIcon from "../CopyIcon";
 import { RootState } from "../../../redux/rootReducer";
 import { InstanceResponse } from "../../axios-utils";
 import { dateConverter } from "../dateConverter";
 import { priceFormatterToFloat } from "../../../utils/priceFormatterToFloat";
+import ErrorAndSuccessModal from "../../../Components/Modals/ErrorAndSuccessModal";
 
 const ReservationPage = () => {
   const { t } = useTranslation();
@@ -47,9 +46,20 @@ const ReservationPage = () => {
   const [itemForRemove, setItemForRemove] = useState([]);
   const [isLoading, setLoading] = useState<boolean>(false);
   const [isDeleteModalActive, setDeleteModalActive] = useState<boolean>(false);
+  const [isErrorAndSuccessModalActive, setErrorAndSuccessModalActive] =
+    useState<boolean>(false);
+  const [ErrorAndSuccessModalData, setErrorAndSuccessModalData] = useState({
+    type: "",
+    message: "",
+  });
 
   function deleteModalHandler() {
     setDeleteModalActive(!isDeleteModalActive);
+  }
+
+  function errorAndSuccessModalHandler(data) {
+    setErrorAndSuccessModalData(data);
+    setErrorAndSuccessModalActive(!isErrorAndSuccessModalActive);
   }
 
   useEffect(() => {
@@ -183,10 +193,19 @@ const ReservationPage = () => {
         </TableContainer>
       </Box>
       {isDeleteModalActive && (
-        <DeleteModal props={itemForRemove} onClose={deleteModalHandler} />
+        <DeleteModal
+          props={itemForRemove}
+          onClose={deleteModalHandler}
+          result={errorAndSuccessModalHandler}
+        />
       )}
-      <RemoveAndAddModal />
-      <RemoveAndAddModalError />
+      {isErrorAndSuccessModalActive && (
+        <ErrorAndSuccessModal
+          onClose={errorAndSuccessModalHandler}
+          type={ErrorAndSuccessModalData?.type}
+          message={ErrorAndSuccessModalData?.message}
+        />
+      )}
     </>
   );
 };

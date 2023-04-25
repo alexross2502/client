@@ -25,8 +25,6 @@ import Paper from "@mui/material/Paper";
 import DeleteModal from "../../../Components/Modals/DeleteModal";
 import { setModalDelete } from "../../../redux/deleteReducer";
 import { Watch } from "react-loader-spinner";
-import RemoveAndAddModal from "../../RemoveAndAddModal";
-import RemoveAndAddModalError from "../../RemoveAndAddModalError";
 import CopyIcon from "../CopyIcon";
 import { RootState } from "../../../redux/rootReducer";
 import { instance, InstanceResponse } from "../../axios-utils";
@@ -36,6 +34,7 @@ import { setModalUpdatePassword } from "../../../redux/updatePasswordReducer";
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 import { setRemoveAndAddModalError } from "../../../redux/RemoveAndAddModalErrorReducer";
 import { setRemoveAndAddModal } from "../../../redux/RemoveAndAddModalReducer";
+import ErrorAndSuccessModal from "../../../Components/Modals/ErrorAndSuccessModal";
 
 const MastersPage = () => {
   const { t } = useTranslation();
@@ -49,9 +48,20 @@ const MastersPage = () => {
   const [isDeleteModalActive, setDeleteModalActive] = useState<boolean>(false);
   const [isUpdatePasswordModalActive, setUpdatePasswordModalActive] =
     useState<boolean>(false);
+  const [isErrorAndSuccessModalActive, setErrorAndSuccessModalActive] =
+    useState<boolean>(false);
+  const [ErrorAndSuccessModalData, setErrorAndSuccessModalData] = useState({
+    type: "",
+    message: "",
+  });
 
   function deleteModalHandler() {
     setDeleteModalActive(!isDeleteModalActive);
+  }
+
+  function errorAndSuccessModalHandler(data) {
+    setErrorAndSuccessModalData(data);
+    setErrorAndSuccessModalActive(!isErrorAndSuccessModalActive);
   }
 
   function updatePasswordModalHandler() {
@@ -205,7 +215,11 @@ const MastersPage = () => {
         </TableContainer>
       </Box>
       {isDeleteModalActive && (
-        <DeleteModal props={itemForRemove} onClose={deleteModalHandler} />
+        <DeleteModal
+          props={itemForRemove}
+          onClose={deleteModalHandler}
+          result={errorAndSuccessModalHandler}
+        />
       )}
       {isUpdatePasswordModalActive && (
         <UpdatePasswordModal
@@ -213,8 +227,13 @@ const MastersPage = () => {
           onClose={updatePasswordModalHandler}
         />
       )}
-      <RemoveAndAddModal />
-      <RemoveAndAddModalError />
+      {isErrorAndSuccessModalActive && (
+        <ErrorAndSuccessModal
+          onClose={errorAndSuccessModalHandler}
+          type={ErrorAndSuccessModalData?.type}
+          message={ErrorAndSuccessModalData?.message}
+        />
+      )}
     </>
   );
 };

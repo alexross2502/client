@@ -5,10 +5,9 @@ import { useForm } from "react-hook-form";
 import { useState } from "react";
 import Api from "../../AdminComponents/Components/api";
 import { setPageRerender } from "../../redux/rerenderReducer";
-import { setRemoveAndAddModal } from "../../redux/RemoveAndAddModalReducer";
-import { setRemoveAndAddModalError } from "../../redux/RemoveAndAddModalErrorReducer";
 import css from "../../Components/Modals/ModalWrapper.module.css";
 import { useDispatch } from "react-redux";
+import ErrorAndSuccessModal from "./ErrorAndSuccessModal";
 
 const style = {
   position: "absolute" as "absolute",
@@ -37,80 +36,86 @@ const DeleteModal = (props) => {
   const [pending, setPending] = useState(false);
 
   return (
-    <div className={css.modalWrapper}>
-      <Box sx={style}>
-        <Grid container>
-          <Grid item xs={1}></Grid>
-          <Grid item xs={10}>
-            <Typography variant="h4" padding={3} textAlign="center">
-              Точно удалить?
-            </Typography>
-          </Grid>
-        </Grid>
-        <Grid container>
-          <Grid item xs={6}>
-            <Grid container justifyContent="center">
-              <Button
-                sx={{
-                  background: "#82c434",
-                  marginTop: 3,
-                  borderRadius: 3,
-                  padding: 1,
-                  paddingLeft: 4,
-                  paddingRight: 4,
-                  display: "inline-block",
-                }}
-                variant="contained"
-                color="warning"
-                disabled={pending}
-                onClick={() => {
-                  setPending(true);
-                  let [id, url] = props.props;
-                  Api.delete(url, id)
-                    .then((res) => {
-                      dispatch(setPageRerender());
-                      dispatch(setRemoveAndAddModal(true));
-                      setTimeout(() => {
-                        dispatch(setRemoveAndAddModal(false));
-                      }, 1000);
-                    })
-                    .catch(() => {
-                      dispatch(setRemoveAndAddModalError(true));
-                      setTimeout(() => {
-                        dispatch(setRemoveAndAddModalError(false));
-                      }, 1000);
-                    })
-                    .finally(() => {
-                      setPending(false);
-                      props.onClose();
-                    });
-                }}>
-                Да
-              </Button>
+    <>
+      <div className={css.modalWrapper}>
+        <Box sx={style}>
+          <Grid container>
+            <Grid item xs={1}></Grid>
+            <Grid item xs={10}>
+              <Typography variant="h4" padding={3} textAlign="center">
+                Точно удалить?
+              </Typography>
             </Grid>
           </Grid>
-          <Grid item xs={6}>
-            <Grid container justifyContent="center">
-              <Button
-                sx={{
-                  background: "rgba(180,58,58,1)",
-                  marginTop: 3,
-                  borderRadius: 3,
-                  padding: 1,
-                  paddingLeft: 4,
-                  paddingRight: 4,
-                }}
-                variant="contained"
-                color="warning"
-                disabled={pending}
-                onClick={props.onClose}>
-                Нет
-              </Button>
+          <Grid container>
+            <Grid item xs={6}>
+              <Grid container justifyContent="center">
+                <Button
+                  sx={{
+                    background: "#82c434",
+                    marginTop: 3,
+                    borderRadius: 3,
+                    padding: 1,
+                    paddingLeft: 4,
+                    paddingRight: 4,
+                    display: "inline-block",
+                  }}
+                  variant="contained"
+                  color="warning"
+                  disabled={pending}
+                  onClick={() => {
+                    setPending(true);
+                    let [id, url] = props.props;
+                    Api.delete(url, id)
+                      .then((res) => {
+                        dispatch(setPageRerender());
+                        props.result({
+                          type: "success",
+                          message: "Успешно",
+                        });
+                      })
+                      .catch((e) => {
+                        props.result({
+                          type: "error",
+                          message: e.response.data.message.includes(
+                            "Cannot delete or update a parent row"
+                          )
+                            ? "От этой записи зависят другие"
+                            : "Ошибка",
+                        });
+                      })
+                      .finally(() => {
+                        setPending(false);
+                        props.onClose();
+                      });
+                  }}>
+                  Да
+                </Button>
+              </Grid>
+            </Grid>
+            <Grid item xs={6}>
+              <Grid container justifyContent="center">
+                <Button
+                  sx={{
+                    background: "rgba(180,58,58,1)",
+                    marginTop: 3,
+                    borderRadius: 3,
+                    padding: 1,
+                    paddingLeft: 4,
+                    paddingRight: 4,
+                  }}
+                  variant="contained"
+                  color="warning"
+                  disabled={pending}
+                  onClick={props.onClose}>
+                  Нет
+                </Button>
+              </Grid>
             </Grid>
           </Grid>
-        </Grid>
-      </Box>
-    </div>
+        </Box>
+      </div>
+    </>
   );
 };
 

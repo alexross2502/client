@@ -23,14 +23,12 @@ import TableContainer from "@mui/material/TableContainer";
 import Paper from "@mui/material/Paper";
 import DeleteModal from "../../../Components/Modals/DeleteModal";
 import { Watch } from "react-loader-spinner";
-import RemoveAndAddModal from "../../RemoveAndAddModal";
 import { instance, InstanceResponse } from "../../axios-utils";
-import RemoveAndAddModalError from "../../RemoveAndAddModalError";
 import CopyIcon from "../CopyIcon";
 import { RootState } from "../../../redux/rootReducer";
 import CachedIcon from "@mui/icons-material/Cached";
 import UpdatePasswordModal from "../../../Components/Modals/UpdatePasswordModal";
-import TransitionsModal from "../../../Components/Modals/Modal";
+import ErrorAndSuccessModal from "../../../Components/Modals/ErrorAndSuccessModal";
 
 const ClientPage = () => {
   const { t } = useTranslation();
@@ -43,9 +41,20 @@ const ClientPage = () => {
   const [isDeleteModalActive, setDeleteModalActive] = useState<boolean>(false);
   const [isUpdatePasswordModalActive, setUpdatePasswordModalActive] =
     useState<boolean>(false);
+  const [isErrorAndSuccessModalActive, setErrorAndSuccessModalActive] =
+    useState<boolean>(false);
+  const [ErrorAndSuccessModalData, setErrorAndSuccessModalData] = useState({
+    type: "",
+    message: "",
+  });
 
   function deleteModalHandler() {
     setDeleteModalActive(!isDeleteModalActive);
+  }
+
+  function errorAndSuccessModalHandler(data) {
+    setErrorAndSuccessModalData(data);
+    setErrorAndSuccessModalActive(!isErrorAndSuccessModalActive);
   }
 
   function updatePasswordModalHandler() {
@@ -158,7 +167,11 @@ const ClientPage = () => {
         </TableContainer>
       </Box>
       {isDeleteModalActive && (
-        <DeleteModal props={itemForRemove} onClose={deleteModalHandler} />
+        <DeleteModal
+          props={itemForRemove}
+          onClose={deleteModalHandler}
+          result={errorAndSuccessModalHandler}
+        />
       )}
       {isUpdatePasswordModalActive && (
         <UpdatePasswordModal
@@ -166,9 +179,13 @@ const ClientPage = () => {
           onClose={updatePasswordModalHandler}
         />
       )}
-      <TransitionsModal />
-      <RemoveAndAddModal />
-      <RemoveAndAddModalError />
+      {isErrorAndSuccessModalActive && (
+        <ErrorAndSuccessModal
+          onClose={errorAndSuccessModalHandler}
+          type={ErrorAndSuccessModalData?.type}
+          message={ErrorAndSuccessModalData?.message}
+        />
+      )}
     </>
   );
 };

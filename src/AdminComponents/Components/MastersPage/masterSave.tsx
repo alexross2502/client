@@ -11,10 +11,9 @@ import InputLabel from "@mui/material/InputLabel";
 import NativeSelect from "@mui/material/NativeSelect";
 import Api from "../api";
 import { setPageRerender } from "../../../redux/rerenderReducer";
-import { setRemoveAndAddModal } from "../../../redux/RemoveAndAddModalReducer";
-import { setRemoveAndAddModalError } from "../../../redux/RemoveAndAddModalErrorReducer";
 import { RootState } from "../../../redux/rootReducer";
 import { rating, Validator } from "../../../utils/constants";
+import ErrorAndSuccessModal from "../../../Components/Modals/ErrorAndSuccessModal";
 
 const MasterSave = () => {
   const dispatch = useDispatch();
@@ -27,10 +26,19 @@ const MasterSave = () => {
   } = useForm({
     mode: "onBlur",
   });
-  //Открытие\закрытие модального окна
   const isActive = useSelector((state: RootState) => state.addMaster.isActive);
   const rerender = useSelector((state: RootState) => state.rerender.isRerender);
   const [townsList, setTownsList] = useState<InstanceResponse | []>([]);
+  const [isErrorAndSuccessModalActive, setErrorAndSuccessModalActive] =
+    useState<boolean>(false);
+  const [ErrorAndSuccessModalData, setErrorAndSuccessModalData] = useState({
+    type: "",
+    message: "",
+  });
+
+  function ErrorAndSuccessModalHandler() {
+    setErrorAndSuccessModalActive(!isErrorAndSuccessModalActive);
+  }
 
   useEffect(() => {
     let asyncFunc = async () => {
@@ -49,190 +57,194 @@ const MasterSave = () => {
       .then(() => {
         dispatch(setModalAddMasters());
         dispatch(setPageRerender());
-        dispatch(setRemoveAndAddModal(true));
-        setTimeout(() => {
-          dispatch(setRemoveAndAddModal(false));
-        }, 1000);
+        setErrorAndSuccessModalData({ type: "success", message: "Успешно" });
+        ErrorAndSuccessModalHandler();
       })
       .catch(() => {
-        dispatch(setRemoveAndAddModalError(true));
         dispatch(setModalAddMasters());
-        setTimeout(() => {
-          dispatch(setRemoveAndAddModalError(false));
-        }, 1000);
+        setErrorAndSuccessModalData({ type: "error", message: "Ошибка" });
+        ErrorAndSuccessModalHandler();
       })
       .finally(() => setPending(false));
   }
   ///////////
-
   return (
-    <div
-      onClick={(e) => e.stopPropagation()}
-      className={isActive ? `${style.active}` : `${style.inactive}`}>
-      <form onSubmit={handleSubmit(masterSave)}>
-        <Box
-          display="flex"
-          flexDirection={"column"}
-          maxWidth={400}
-          alignItems="center"
-          justifyContent={"center"}
-          margin="auto"
-          marginTop={5}
-          padding={3}
-          borderRadius={5}
-          boxShadow={"5px 5px 10px #ccc"}
-          sx={{
-            backgroundColor: "#696969",
-
-            ":hover": {
-              boxShadow: "10px 10px 20px #ccc",
-            },
-          }}>
-          <Grid container>
-            <Grid item xs={1}></Grid>
-            <Grid item xs={10}>
-              <Typography variant="h4" padding={3} textAlign="center">
-                Добавить мастера
-              </Typography>
-            </Grid>
-            <Grid item xs={1}>
-              <CloseIcon onClick={() => dispatch(setModalAddMasters())} />
-            </Grid>
-          </Grid>
-          {
-            <Typography color={"red"}>
-              {errors?.name && errors?.name.message}
-            </Typography>
-          }
-          <TextField
-            margin="normal"
-            type={"text"}
-            variant="outlined"
-            placeholder="Имя"
-            sx={{ backgroundColor: "white" }}
-            name="name"
-            {...register("name", {
-              required: `${t("adminPopup.emptyField")}`,
-              minLength: Validator.minLength(3),
-              maxLength: Validator.maxLength(12),
-              pattern: Validator.name,
-            })}
-          />
-          {
-            <Typography color={"red"}>
-              {errors?.surname && errors?.surname.message}
-            </Typography>
-          }
-          <TextField
-            margin="normal"
-            type={"text"}
-            variant="outlined"
-            placeholder="Фамилия"
-            sx={{ backgroundColor: "white" }}
-            name="surname"
-            {...register("surname", {
-              required: `${t("adminPopup.emptyField")}`,
-              minLength: Validator.minLength(3),
-              maxLength: Validator.maxLength(12),
-              pattern: Validator.name,
-            })}
-          />
-          {
-            <Typography color={"red"}>
-              {errors?.email && errors?.email.message}
-            </Typography>
-          }
-          <TextField
-            margin="normal"
-            type={"text"}
-            variant="outlined"
-            placeholder="Почта"
-            sx={{ backgroundColor: "white" }}
-            name="email"
-            {...register("email", {
-              required: `${t("adminPopup.emptyField")}`,
-              minLength: Validator.minLength(10),
-              maxLength: Validator.maxLength(30),
-              pattern: Validator.email,
-            })}
-          />
-          {
-            <Typography color={"red"}>
-              {errors?.password && errors?.password.message}
-            </Typography>
-          }
-          <TextField
-            margin="normal"
-            type={"text"}
-            variant="outlined"
-            placeholder="Пароль"
-            sx={{ backgroundColor: "white" }}
-            name="password"
-            {...register("password", {
-              required: `${t("adminPopup.emptyField")}`,
-              minLength: Validator.minLength(5),
-              maxLength: Validator.maxLength(15),
-              pattern: Validator.password,
-            })}
-          />
-          <Grid item marginTop={3}>
-            <InputLabel variant="standard" htmlFor="rating">
-              Рейтинг
-            </InputLabel>
-            <NativeSelect
-              inputProps={{
-                name: "rating",
-                id: "rating",
-              }}
-              style={{ width: 200 }}
-              {...register("rating", {
-                required: `${t("adminPopup.emptyField")}`,
-              })}>
-              {rating.map((el) => {
-                return <option value={el}>{el}</option>;
-              })}
-            </NativeSelect>
-          </Grid>
-          <Grid item marginTop={3}>
-            <InputLabel variant="standard" htmlFor="townId">
-              Город
-            </InputLabel>
-            <NativeSelect
-              inputProps={{
-                name: "townId",
-                id: "townId",
-              }}
-              style={{ width: 200 }}
-              {...register("townId", {
-                required: `${t("adminPopup.emptyField")}`,
-              })}>
-              {townsList.map((el) => {
-                return (
-                  <option value={el.id} key={el.id}>
-                    {el.name}
-                  </option>
-                );
-              })}
-            </NativeSelect>
-          </Grid>
-          <Button
+    <>
+      <div
+        onClick={(e) => e.stopPropagation()}
+        className={isActive ? `${style.active}` : `${style.inactive}`}>
+        <form onSubmit={handleSubmit(masterSave)}>
+          <Box
+            display="flex"
+            flexDirection={"column"}
+            maxWidth={400}
+            alignItems="center"
+            justifyContent={"center"}
+            margin="auto"
+            marginTop={5}
+            padding={3}
+            borderRadius={5}
+            boxShadow={"5px 5px 10px #ccc"}
             sx={{
-              background: "rgba(180,58,58,1)",
-              marginTop: 3,
-              borderRadius: 3,
-              padding: 1,
-              paddingLeft: 4,
-              paddingRight: 4,
-            }}
-            variant="contained"
-            color="warning"
-            type="submit"
-            disabled={pending}>
-            Добавить
-          </Button>
-        </Box>
-      </form>
-    </div>
+              backgroundColor: "#696969",
+
+              ":hover": {
+                boxShadow: "10px 10px 20px #ccc",
+              },
+            }}>
+            <Grid container>
+              <Grid item xs={1}></Grid>
+              <Grid item xs={10}>
+                <Typography variant="h4" padding={3} textAlign="center">
+                  Добавить мастера
+                </Typography>
+              </Grid>
+              <Grid item xs={1}>
+                <CloseIcon onClick={() => dispatch(setModalAddMasters())} />
+              </Grid>
+            </Grid>
+            {
+              <Typography color={"red"}>
+                {errors?.name && errors?.name.message}
+              </Typography>
+            }
+            <TextField
+              margin="normal"
+              type={"text"}
+              variant="outlined"
+              placeholder="Имя"
+              sx={{ backgroundColor: "white" }}
+              name="name"
+              {...register("name", {
+                required: `${t("adminPopup.emptyField")}`,
+                minLength: Validator.minLength(3),
+                maxLength: Validator.maxLength(12),
+                pattern: Validator.name,
+              })}
+            />
+            {
+              <Typography color={"red"}>
+                {errors?.surname && errors?.surname.message}
+              </Typography>
+            }
+            <TextField
+              margin="normal"
+              type={"text"}
+              variant="outlined"
+              placeholder="Фамилия"
+              sx={{ backgroundColor: "white" }}
+              name="surname"
+              {...register("surname", {
+                required: `${t("adminPopup.emptyField")}`,
+                minLength: Validator.minLength(3),
+                maxLength: Validator.maxLength(12),
+                pattern: Validator.name,
+              })}
+            />
+            {
+              <Typography color={"red"}>
+                {errors?.email && errors?.email.message}
+              </Typography>
+            }
+            <TextField
+              margin="normal"
+              type={"text"}
+              variant="outlined"
+              placeholder="Почта"
+              sx={{ backgroundColor: "white" }}
+              name="email"
+              {...register("email", {
+                required: `${t("adminPopup.emptyField")}`,
+                minLength: Validator.minLength(10),
+                maxLength: Validator.maxLength(30),
+                pattern: Validator.email,
+              })}
+            />
+            {
+              <Typography color={"red"}>
+                {errors?.password && errors?.password.message}
+              </Typography>
+            }
+            <TextField
+              margin="normal"
+              type={"text"}
+              variant="outlined"
+              placeholder="Пароль"
+              sx={{ backgroundColor: "white" }}
+              name="password"
+              {...register("password", {
+                required: `${t("adminPopup.emptyField")}`,
+                minLength: Validator.minLength(5),
+                maxLength: Validator.maxLength(15),
+                pattern: Validator.password,
+              })}
+            />
+            <Grid item marginTop={3}>
+              <InputLabel variant="standard" htmlFor="rating">
+                Рейтинг
+              </InputLabel>
+              <NativeSelect
+                inputProps={{
+                  name: "rating",
+                  id: "rating",
+                }}
+                style={{ width: 200 }}
+                {...register("rating", {
+                  required: `${t("adminPopup.emptyField")}`,
+                })}>
+                {rating.map((el) => {
+                  return <option value={el}>{el}</option>;
+                })}
+              </NativeSelect>
+            </Grid>
+            <Grid item marginTop={3}>
+              <InputLabel variant="standard" htmlFor="townId">
+                Город
+              </InputLabel>
+              <NativeSelect
+                inputProps={{
+                  name: "townId",
+                  id: "townId",
+                }}
+                style={{ width: 200 }}
+                {...register("townId", {
+                  required: `${t("adminPopup.emptyField")}`,
+                })}>
+                {townsList.map((el) => {
+                  return (
+                    <option value={el.id} key={el.id}>
+                      {el.name}
+                    </option>
+                  );
+                })}
+              </NativeSelect>
+            </Grid>
+            <Button
+              sx={{
+                background: "rgba(180,58,58,1)",
+                marginTop: 3,
+                borderRadius: 3,
+                padding: 1,
+                paddingLeft: 4,
+                paddingRight: 4,
+              }}
+              variant="contained"
+              color="warning"
+              type="submit"
+              disabled={pending}>
+              Добавить
+            </Button>
+          </Box>
+        </form>
+      </div>
+      {isErrorAndSuccessModalActive && (
+        <ErrorAndSuccessModal
+          onClose={ErrorAndSuccessModalHandler}
+          type={ErrorAndSuccessModalData.type}
+          message={ErrorAndSuccessModalData.message}
+        />
+      )}
+    </>
   );
 };
 
