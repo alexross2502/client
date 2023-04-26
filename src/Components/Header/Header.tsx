@@ -1,5 +1,3 @@
-import { useDispatch, useSelector } from "react-redux";
-import { setModalActive } from "../../redux/modalWindowReducer";
 import { useTranslation } from "react-i18next";
 import {
   AppBar,
@@ -16,25 +14,12 @@ import AccessAlarmsIcon from "@mui/icons-material/AccessAlarms";
 import { useState } from "react";
 import { Box } from "@mui/system";
 import { DrawerComp } from "./DrawerComp";
-import { setModalOrder } from "../../redux/orderReducer";
 import { getToken } from "../../AdminComponents/token";
 import { useNavigate } from "react-router-dom";
 import React from "react";
-import { setRegistrationModalReducer } from "../../redux/registrationModalReducer";
 import { loginSwitchCase } from "../../utils/loginSwitchCase";
 
-const Header = () => {
-  const dispatch = useDispatch();
-  function onClickRegistration() {
-    dispatch(setRegistrationModalReducer());
-  }
-  function onClickLogin() {
-    dispatch(setModalActive());
-  }
-  function onClickOrder() {
-    dispatch(setModalOrder());
-  }
-
+const Header = (props) => {
   const { t } = useTranslation();
   const [value, setValue] = useState();
   const theme = useTheme();
@@ -81,7 +66,7 @@ const Header = () => {
                 <Tab
                   sx={{ marginLeft: "40px", fontSize: "15px" }}
                   label={t("order.header")}
-                  onClick={onClickOrder}></Tab>
+                  onClick={props.order}></Tab>
               </Tabs>
             </Grid>
             <Grid item xs={2}>
@@ -89,7 +74,7 @@ const Header = () => {
                 <Button
                   sx={{ marginLeft: "auto", background: "rgba(180,58,58,1)" }}
                   variant="contained"
-                  onClick={onClickRegistration}>
+                  onClick={props.registration}>
                   {t("header.registration")}
                 </Button>
                 {getToken() !== null ? (
@@ -105,7 +90,7 @@ const Header = () => {
                   <Button
                     sx={{ marginLeft: "auto", background: "rgba(180,58,58,1)" }}
                     variant="contained"
-                    onClick={onClickLogin}>
+                    onClick={props.authorization}>
                     {t("header.login")}
                   </Button>
                 )}

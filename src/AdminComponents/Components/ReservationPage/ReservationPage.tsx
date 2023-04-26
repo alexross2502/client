@@ -1,7 +1,7 @@
 import { useTranslation } from "react-i18next";
 import style from "../../AdminPage.module.css";
 import React, { useEffect, useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import { LeftSideMenu } from "../../LeftSideMenu";
 import { useForm } from "react-hook-form";
 import Api from "../api";
@@ -30,10 +30,11 @@ import { InstanceResponse } from "../../axios-utils";
 import { dateConverter } from "../dateConverter";
 import { priceFormatterToFloat } from "../../../utils/priceFormatterToFloat";
 import ErrorAndSuccessModal from "../../../Components/Modals/ErrorAndSuccessModal";
+import EditIcon from "@mui/icons-material/Edit";
+import ChangeStatusModal from "../../../Components/Modals/ChangeStatusModal";
 
 const ReservationPage = () => {
   const { t } = useTranslation();
-  const dispatch = useDispatch();
   const rerender = useSelector((state: RootState) => state.rerender.isRerender);
   const [clientsList, setClientsList] = useState<InstanceResponse | []>([]);
   const [mastersList, setMastersList] = useState<InstanceResponse | []>([]);
@@ -52,6 +53,16 @@ const ReservationPage = () => {
   });
   const [isReservationSaveModalActive, setReservationSaveModalActive] =
     useState<boolean>(false);
+  const [isChangeStatusModalActive, setChangeStatusModalActive] =
+    useState<boolean>(false);
+  const [changeStatusData, setChangeStatusData] = useState({
+    id: "",
+    status: "",
+  });
+
+  function changeStatusModalHandler() {
+    setChangeStatusModalActive(!isChangeStatusModalActive);
+  }
 
   function reservationSaveModalHandler() {
     setReservationSaveModalActive(!isReservationSaveModalActive);
@@ -77,6 +88,9 @@ const ReservationPage = () => {
       setTownsList(towns);
       let reservation: any = await Api.getAll("reservation");
       reservation.forEach((el) => {
+        new Date(el.day) > new Date()
+          ? (el.editStatus = true)
+          : (el.editStatus = false);
         dateConverter(el);
       });
       setReservationList(reservation);
@@ -177,6 +191,17 @@ const ReservationPage = () => {
                     </TableCell>
                     <TableCell align="left">
                       {t(`status.${row.status}`)}
+                      {row.editStatus && (
+                        <EditIcon
+                          onClick={() => {
+                            changeStatusModalHandler();
+                            setChangeStatusData({
+                              id: row.id,
+                              status: row.status,
+                            });
+                          }}
+                        />
+                      )}
                     </TableCell>
 
                     <TableCell align="right">
@@ -195,6 +220,13 @@ const ReservationPage = () => {
           </Table>
         </TableContainer>
       </Box>
+      {isChangeStatusModalActive && (
+        <ChangeStatusModal
+          props={changeStatusData}
+          onClose={changeStatusModalHandler}
+          result={errorAndSuccessModalHandler}
+        />
+      )}
       {isDeleteModalActive && (
         <DeleteModal
           props={itemForRemove}

@@ -3,7 +3,7 @@ import { Box, Typography } from "@mui/material";
 
 const ErrorAndSuccessModal = (props) => {
   const style = {
-    position: "absolute" as "absolute",
+    position: "fixed",
     top: "100%",
     left: "100%",
     transform: "translate(-100%, -100%)",

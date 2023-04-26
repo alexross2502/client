@@ -1,18 +1,20 @@
 import { Grid, Typography } from "@mui/material";
 import React from "react";
-import { useDispatch, useSelector } from "react-redux";
 import { instance } from "../../AdminComponents/axios-utils";
-import { setModalMasters } from "../../redux/modalMastersReducer";
-import { RootState } from "../../redux/rootReducer";
-import { setOrderSuccessReducer } from "../../redux/orderSuccessReducer";
 
 const AvailableMastersForm = (props) => {
-  let dispatch = useDispatch();
-  let orderData = useSelector((state: RootState) => state.orderData.data);
-
-  /////собираем нужные поля для запроса из разных мест
-  let data = Object.assign(props.data, orderData[0]);
-  data.master_id = data.id;
+  const [master, orderData] = [props.data, props.orderData];
+  let data = {
+    day: orderData.day,
+    size: orderData.size,
+    master_id: master.id,
+    towns_id: orderData.towns_id,
+    recipient: orderData.recipient,
+    name: master.name,
+    surname: master.surname,
+    rating: master.rating,
+    clientName: orderData.clientName,
+  };
 
   return (
     <Grid
@@ -34,12 +36,15 @@ const AvailableMastersForm = (props) => {
           data: data,
         })
           .then((res) => {
-            dispatch(setOrderSuccessReducer(true));
-            dispatch(setModalMasters());
+            props.result({
+              type: "success",
+              message: "Заказ создан, письмо отправленно",
+            });
           })
           .catch((err) => {
-            console.log(err);
-          });
+            props.result({ type: "error", message: "Ошибка" });
+          })
+          .finally(props.onClose);
       }}>
       <Grid item xs={4}>
         <Typography variant="h6" padding={3} textAlign="center">

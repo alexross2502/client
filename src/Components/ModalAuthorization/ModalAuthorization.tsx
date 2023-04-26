@@ -3,8 +3,7 @@ import modalWrapperStyle from "../../Components/Modals/ModalWrapper.module.css";
 import React from "react";
 import { Box, Button, Grid, TextField, Typography } from "@mui/material";
 import { useTranslation } from "react-i18next";
-import { useSelector, useDispatch } from "react-redux";
-import { setModalActive } from "../../redux/modalWindowReducer";
+import { useDispatch } from "react-redux";
 import { setAuthorized } from "../../redux/authorizationReducer";
 import { authCheck } from "./authCheck";
 import { useNavigate } from "react-router-dom";
@@ -12,7 +11,6 @@ import { useForm } from "react-hook-form";
 import { useState } from "react";
 import CloseIcon from "@mui/icons-material/Close";
 import VisibilityIcon from "@mui/icons-material/Visibility";
-import { RootState } from "../../redux/rootReducer";
 import { loginSwitchCase } from "../../utils/loginSwitchCase";
 import { Validator } from "../../utils/constants";
 
@@ -44,7 +42,6 @@ const ModalAuthorization = (props) => {
       })
       .finally(() => {
         setPending(false);
-        props.onClose();
       });
   }
   ///Глазик в пароле
