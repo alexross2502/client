@@ -20,7 +20,7 @@ const style = {
   border: "2px solid #000",
   boxShadow: 24,
   p: 4,
-  zIndex: 999,
+  zIndex: 10000,
 };
 
 const ChangeStatusModal = (props) => {
@@ -43,17 +43,23 @@ const ChangeStatusModal = (props) => {
       })
       .finally(props.onClose);
   };
-  const statusArray = [];
-  (() => {
-    for (let el in statusVariant) {
-      statusArray.push(el);
-    }
-  })();
+
+  function statusList() {
+    return Object.values(statusVariant).map((el) => {
+      return (
+        <FormControlLabel key={el} value={el} control={<Radio />} label={el} />
+      );
+    });
+  }
 
   return (
     <>
-      <div className={css.modalWrapper}>
-        <Box sx={style}>
+      <div className={css.modalWrapper} onClick={props.onClose}>
+        <Box
+          sx={style}
+          onClick={(e) => {
+            e.stopPropagation();
+          }}>
           <Grid container>
             <FormControl>
               <FormLabel id="demo-controlled-radio-buttons-group">
@@ -64,16 +70,7 @@ const ChangeStatusModal = (props) => {
                 name="controlled-radio-buttons-group"
                 value={value}
                 onClick={handleChange}>
-                {statusArray.map((el) => {
-                  return (
-                    <FormControlLabel
-                      key={el}
-                      value={el}
-                      control={<Radio />}
-                      label={el}
-                    />
-                  );
-                })}
+                {statusList()}
               </RadioGroup>
             </FormControl>
           </Grid>
