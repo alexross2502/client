@@ -5,8 +5,6 @@ import { useForm } from "react-hook-form";
 import { useState } from "react";
 import Api from "../../AdminComponents/Components/api";
 import { setPageRerender } from "../../redux/rerenderReducer";
-import { setRemoveAndAddModal } from "../../redux/RemoveAndAddModalReducer";
-import { setRemoveAndAddModalError } from "../../redux/RemoveAndAddModalErrorReducer";
 import css from "../../Components/Modals/ModalWrapper.module.css";
 import { useDispatch } from "react-redux";
 
@@ -23,7 +21,18 @@ const style = {
   zIndex: 999,
 };
 
-const UpdatePasswordModal = (props) => {
+type IProps = {
+  onClose: () => void;
+  result: (data: any) => void;
+  props: [string, string];
+};
+
+const UpdatePasswordModal = (props: IProps) => {
+  const {
+    onClose,
+    result,
+    props: [email, url],
+  } = props;
   const dispatch = useDispatch();
   const { t } = useTranslation();
   const {
@@ -65,24 +74,23 @@ const UpdatePasswordModal = (props) => {
                 disabled={pending}
                 onClick={() => {
                   setPending(true);
-                  let [email, url] = props.props;
                   Api.updatePassword(url, email)
                     .then((res) => {
                       dispatch(setPageRerender());
-                      props.result({
+                      result({
                         type: "success",
                         message: "Успешно",
                       });
                     })
                     .catch(() => {
-                      props.result({
+                      result({
                         type: "error",
                         message: "Ошибка",
                       });
                     })
                     .finally(() => {
                       setPending(false);
-                      props.onClose();
+                      onClose();
                     });
                 }}>
                 Да
@@ -103,7 +111,7 @@ const UpdatePasswordModal = (props) => {
                 variant="contained"
                 color="warning"
                 disabled={pending}
-                onClick={props.onClose}>
+                onClick={onClose}>
                 Нет
               </Button>
             </Grid>

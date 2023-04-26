@@ -13,8 +13,15 @@ import CloseIcon from "@mui/icons-material/Close";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import { loginSwitchCase } from "../../utils/loginSwitchCase";
 import { Validator } from "../../utils/constants";
+import { modalBoxStyle } from "../../styles/styles";
 
-const ModalAuthorization = (props) => {
+type IProps = {
+  onClose: () => void;
+  result: (data) => void;
+};
+
+const ModalAuthorization = (props: IProps) => {
+  const { onClose, result } = props;
   const dispatch = useDispatch();
   const { t } = useTranslation();
   const navigate = useNavigate();
@@ -38,7 +45,7 @@ const ModalAuthorization = (props) => {
       })
       .catch(() => {
         reset();
-        props.result({ type: "error", message: "Неверный логин или пароль" });
+        result({ type: "error", message: "Неверный логин или пароль" });
       })
       .finally(() => {
         setPending(false);
@@ -67,13 +74,7 @@ const ModalAuthorization = (props) => {
             padding={3}
             borderRadius={5}
             boxShadow={"5px 5px 10px #ccc"}
-            sx={{
-              backgroundColor: "#a0a0a0",
-
-              ":hover": {
-                boxShadow: "10px 10px 20px #ccc",
-              },
-            }}>
+            sx={modalBoxStyle}>
             <Grid container>
               <Grid item xs={1}></Grid>
               <Grid item xs={10}>
@@ -82,7 +83,7 @@ const ModalAuthorization = (props) => {
                 </Typography>
               </Grid>
               <Grid item xs={1}>
-                <CloseIcon onClick={props.onClose} />
+                <CloseIcon onClick={onClose} />
               </Grid>
             </Grid>
             {

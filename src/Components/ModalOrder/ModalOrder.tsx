@@ -18,6 +18,7 @@ import { instance, InstanceResponse } from "../../AdminComponents/axios-utils";
 import { DateCalendar, TimeClock } from "@mui/x-date-pickers";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import { Validator } from "../../utils/constants";
+import { modalBoxStyle, redSaveButtonStyle } from "../../styles/styles";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -32,7 +33,14 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ModalOrder = (props) => {
+type IProps = {
+  next: (payload) => void;
+  onClose: () => void;
+  result: (data) => void;
+};
+
+const ModalOrder = (props: IProps) => {
+  const { next, onClose, result } = props;
   const dispatch = useDispatch();
   const { t } = useTranslation();
   const {
@@ -70,7 +78,7 @@ const ModalOrder = (props) => {
       data: data,
     })
       .then((res: any) => {
-        props.next({
+        next({
           masters: [...res],
           day: currentDate.getTime(),
           size: atr.size,
@@ -84,7 +92,7 @@ const ModalOrder = (props) => {
       })
       .finally(() => {
         setPending(false);
-        props.onClose();
+        onClose();
       });
   }
 
@@ -103,13 +111,7 @@ const ModalOrder = (props) => {
             padding={3}
             borderRadius={5}
             boxShadow={"5px 5px 10px #ccc"}
-            sx={{
-              backgroundColor: "#a0a0a0",
-
-              ":hover": {
-                boxShadow: "10px 10px 20px #ccc",
-              },
-            }}>
+            sx={modalBoxStyle}>
             <Grid container maxHeight={200}>
               <Grid item xs={1}></Grid>
               <Grid item xs={10}>
@@ -118,7 +120,7 @@ const ModalOrder = (props) => {
                 </Typography>
               </Grid>
               <Grid item xs={1}>
-                <CloseIcon onClick={props.onClose} />
+                <CloseIcon onClick={onClose} />
               </Grid>
             </Grid>
             <Grid item marginTop={3} sx={{ width: 300 }}>
@@ -236,14 +238,7 @@ const ModalOrder = (props) => {
               </NativeSelect>
             </Grid>
             <Button
-              sx={{
-                background: "rgba(180,58,58,1)",
-                marginTop: 3,
-                borderRadius: 3,
-                padding: 1,
-                paddingLeft: 4,
-                paddingRight: 4,
-              }}
+              sx={redSaveButtonStyle}
               variant="contained"
               color="warning"
               type="submit"

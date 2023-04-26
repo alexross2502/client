@@ -28,6 +28,7 @@ import { InstanceResponse } from "../../axios-utils";
 import { priceFormatterToFloat } from "../../../utils/priceFormatterToFloat";
 import ErrorAndSuccessModal from "../../../Components/Modals/ErrorAndSuccessModal";
 import DeleteModal from "../../../Components/Modals/DeleteModal";
+import { redAddButtonStyle } from "../../../styles/styles";
 
 const TownsPage = () => {
   const { t } = useTranslation();
@@ -87,7 +88,7 @@ const TownsPage = () => {
                 <TableCell align="left">Тариф</TableCell>
                 <TableCell align="right">
                   <Button
-                    sx={{ marginLeft: "auto", background: "rgba(180,58,58,1)" }}
+                    sx={redAddButtonStyle}
                     variant="contained"
                     onClick={() => {
                       dispatch(townSaveModalHandler);

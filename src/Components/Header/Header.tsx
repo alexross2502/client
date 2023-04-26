@@ -11,15 +11,23 @@ import {
   useMediaQuery,
 } from "@mui/material";
 import AccessAlarmsIcon from "@mui/icons-material/AccessAlarms";
-import { useState } from "react";
+import { MouseEventHandler, useState } from "react";
 import { Box } from "@mui/system";
 import { DrawerComp } from "./DrawerComp";
 import { getToken } from "../../AdminComponents/token";
 import { useNavigate } from "react-router-dom";
 import React from "react";
 import { loginSwitchCase } from "../../utils/loginSwitchCase";
+import { headerAppBarStyle } from "../../styles/styles";
 
-const Header = (props) => {
+type IProps = {
+  authorization: () => void;
+  order: () => void;
+  registration: () => void;
+};
+
+const Header = (props: IProps) => {
+  const { authorization, order, registration } = props;
   const { t } = useTranslation();
   const [value, setValue] = useState();
   const theme = useTheme();
@@ -27,11 +35,7 @@ const Header = (props) => {
   const navigate = useNavigate();
 
   return (
-    <AppBar
-      sx={{
-        backgroundImage:
-          "linear-gradient(90deg, rgba(180,58,58,1) 2%, rgba(49,49,116,1) 36%, rgba(105,0,161,1) 73%, rgba(166,69,252,1) 100%)",
-      }}>
+    <AppBar sx={headerAppBarStyle}>
       <Toolbar>
         {isMatch ? (
           <>
@@ -66,7 +70,7 @@ const Header = (props) => {
                 <Tab
                   sx={{ marginLeft: "40px", fontSize: "15px" }}
                   label={t("order.header")}
-                  onClick={props.order}></Tab>
+                  onClick={order}></Tab>
               </Tabs>
             </Grid>
             <Grid item xs={2}>
@@ -74,7 +78,7 @@ const Header = (props) => {
                 <Button
                   sx={{ marginLeft: "auto", background: "rgba(180,58,58,1)" }}
                   variant="contained"
-                  onClick={props.registration}>
+                  onClick={registration}>
                   {t("header.registration")}
                 </Button>
                 {getToken() !== null ? (
@@ -90,7 +94,7 @@ const Header = (props) => {
                   <Button
                     sx={{ marginLeft: "auto", background: "rgba(180,58,58,1)" }}
                     variant="contained"
-                    onClick={props.authorization}>
+                    onClick={authorization}>
                     {t("header.login")}
                   </Button>
                 )}

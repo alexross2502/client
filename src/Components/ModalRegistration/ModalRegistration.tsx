@@ -22,8 +22,15 @@ import Api from "../../AdminComponents/Components/api";
 import registrationVariant from "./registrationVariant";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import { Validator } from "../../utils/constants";
+import { modalBoxStyle } from "../../styles/styles";
 
-const ModalRegistration = (props) => {
+type IProps = {
+  onClose: () => void;
+  result: (data) => void;
+};
+
+const ModalRegistration = (props: IProps) => {
+  const { onClose, result } = props;
   const {
     handleSubmit,
     register,
@@ -70,16 +77,16 @@ const ModalRegistration = (props) => {
     )
       .then(() => {
         setPending(false);
-        props.result({
+        result({
           type: "success",
           message: "Аккаунт создан, письмо отправленно",
         });
       })
       .catch((e) => {
         setPending(false);
-        props.result({ type: "error", message: "Ошибка" });
+        result({ type: "error", message: "Ошибка" });
       })
-      .finally(props.onClose);
+      .finally(onClose);
   }
 
   return (
@@ -98,12 +105,7 @@ const ModalRegistration = (props) => {
             padding={3}
             borderRadius={5}
             boxShadow={"5px 5px 10px #ccc"}
-            sx={{
-              backgroundColor: "#a0a0a0",
-              ":hover": {
-                boxShadow: "10px 10px 20px #ccc",
-              },
-            }}>
+            sx={modalBoxStyle}>
             <Grid container>
               <Grid item xs={1}></Grid>
               <Grid item xs={10}>
@@ -112,7 +114,7 @@ const ModalRegistration = (props) => {
                 </Typography>
               </Grid>
               <Grid item xs={1}>
-                <CloseIcon onClick={props.onClose} />
+                <CloseIcon onClick={onClose} />
               </Grid>
             </Grid>
             <Grid item marginTop={3} sx={{ width: 300 }}>

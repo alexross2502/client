@@ -13,6 +13,7 @@ import Api from "../api";
 import { setPageRerender } from "../../../redux/rerenderReducer";
 import { RootState } from "../../../redux/rootReducer";
 import { rating, Validator } from "../../../utils/constants";
+import { modalBoxStyle, redSaveButtonStyle } from "../../../styles/styles";
 
 const MasterSave = (props) => {
   const dispatch = useDispatch();
@@ -70,13 +71,7 @@ const MasterSave = (props) => {
               padding={3}
               borderRadius={5}
               boxShadow={"5px 5px 10px #ccc"}
-              sx={{
-                backgroundColor: "#696969",
-
-                ":hover": {
-                  boxShadow: "10px 10px 20px #ccc",
-                },
-              }}>
+              sx={modalBoxStyle}>
               <Grid container>
                 <Grid item xs={1}></Grid>
                 <Grid item xs={10}>
@@ -205,14 +200,7 @@ const MasterSave = (props) => {
                 </NativeSelect>
               </Grid>
               <Button
-                sx={{
-                  background: "rgba(180,58,58,1)",
-                  marginTop: 3,
-                  borderRadius: 3,
-                  padding: 1,
-                  paddingLeft: 4,
-                  paddingRight: 4,
-                }}
+                sx={redSaveButtonStyle}
                 variant="contained"
                 color="warning"
                 type="submit"

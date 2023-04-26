@@ -24,26 +24,40 @@ const style = {
   zIndex: 10000,
 };
 
-const ChangeStatusModal = (props) => {
+type IProps = {
+  onClose: () => void;
+  result: (data) => void;
+  props: {
+    status: string;
+    id: string;
+  };
+};
+
+const ChangeStatusModal = (props: IProps) => {
+  const {
+    onClose,
+    result,
+    props: { status, id },
+  } = props;
   const { t } = useTranslation();
-  const [value, setValue] = useState(`${props.props.status}`);
+  const [value, setValue] = useState(`${status}`);
   const handleChange = async (event) => {
     setValue((event.target as HTMLInputElement).value);
     await instance({
       url: "/masters/changestatus",
       data: {
-        id: props.props.id,
+        id: id,
         status: event.target.value,
       },
       method: "PUT",
     })
       .then((res) => {
-        props.result({ type: "success", message: "Успешно" });
+        result({ type: "success", message: "Успешно" });
       })
       .catch((e) => {
-        props.result({ type: "error", message: "Ошибка" });
+        result({ type: "error", message: "Ошибка" });
       })
-      .finally(props.onClose);
+      .finally(onClose);
   };
 
   function statusList() {
@@ -61,7 +75,7 @@ const ChangeStatusModal = (props) => {
 
   return (
     <>
-      <div className={css.modalWrapper} onClick={props.onClose}>
+      <div className={css.modalWrapper} onClick={onClose}>
         <Box
           sx={style}
           onClick={(e) => {

@@ -11,6 +11,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import { setPageRerender } from "../../../redux/rerenderReducer";
 import { RootState } from "../../../redux/rootReducer";
 import { Validator } from "../../../utils/constants";
+import { modalBoxStyle, redSaveButtonStyle } from "../../../styles/styles";
 
 const ClientSave = (props) => {
   const dispatch = useDispatch();
@@ -59,13 +60,7 @@ const ClientSave = (props) => {
               padding={3}
               borderRadius={5}
               boxShadow={"5px 5px 10px #ccc"}
-              sx={{
-                backgroundColor: "#696969",
-
-                ":hover": {
-                  boxShadow: "10px 10px 20px #ccc",
-                },
-              }}>
+              sx={modalBoxStyle}>
               <Grid container>
                 <Grid item xs={1}></Grid>
                 <Grid item xs={10}>
@@ -135,14 +130,7 @@ const ClientSave = (props) => {
                 })}
               />
               <Button
-                sx={{
-                  background: "rgba(180,58,58,1)",
-                  marginTop: 3,
-                  borderRadius: 3,
-                  padding: 1,
-                  paddingLeft: 4,
-                  paddingRight: 4,
-                }}
+                sx={redSaveButtonStyle}
                 variant="contained"
                 color="warning"
                 type="submit"

@@ -32,6 +32,7 @@ import { priceFormatterToFloat } from "../../../utils/priceFormatterToFloat";
 import ErrorAndSuccessModal from "../../../Components/Modals/ErrorAndSuccessModal";
 import EditIcon from "@mui/icons-material/Edit";
 import ChangeStatusModal from "../../../Components/Modals/ChangeStatusModal";
+import { redAddButtonStyle } from "../../../styles/styles";
 
 const ReservationPage = () => {
   const { t } = useTranslation();
@@ -138,7 +139,7 @@ const ReservationPage = () => {
                 </TableCell>
                 <TableCell align="right">
                   <Button
-                    sx={{ marginLeft: "auto", background: "rgba(180,58,58,1)" }}
+                    sx={redAddButtonStyle}
                     variant="contained"
                     onClick={() => {
                       reservationSaveModalHandler();

@@ -28,14 +28,14 @@ import { RootState } from "../../../redux/rootReducer";
 import CachedIcon from "@mui/icons-material/Cached";
 import UpdatePasswordModal from "../../../Components/Modals/UpdatePasswordModal";
 import ErrorAndSuccessModal from "../../../Components/Modals/ErrorAndSuccessModal";
+import { redAddButtonStyle } from "../../../styles/styles";
 
 const ClientPage = () => {
   const { t } = useTranslation();
-  const dispatch = useDispatch();
   const rerender = useSelector((state: RootState) => state.rerender.isRerender);
   const [clientsList, setClientsList] = useState<InstanceResponse | []>();
   const [itemForRemove, setItemForRemove] = useState([]);
-  const [itemForUpdatePassword, setItemForUpdatePassword] = useState([]);
+  const [itemForUpdatePassword, setItemForUpdatePassword] = useState({});
   const [isLoading, setLoading] = useState<boolean>(false);
   const [isDeleteModalActive, setDeleteModalActive] = useState<boolean>(false);
   const [isUpdatePasswordModalActive, setUpdatePasswordModalActive] =
@@ -96,7 +96,7 @@ const ClientPage = () => {
                 <TableCell>Сбросить пароль</TableCell>
                 <TableCell align="right">
                   <Button
-                    sx={{ marginLeft: "auto", background: "rgba(180,58,58,1)" }}
+                    sx={redAddButtonStyle}
                     variant="contained"
                     onClick={() => {
                       clientSaveModalHandler();
@@ -148,7 +148,10 @@ const ClientPage = () => {
                     <TableCell align="left">
                       <CachedIcon
                         onClick={() => {
-                          setItemForUpdatePassword([row.email, "clients"]);
+                          setItemForUpdatePassword({
+                            email: row.email,
+                            url: "clients",
+                          });
                           updatePasswordModalHandler();
                         }}
                       />

@@ -30,6 +30,7 @@ import CachedIcon from "@mui/icons-material/Cached";
 import UpdatePasswordModal from "../../../Components/Modals/UpdatePasswordModal";
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 import ErrorAndSuccessModal from "../../../Components/Modals/ErrorAndSuccessModal";
+import { redAddButtonStyle } from "../../../styles/styles";
 
 const MastersPage = () => {
   const { t } = useTranslation();
@@ -110,7 +111,7 @@ const MastersPage = () => {
                 <TableCell align="left">Подтвердить</TableCell>
                 <TableCell align="right">
                   <Button
-                    sx={{ marginLeft: "auto", background: "rgba(180,58,58,1)" }}
+                    sx={redAddButtonStyle}
                     variant="contained"
                     onClick={masterSaveModalHandler}>
                     {t("table.add")}
