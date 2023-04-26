@@ -9,6 +9,7 @@ import FormControl from "@mui/material/FormControl";
 import FormLabel from "@mui/material/FormLabel";
 import { statusVariant } from "../../utils/constants";
 import { instance } from "../../AdminComponents/axios-utils";
+import { useTranslation } from "react-i18next";
 
 const style = {
   position: "absolute" as "absolute",
@@ -24,6 +25,7 @@ const style = {
 };
 
 const ChangeStatusModal = (props) => {
+  const { t } = useTranslation();
   const [value, setValue] = useState(`${props.props.status}`);
   const handleChange = async (event) => {
     setValue((event.target as HTMLInputElement).value);
@@ -47,7 +49,12 @@ const ChangeStatusModal = (props) => {
   function statusList() {
     return Object.values(statusVariant).map((el) => {
       return (
-        <FormControlLabel key={el} value={el} control={<Radio />} label={el} />
+        <FormControlLabel
+          key={el}
+          value={el}
+          control={<Radio />}
+          label={t(`status.${el}`)}
+        />
       );
     });
   }

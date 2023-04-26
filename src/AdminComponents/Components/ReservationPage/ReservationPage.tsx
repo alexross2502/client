@@ -133,7 +133,9 @@ const ReservationPage = () => {
                 <TableCell align="left">Город</TableCell>
                 <TableCell align="left">Клиент</TableCell>
                 <TableCell align="left">Цена</TableCell>
-                <TableCell align="left">Статус</TableCell>
+                <TableCell align="left" sx={{ minWidth: 140 }}>
+                  Статус
+                </TableCell>
                 <TableCell align="right">
                   <Button
                     sx={{ marginLeft: "auto", background: "rgba(180,58,58,1)" }}
