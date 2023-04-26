@@ -35,7 +35,9 @@ const ClientPage = () => {
   const rerender = useSelector((state: RootState) => state.rerender.isRerender);
   const [clientsList, setClientsList] = useState<InstanceResponse | []>();
   const [itemForRemove, setItemForRemove] = useState([]);
-  const [itemForUpdatePassword, setItemForUpdatePassword] = useState({});
+  const [itemForUpdatePassword, setItemForUpdatePassword] = useState<
+    React.SetStateAction<[email: string, url: string]>
+  >(["", ""]);
   const [isLoading, setLoading] = useState<boolean>(false);
   const [isDeleteModalActive, setDeleteModalActive] = useState<boolean>(false);
   const [isUpdatePasswordModalActive, setUpdatePasswordModalActive] =
@@ -148,10 +150,7 @@ const ClientPage = () => {
                     <TableCell align="left">
                       <CachedIcon
                         onClick={() => {
-                          setItemForUpdatePassword({
-                            email: row.email,
-                            url: "clients",
-                          });
+                          setItemForUpdatePassword([row.email, "clients"]);
                           updatePasswordModalHandler();
                         }}
                       />

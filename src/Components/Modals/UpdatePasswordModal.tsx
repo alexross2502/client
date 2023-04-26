@@ -24,7 +24,7 @@ const style = {
 type IProps = {
   onClose: () => void;
   result: (data: any) => void;
-  props: [string, string];
+  props: [email: string, url: string];
 };
 
 const UpdatePasswordModal = (props: IProps) => {
