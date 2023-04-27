@@ -6,16 +6,16 @@ import { Box, Grid, Typography } from "@mui/material";
 import AvailableMastersForm from "./AvailableMastersForm";
 import modalWrapperStyle from "../../Components/Modals/ModalWrapper.module.css";
 
-const ModalAvailableMasters = (props) => {
+const ModalAvailableMasters = ({ data, result, onClose }) => {
   const { t } = useTranslation();
-  const masterListItem = props.data.masters.map((item) => {
+  const masterListItem = data.masters.map((item) => {
     return (
       <AvailableMastersForm
         data={item}
         key={item.id}
-        orderData={props.data}
-        result={props.result}
-        onClose={props.onClose}
+        orderData={data}
+        result={result}
+        onClose={onClose}
       />
     );
   });
@@ -49,7 +49,7 @@ const ModalAvailableMasters = (props) => {
                 </Typography>
               </Grid>
               <Grid item xs={1}>
-                <CloseIcon onClick={props.onClose} />
+                <CloseIcon onClick={onClose} />
               </Grid>
             </Grid>
             <Grid container>

@@ -3,8 +3,7 @@ import ImageList from "@mui/material/ImageList";
 import ImageListItem from "@mui/material/ImageListItem";
 import ClearIcon from "@mui/icons-material/Clear";
 
-export default function ImageUploader(props) {
-  const { itemData, handleFileInputDelete } = props;
+export default function ImageUploader({ itemData, handleFileInputDelete }) {
   return (
     <ImageList sx={{ width: 300, height: 450 }} cols={1}>
       {itemData?.map((item) => (

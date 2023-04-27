@@ -69,7 +69,12 @@ const ModalOrder = ({ next, onClose, result }: TProps) => {
     if (new Date() > currentDate) {
       throw new Error("error");
     }
+    const formData = new FormData();
     let data = { ...atr };
+    for (let i = 0; i < image.length; i++) {
+      formData.append(`${i}`, image[i].file);
+    }
+    data.image = formData;
     data.day = currentDate.getTime();
     setPending(true);
     await instance({
@@ -80,6 +85,7 @@ const ModalOrder = ({ next, onClose, result }: TProps) => {
       .then((res: any) => {
         next({
           masters: [...res],
+          image: image,
           day: currentDate.getTime(),
           size: atr.size,
           recipient: atr.email,
@@ -100,12 +106,14 @@ const ModalOrder = ({ next, onClose, result }: TProps) => {
 
   const handleFileInputChange = (e) => {
     const file = e.target.files[0];
-
     const reader = new FileReader();
     reader.readAsDataURL(file);
 
     reader.onload = () => {
-      setImage([...image, { img: reader.result, id: new Date().getTime() }]);
+      setImage([
+        ...image,
+        { file: file, img: reader.result, id: new Date().getTime() },
+      ]);
     };
   };
 

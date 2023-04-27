@@ -13,6 +13,7 @@ const AvailableMastersForm = ({ data: master, orderData, result, onClose }) => {
     surname: master.surname,
     rating: master.rating,
     clientName: orderData.clientName,
+    image: orderData.image,
   };
 
   return (
