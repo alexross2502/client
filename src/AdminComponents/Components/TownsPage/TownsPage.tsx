@@ -35,7 +35,10 @@ const TownsPage = () => {
   const dispatch = useDispatch();
   const rerender = useSelector((state: RootState) => state.rerender.isRerender);
   const [townsList, setTownsList] = useState<InstanceResponse>();
-  const [itemForRemove, setItemForRemove] = useState([]);
+  const [itemForRemove, setItemForRemove] = useState<{
+    id: string;
+    url: string;
+  }>();
   const [isLoading, setLoading] = useState<boolean>(false);
   const [isDeleteModalActive, setDeleteModalActive] = useState<boolean>(false);
   const [isErrorAndSuccessModalActive, setErrorAndSuccessModalActive] =
@@ -139,7 +142,7 @@ const TownsPage = () => {
                     <TableCell align="right">
                       <IconButton
                         onClick={() => {
-                          setItemForRemove([row.id, "towns"]);
+                          setItemForRemove({ id: row.id, url: "towns" });
                           deleteModalHandler();
                         }}>
                         <DeleteForeverIcon></DeleteForeverIcon>

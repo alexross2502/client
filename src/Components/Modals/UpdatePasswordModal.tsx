@@ -21,18 +21,17 @@ const style = {
   zIndex: 999,
 };
 
-type IProps = {
+type TProps = {
   onClose: () => void;
   result: (data: any) => void;
-  props: [email: string, url: string];
+  props: { email: string; url: string };
 };
 
-const UpdatePasswordModal = (props: IProps) => {
-  const {
-    onClose,
-    result,
-    props: [email, url],
-  } = props;
+const UpdatePasswordModal = ({
+  onClose,
+  result,
+  props: { email, url },
+}: TProps) => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
   const {

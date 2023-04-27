@@ -43,7 +43,10 @@ const ReservationPage = () => {
   const [reservationList, setReservationList] = useState<
     InstanceResponse | []
   >();
-  const [itemForRemove, setItemForRemove] = useState([]);
+  const [itemForRemove, setItemForRemove] = useState<{
+    id: string;
+    url: string;
+  }>();
   const [isLoading, setLoading] = useState<boolean>(false);
   const [isDeleteModalActive, setDeleteModalActive] = useState<boolean>(false);
   const [isErrorAndSuccessModalActive, setErrorAndSuccessModalActive] =
@@ -210,7 +213,7 @@ const ReservationPage = () => {
                     <TableCell align="right">
                       <IconButton
                         onClick={() => {
-                          setItemForRemove([row.id, "reservation"]);
+                          setItemForRemove({ id: row.id, url: "reservation" });
                           deleteModalHandler();
                         }}>
                         <DeleteForeverIcon></DeleteForeverIcon>

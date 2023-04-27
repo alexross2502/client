@@ -24,7 +24,7 @@ const style = {
   zIndex: 10000,
 };
 
-type IProps = {
+type TProps = {
   onClose: () => void;
   result: (data) => void;
   props: {
@@ -33,12 +33,11 @@ type IProps = {
   };
 };
 
-const ChangeStatusModal = (props: IProps) => {
-  const {
-    onClose,
-    result,
-    props: { status, id },
-  } = props;
+const ChangeStatusModal = ({
+  onClose,
+  result,
+  props: { status, id },
+}: TProps) => {
   const { t } = useTranslation();
   const [value, setValue] = useState(`${status}`);
   const handleChange = async (event) => {

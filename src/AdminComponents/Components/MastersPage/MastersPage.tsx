@@ -38,8 +38,14 @@ const MastersPage = () => {
   const rerender = useSelector((state: RootState) => state.rerender.isRerender);
   const [mastersList, setMastersList] = useState<InstanceResponse | []>();
   const [townsList, setTownsList] = useState<InstanceResponse | []>([]);
-  const [itemForRemove, setItemForRemove] = useState([]);
-  const [itemForUpdatePassword, setItemForUpdatePassword] = useState([]);
+  const [itemForRemove, setItemForRemove] = useState<{
+    id: string;
+    url: string;
+  }>();
+  const [itemForUpdatePassword, setItemForUpdatePassword] = useState<{
+    email: string;
+    url: string;
+  }>();
   const [isLoading, setLoading] = useState<boolean>(false);
   const [isDeleteModalActive, setDeleteModalActive] = useState<boolean>(false);
   const [isUpdatePasswordModalActive, setUpdatePasswordModalActive] =
@@ -164,7 +170,10 @@ const MastersPage = () => {
                     <TableCell align="left">
                       <CachedIcon
                         onClick={() => {
-                          setItemForUpdatePassword([row.email, "masters"]);
+                          setItemForUpdatePassword({
+                            email: row.email,
+                            url: "masters",
+                          });
                           updatePasswordModalHandler();
                         }}
                       />
@@ -200,7 +209,7 @@ const MastersPage = () => {
                     <TableCell align="right">
                       <IconButton
                         onClick={() => {
-                          setItemForRemove([row.id, "masters"]);
+                          setItemForRemove({ id: row.id, url: "masters" });
                           deleteModalHandler();
                         }}>
                         <DeleteForeverIcon></DeleteForeverIcon>
@@ -222,7 +231,7 @@ const MastersPage = () => {
       )}
       {isUpdatePasswordModalActive && (
         <UpdatePasswordModal
-          props={[itemForUpdatePassword[0], itemForUpdatePassword[1]]}
+          props={itemForUpdatePassword}
           onClose={updatePasswordModalHandler}
           result={errorAndSuccessModalHandler}
         />

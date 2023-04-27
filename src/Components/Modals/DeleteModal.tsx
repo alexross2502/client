@@ -19,12 +19,16 @@ const style = {
   zIndex: 999,
 };
 
-const DeleteModal = (props) => {
-  const {
-    onClose,
-    result,
-    props: [id, url],
-  } = props;
+type TProps = {
+  onClose: () => void;
+  result: (data) => void;
+  props: {
+    id: string;
+    url: string;
+  };
+};
+
+const DeleteModal = ({ onClose, result, props: { id, url } }: TProps) => {
   const dispatch = useDispatch();
   const [pending, setPending] = useState(false);
 

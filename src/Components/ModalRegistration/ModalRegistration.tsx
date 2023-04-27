@@ -24,13 +24,12 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import { Validator } from "../../utils/constants";
 import { modalBoxStyle } from "../../styles/styles";
 
-type IProps = {
+type TProps = {
   onClose: () => void;
   result: (data) => void;
 };
 
-const ModalRegistration = (props: IProps) => {
-  const { onClose, result } = props;
+const ModalRegistration = ({ onClose, result }: TProps) => {
   const {
     handleSubmit,
     register,
