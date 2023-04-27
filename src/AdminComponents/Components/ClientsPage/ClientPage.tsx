@@ -18,28 +18,30 @@ import {
   Typography,
 } from "@mui/material";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
-import { setModalAddClients } from "../../../redux/clientsReducer";
 import TableContainer from "@mui/material/TableContainer";
 import Paper from "@mui/material/Paper";
 import DeleteModal from "../../../Components/Modals/DeleteModal";
 import { Watch } from "react-loader-spinner";
-import RemoveAndAddModal from "../../RemoveAndAddModal";
 import { instance, InstanceResponse } from "../../axios-utils";
-import RemoveAndAddModalError from "../../RemoveAndAddModalError";
 import CopyIcon from "../CopyIcon";
 import { RootState } from "../../../redux/rootReducer";
 import CachedIcon from "@mui/icons-material/Cached";
 import UpdatePasswordModal from "../../../Components/Modals/UpdatePasswordModal";
-import TransitionsModal from "../../../Components/Modals/Modal";
 import ErrorAndSuccessModal from "../../../Components/Modals/ErrorAndSuccessModal";
+import { redAddButtonStyle } from "../../../styles/styles";
 
 const ClientPage = () => {
   const { t } = useTranslation();
-  const dispatch = useDispatch();
   const rerender = useSelector((state: RootState) => state.rerender.isRerender);
   const [clientsList, setClientsList] = useState<InstanceResponse | []>();
-  const [itemForRemove, setItemForRemove] = useState([]);
-  const [itemForUpdatePassword, setItemForUpdatePassword] = useState([]);
+  const [itemForRemove, setItemForRemove] = useState<{
+    id: string;
+    url: string;
+  }>();
+  const [itemForUpdatePassword, setItemForUpdatePassword] = useState<{
+    email: string;
+    url: string;
+  }>();
   const [isLoading, setLoading] = useState<boolean>(false);
   const [isDeleteModalActive, setDeleteModalActive] = useState<boolean>(false);
   const [isUpdatePasswordModalActive, setUpdatePasswordModalActive] =
@@ -50,6 +52,12 @@ const ClientPage = () => {
     type: "",
     message: "",
   });
+  const [isClientSaveModalActive, setClientSaveModalActive] =
+    useState<boolean>(false);
+
+  function clientSaveModalHandler() {
+    setClientSaveModalActive(!isClientSaveModalActive);
+  }
 
   function deleteModalHandler() {
     setDeleteModalActive(!isDeleteModalActive);
@@ -80,7 +88,6 @@ const ClientPage = () => {
 
   return (
     <>
-      <ClientSave />
       <Box height={70} />
 
       <Box sx={{ display: "flex" }}>
@@ -95,10 +102,10 @@ const ClientPage = () => {
                 <TableCell>Сбросить пароль</TableCell>
                 <TableCell align="right">
                   <Button
-                    sx={{ marginLeft: "auto", background: "rgba(180,58,58,1)" }}
+                    sx={redAddButtonStyle}
                     variant="contained"
                     onClick={() => {
-                      dispatch(setModalAddClients());
+                      clientSaveModalHandler();
                     }}>
                     {t("table.add")}
                   </Button>
@@ -147,7 +154,10 @@ const ClientPage = () => {
                     <TableCell align="left">
                       <CachedIcon
                         onClick={() => {
-                          setItemForUpdatePassword([row.email, "clients"]);
+                          setItemForUpdatePassword({
+                            email: row.email,
+                            url: "clients",
+                          });
                           updatePasswordModalHandler();
                         }}
                       />
@@ -156,7 +166,7 @@ const ClientPage = () => {
                     <TableCell align="right">
                       <IconButton
                         onClick={() => {
-                          setItemForRemove([row.id, "clients"]);
+                          setItemForRemove({ id: row.id, url: "clients" });
                           deleteModalHandler();
                         }}>
                         <DeleteForeverIcon></DeleteForeverIcon>
@@ -180,6 +190,7 @@ const ClientPage = () => {
         <UpdatePasswordModal
           props={itemForUpdatePassword}
           onClose={updatePasswordModalHandler}
+          result={errorAndSuccessModalHandler}
         />
       )}
       {isErrorAndSuccessModalActive && (
@@ -189,9 +200,12 @@ const ClientPage = () => {
           message={ErrorAndSuccessModalData?.message}
         />
       )}
-      <TransitionsModal />
-      <RemoveAndAddModal />
-      <RemoveAndAddModalError />
+      {isClientSaveModalActive && (
+        <ClientSave
+          onClose={clientSaveModalHandler}
+          result={errorAndSuccessModalHandler}
+        />
+      )}
     </>
   );
 };

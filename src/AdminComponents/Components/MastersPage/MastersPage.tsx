@@ -19,23 +19,18 @@ import {
   Typography,
 } from "@mui/material";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
-import { setModalAddMasters } from "../../../redux/mastersReducer";
 import TableContainer from "@mui/material/TableContainer";
 import Paper from "@mui/material/Paper";
 import DeleteModal from "../../../Components/Modals/DeleteModal";
 import { Watch } from "react-loader-spinner";
-import RemoveAndAddModal from "../../RemoveAndAddModal";
-import RemoveAndAddModalError from "../../RemoveAndAddModalError";
 import CopyIcon from "../CopyIcon";
 import { RootState } from "../../../redux/rootReducer";
 import { instance, InstanceResponse } from "../../axios-utils";
 import CachedIcon from "@mui/icons-material/Cached";
 import UpdatePasswordModal from "../../../Components/Modals/UpdatePasswordModal";
-import { setModalUpdatePassword } from "../../../redux/updatePasswordReducer";
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
-import { setRemoveAndAddModalError } from "../../../redux/RemoveAndAddModalErrorReducer";
-import { setRemoveAndAddModal } from "../../../redux/RemoveAndAddModalReducer";
 import ErrorAndSuccessModal from "../../../Components/Modals/ErrorAndSuccessModal";
+import { redAddButtonStyle } from "../../../styles/styles";
 
 const MastersPage = () => {
   const { t } = useTranslation();
@@ -43,8 +38,14 @@ const MastersPage = () => {
   const rerender = useSelector((state: RootState) => state.rerender.isRerender);
   const [mastersList, setMastersList] = useState<InstanceResponse | []>();
   const [townsList, setTownsList] = useState<InstanceResponse | []>([]);
-  const [itemForRemove, setItemForRemove] = useState([]);
-  const [itemForUpdatePassword, setItemForUpdatePassword] = useState([]);
+  const [itemForRemove, setItemForRemove] = useState<{
+    id: string;
+    url: string;
+  }>();
+  const [itemForUpdatePassword, setItemForUpdatePassword] = useState<{
+    email: string;
+    url: string;
+  }>();
   const [isLoading, setLoading] = useState<boolean>(false);
   const [isDeleteModalActive, setDeleteModalActive] = useState<boolean>(false);
   const [isUpdatePasswordModalActive, setUpdatePasswordModalActive] =
@@ -55,6 +56,12 @@ const MastersPage = () => {
     type: "",
     message: "",
   });
+  const [isMasterSaveModalActive, setMasterSaveModalActive] =
+    useState<boolean>(false);
+
+  function masterSaveModalHandler() {
+    setMasterSaveModalActive(!isMasterSaveModalActive);
+  }
 
   function deleteModalHandler() {
     setDeleteModalActive(!isDeleteModalActive);
@@ -94,7 +101,6 @@ const MastersPage = () => {
 
   return (
     <>
-      <MasterSave />
       <Box height={70} />
       <Box sx={{ display: "flex" }}>
         <LeftSideMenu name={"masters"} />
@@ -111,11 +117,9 @@ const MastersPage = () => {
                 <TableCell align="left">Подтвердить</TableCell>
                 <TableCell align="right">
                   <Button
-                    sx={{ marginLeft: "auto", background: "rgba(180,58,58,1)" }}
+                    sx={redAddButtonStyle}
                     variant="contained"
-                    onClick={() => {
-                      dispatch(setModalAddMasters());
-                    }}>
+                    onClick={masterSaveModalHandler}>
                     {t("table.add")}
                   </Button>
                 </TableCell>
@@ -166,7 +170,10 @@ const MastersPage = () => {
                     <TableCell align="left">
                       <CachedIcon
                         onClick={() => {
-                          setItemForUpdatePassword([row.email, "masters"]);
+                          setItemForUpdatePassword({
+                            email: row.email,
+                            url: "masters",
+                          });
                           updatePasswordModalHandler();
                         }}
                       />
@@ -181,16 +188,16 @@ const MastersPage = () => {
                               data: { id: row.id },
                             })
                               .then(() => {
-                                dispatch(setRemoveAndAddModal(true));
-                                setTimeout(() => {
-                                  dispatch(setRemoveAndAddModal(false));
-                                }, 1000);
+                                errorAndSuccessModalHandler({
+                                  type: "success",
+                                  message: "Мастер успешно подтвержден",
+                                });
                               })
                               .catch(() => {
-                                dispatch(setRemoveAndAddModalError(true));
-                                setTimeout(() => {
-                                  dispatch(setRemoveAndAddModalError(false));
-                                }, 1000);
+                                errorAndSuccessModalHandler({
+                                  type: "error",
+                                  message: "Невозможно совершить подтверждение",
+                                });
                               })
                               .finally(async () =>
                                 setMastersList(await Api.getAll("masters"))
@@ -202,7 +209,7 @@ const MastersPage = () => {
                     <TableCell align="right">
                       <IconButton
                         onClick={() => {
-                          setItemForRemove([row.id, "masters"]);
+                          setItemForRemove({ id: row.id, url: "masters" });
                           deleteModalHandler();
                         }}>
                         <DeleteForeverIcon></DeleteForeverIcon>
@@ -226,6 +233,7 @@ const MastersPage = () => {
         <UpdatePasswordModal
           props={itemForUpdatePassword}
           onClose={updatePasswordModalHandler}
+          result={errorAndSuccessModalHandler}
         />
       )}
       {isErrorAndSuccessModalActive && (
@@ -235,8 +243,12 @@ const MastersPage = () => {
           message={ErrorAndSuccessModalData?.message}
         />
       )}
-      <RemoveAndAddModal />
-      <RemoveAndAddModalError />
+      {isMasterSaveModalActive && (
+        <MasterSave
+          onClose={masterSaveModalHandler}
+          result={errorAndSuccessModalHandler}
+        />
+      )}
     </>
   );
 };

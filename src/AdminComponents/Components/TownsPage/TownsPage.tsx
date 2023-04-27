@@ -19,26 +19,26 @@ import {
   Typography,
 } from "@mui/material";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
-import { setModalAddTowns } from "../../../redux/townsReducer";
 import TableContainer from "@mui/material/TableContainer";
 import Paper from "@mui/material/Paper";
-import DeleteModal from "../../../Components/Modals/DeleteModal";
-import { setModalDelete } from "../../../redux/deleteReducer";
 import { Watch } from "react-loader-spinner";
-import RemoveAndAddModal from "../../RemoveAndAddModal";
-import RemoveAndAddModalError from "../../RemoveAndAddModalError";
 import CopyIcon from "../CopyIcon";
 import { RootState } from "../../../redux/rootReducer";
 import { InstanceResponse } from "../../axios-utils";
 import { priceFormatterToFloat } from "../../../utils/priceFormatterToFloat";
 import ErrorAndSuccessModal from "../../../Components/Modals/ErrorAndSuccessModal";
+import DeleteModal from "../../../Components/Modals/DeleteModal";
+import { redAddButtonStyle } from "../../../styles/styles";
 
 const TownsPage = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const rerender = useSelector((state: RootState) => state.rerender.isRerender);
   const [townsList, setTownsList] = useState<InstanceResponse>();
-  const [itemForRemove, setItemForRemove] = useState([]);
+  const [itemForRemove, setItemForRemove] = useState<{
+    id: string;
+    url: string;
+  }>();
   const [isLoading, setLoading] = useState<boolean>(false);
   const [isDeleteModalActive, setDeleteModalActive] = useState<boolean>(false);
   const [isErrorAndSuccessModalActive, setErrorAndSuccessModalActive] =
@@ -47,6 +47,12 @@ const TownsPage = () => {
     type: "",
     message: "",
   });
+  const [isTownSaveModalActive, setTownSaveModalActive] =
+    useState<boolean>(false);
+
+  function townSaveModalHandler() {
+    setTownSaveModalActive(!isTownSaveModalActive);
+  }
 
   function deleteModalHandler() {
     setDeleteModalActive(!isDeleteModalActive);
@@ -73,7 +79,6 @@ const TownsPage = () => {
 
   return (
     <>
-      <TownSave />
       <Box height={70} />
       <Box sx={{ display: "flex" }}>
         <LeftSideMenu name={"towns"} />
@@ -86,10 +91,10 @@ const TownsPage = () => {
                 <TableCell align="left">Тариф</TableCell>
                 <TableCell align="right">
                   <Button
-                    sx={{ marginLeft: "auto", background: "rgba(180,58,58,1)" }}
+                    sx={redAddButtonStyle}
                     variant="contained"
                     onClick={() => {
-                      dispatch(setModalAddTowns());
+                      dispatch(townSaveModalHandler);
                     }}>
                     {t("table.add")}
                   </Button>
@@ -137,7 +142,7 @@ const TownsPage = () => {
                     <TableCell align="right">
                       <IconButton
                         onClick={() => {
-                          setItemForRemove([row.id, "towns"]);
+                          setItemForRemove({ id: row.id, url: "towns" });
                           deleteModalHandler();
                         }}>
                         <DeleteForeverIcon></DeleteForeverIcon>
@@ -164,8 +169,12 @@ const TownsPage = () => {
           message={ErrorAndSuccessModalData?.message}
         />
       )}
-      <RemoveAndAddModal />
-      <RemoveAndAddModalError />
+      {isTownSaveModalActive && (
+        <TownSave
+          onClose={townSaveModalHandler}
+          result={errorAndSuccessModalHandler}
+        />
+      )}
     </>
   );
 };

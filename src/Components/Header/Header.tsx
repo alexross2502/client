@@ -1,5 +1,3 @@
-import { useDispatch, useSelector } from "react-redux";
-import { setModalActive } from "../../redux/modalWindowReducer";
 import { useTranslation } from "react-i18next";
 import {
   AppBar,
@@ -13,28 +11,22 @@ import {
   useMediaQuery,
 } from "@mui/material";
 import AccessAlarmsIcon from "@mui/icons-material/AccessAlarms";
-import { useState } from "react";
+import { MouseEventHandler, useState } from "react";
 import { Box } from "@mui/system";
 import { DrawerComp } from "./DrawerComp";
-import { setModalOrder } from "../../redux/orderReducer";
 import { getToken } from "../../AdminComponents/token";
 import { useNavigate } from "react-router-dom";
 import React from "react";
-import { setRegistrationModalReducer } from "../../redux/registrationModalReducer";
 import { loginSwitchCase } from "../../utils/loginSwitchCase";
+import { headerAppBarStyle } from "../../styles/styles";
 
-const Header = () => {
-  const dispatch = useDispatch();
-  function onClickRegistration() {
-    dispatch(setRegistrationModalReducer());
-  }
-  function onClickLogin() {
-    dispatch(setModalActive());
-  }
-  function onClickOrder() {
-    dispatch(setModalOrder());
-  }
+type TProps = {
+  authorization: () => void;
+  order: () => void;
+  registration: () => void;
+};
 
+const Header = ({ authorization, order, registration }: TProps) => {
   const { t } = useTranslation();
   const [value, setValue] = useState();
   const theme = useTheme();
@@ -42,11 +34,7 @@ const Header = () => {
   const navigate = useNavigate();
 
   return (
-    <AppBar
-      sx={{
-        backgroundImage:
-          "linear-gradient(90deg, rgba(180,58,58,1) 2%, rgba(49,49,116,1) 36%, rgba(105,0,161,1) 73%, rgba(166,69,252,1) 100%)",
-      }}>
+    <AppBar sx={headerAppBarStyle}>
       <Toolbar>
         {isMatch ? (
           <>
@@ -81,7 +69,7 @@ const Header = () => {
                 <Tab
                   sx={{ marginLeft: "40px", fontSize: "15px" }}
                   label={t("order.header")}
-                  onClick={onClickOrder}></Tab>
+                  onClick={order}></Tab>
               </Tabs>
             </Grid>
             <Grid item xs={2}>
@@ -89,7 +77,7 @@ const Header = () => {
                 <Button
                   sx={{ marginLeft: "auto", background: "rgba(180,58,58,1)" }}
                   variant="contained"
-                  onClick={onClickRegistration}>
+                  onClick={registration}>
                   {t("header.registration")}
                 </Button>
                 {getToken() !== null ? (
@@ -105,7 +93,7 @@ const Header = () => {
                   <Button
                     sx={{ marginLeft: "auto", background: "rgba(180,58,58,1)" }}
                     variant="contained"
-                    onClick={onClickLogin}>
+                    onClick={authorization}>
                     {t("header.login")}
                   </Button>
                 )}

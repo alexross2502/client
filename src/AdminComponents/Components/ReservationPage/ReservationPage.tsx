@@ -1,7 +1,7 @@
 import { useTranslation } from "react-i18next";
 import style from "../../AdminPage.module.css";
 import React, { useEffect, useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import { LeftSideMenu } from "../../LeftSideMenu";
 import { useForm } from "react-hook-form";
 import Api from "../api";
@@ -20,24 +20,22 @@ import {
   Typography,
 } from "@mui/material";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
-import { setModalAddReservations } from "../../../redux/reservationsReducer";
 import TableContainer from "@mui/material/TableContainer";
 import Paper from "@mui/material/Paper";
 import DeleteModal from "../../../Components/Modals/DeleteModal";
-import { setModalDelete } from "../../../redux/deleteReducer";
 import { Watch } from "react-loader-spinner";
-import RemoveAndAddModal from "../../RemoveAndAddModal";
-import RemoveAndAddModalError from "../../RemoveAndAddModalError";
 import CopyIcon from "../CopyIcon";
 import { RootState } from "../../../redux/rootReducer";
 import { InstanceResponse } from "../../axios-utils";
 import { dateConverter } from "../dateConverter";
 import { priceFormatterToFloat } from "../../../utils/priceFormatterToFloat";
 import ErrorAndSuccessModal from "../../../Components/Modals/ErrorAndSuccessModal";
+import EditIcon from "@mui/icons-material/Edit";
+import ChangeStatusModal from "../../../Components/Modals/ChangeStatusModal";
+import { redAddButtonStyle } from "../../../styles/styles";
 
 const ReservationPage = () => {
   const { t } = useTranslation();
-  const dispatch = useDispatch();
   const rerender = useSelector((state: RootState) => state.rerender.isRerender);
   const [clientsList, setClientsList] = useState<InstanceResponse | []>([]);
   const [mastersList, setMastersList] = useState<InstanceResponse | []>([]);
@@ -45,7 +43,10 @@ const ReservationPage = () => {
   const [reservationList, setReservationList] = useState<
     InstanceResponse | []
   >();
-  const [itemForRemove, setItemForRemove] = useState([]);
+  const [itemForRemove, setItemForRemove] = useState<{
+    id: string;
+    url: string;
+  }>();
   const [isLoading, setLoading] = useState<boolean>(false);
   const [isDeleteModalActive, setDeleteModalActive] = useState<boolean>(false);
   const [isErrorAndSuccessModalActive, setErrorAndSuccessModalActive] =
@@ -54,6 +55,22 @@ const ReservationPage = () => {
     type: "",
     message: "",
   });
+  const [isReservationSaveModalActive, setReservationSaveModalActive] =
+    useState<boolean>(false);
+  const [isChangeStatusModalActive, setChangeStatusModalActive] =
+    useState<boolean>(false);
+  const [changeStatusData, setChangeStatusData] = useState({
+    id: "",
+    status: "",
+  });
+
+  function changeStatusModalHandler() {
+    setChangeStatusModalActive(!isChangeStatusModalActive);
+  }
+
+  function reservationSaveModalHandler() {
+    setReservationSaveModalActive(!isReservationSaveModalActive);
+  }
 
   function deleteModalHandler() {
     setDeleteModalActive(!isDeleteModalActive);
@@ -75,6 +92,9 @@ const ReservationPage = () => {
       setTownsList(towns);
       let reservation: any = await Api.getAll("reservation");
       reservation.forEach((el) => {
+        new Date(el.day) > new Date()
+          ? (el.editStatus = true)
+          : (el.editStatus = false);
         dateConverter(el);
       });
       setReservationList(reservation);
@@ -102,7 +122,6 @@ const ReservationPage = () => {
 
   return (
     <>
-      <ReservationSave />
       <Box height={70} />
       <Box sx={{ display: "flex" }}>
         <LeftSideMenu name={"reservation"} />
@@ -118,13 +137,15 @@ const ReservationPage = () => {
                 <TableCell align="left">Город</TableCell>
                 <TableCell align="left">Клиент</TableCell>
                 <TableCell align="left">Цена</TableCell>
-                <TableCell align="left">Статус</TableCell>
+                <TableCell align="left" sx={{ minWidth: 140 }}>
+                  Статус
+                </TableCell>
                 <TableCell align="right">
                   <Button
-                    sx={{ marginLeft: "auto", background: "rgba(180,58,58,1)" }}
+                    sx={redAddButtonStyle}
                     variant="contained"
                     onClick={() => {
-                      dispatch(setModalAddReservations());
+                      reservationSaveModalHandler();
                     }}>
                     {t("table.add")}
                   </Button>
@@ -176,12 +197,23 @@ const ReservationPage = () => {
                     </TableCell>
                     <TableCell align="left">
                       {t(`status.${row.status}`)}
+                      {row.editStatus && (
+                        <EditIcon
+                          onClick={() => {
+                            changeStatusModalHandler();
+                            setChangeStatusData({
+                              id: row.id,
+                              status: row.status,
+                            });
+                          }}
+                        />
+                      )}
                     </TableCell>
 
                     <TableCell align="right">
                       <IconButton
                         onClick={() => {
-                          setItemForRemove([row.id, "reservation"]);
+                          setItemForRemove({ id: row.id, url: "reservation" });
                           deleteModalHandler();
                         }}>
                         <DeleteForeverIcon></DeleteForeverIcon>
@@ -194,6 +226,13 @@ const ReservationPage = () => {
           </Table>
         </TableContainer>
       </Box>
+      {isChangeStatusModalActive && (
+        <ChangeStatusModal
+          props={changeStatusData}
+          onClose={changeStatusModalHandler}
+          result={errorAndSuccessModalHandler}
+        />
+      )}
       {isDeleteModalActive && (
         <DeleteModal
           props={itemForRemove}
@@ -208,8 +247,12 @@ const ReservationPage = () => {
           message={ErrorAndSuccessModalData?.message}
         />
       )}
-      <RemoveAndAddModal />
-      <RemoveAndAddModalError />
+      {isReservationSaveModalActive && (
+        <ReservationSave
+          onClose={reservationSaveModalHandler}
+          result={errorAndSuccessModalHandler}
+        />
+      )}
     </>
   );
 };

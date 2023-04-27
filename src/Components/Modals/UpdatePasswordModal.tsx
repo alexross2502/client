@@ -5,8 +5,6 @@ import { useForm } from "react-hook-form";
 import { useState } from "react";
 import Api from "../../AdminComponents/Components/api";
 import { setPageRerender } from "../../redux/rerenderReducer";
-import { setRemoveAndAddModal } from "../../redux/RemoveAndAddModalReducer";
-import { setRemoveAndAddModalError } from "../../redux/RemoveAndAddModalErrorReducer";
 import css from "../../Components/Modals/ModalWrapper.module.css";
 import { useDispatch } from "react-redux";
 
@@ -23,7 +21,17 @@ const style = {
   zIndex: 999,
 };
 
-const UpdatePasswordModal = (props) => {
+type TProps = {
+  onClose: () => void;
+  result: (data: any) => void;
+  props: { email: string; url: string };
+};
+
+const UpdatePasswordModal = ({
+  onClose,
+  result,
+  props: { email, url },
+}: TProps) => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
   const {
@@ -65,24 +73,23 @@ const UpdatePasswordModal = (props) => {
                 disabled={pending}
                 onClick={() => {
                   setPending(true);
-                  let [email, url] = props.props;
                   Api.updatePassword(url, email)
                     .then((res) => {
                       dispatch(setPageRerender());
-                      dispatch(setRemoveAndAddModal(true));
-                      setTimeout(() => {
-                        dispatch(setRemoveAndAddModal(false));
-                      }, 1000);
+                      result({
+                        type: "success",
+                        message: "Пароль обновлен, данные высланы на почту",
+                      });
                     })
                     .catch(() => {
-                      dispatch(setRemoveAndAddModalError(true));
-                      setTimeout(() => {
-                        dispatch(setRemoveAndAddModalError(false));
-                      }, 1000);
+                      result({
+                        type: "error",
+                        message: "Невозможно обновить пароль",
+                      });
                     })
                     .finally(() => {
                       setPending(false);
-                      props.onClose();
+                      onClose();
                     });
                 }}>
                 Да
@@ -103,7 +110,7 @@ const UpdatePasswordModal = (props) => {
                 variant="contained"
                 color="warning"
                 disabled={pending}
-                onClick={props.onClose}>
+                onClick={onClose}>
                 Нет
               </Button>
             </Grid>

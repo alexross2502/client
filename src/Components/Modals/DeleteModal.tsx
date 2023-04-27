@@ -1,13 +1,10 @@
 import React from "react";
 import { Box, Button, Grid, Typography } from "@mui/material";
-import { useTranslation } from "react-i18next";
-import { useForm } from "react-hook-form";
 import { useState } from "react";
 import Api from "../../AdminComponents/Components/api";
 import { setPageRerender } from "../../redux/rerenderReducer";
 import css from "../../Components/Modals/ModalWrapper.module.css";
 import { useDispatch } from "react-redux";
-import ErrorAndSuccessModal from "./ErrorAndSuccessModal";
 
 const style = {
   position: "absolute" as "absolute",
@@ -22,17 +19,17 @@ const style = {
   zIndex: 999,
 };
 
-const DeleteModal = (props) => {
+type TProps = {
+  onClose: () => void;
+  result: (data) => void;
+  props: {
+    id: string;
+    url: string;
+  };
+};
+
+const DeleteModal = ({ onClose, result, props: { id, url } }: TProps) => {
   const dispatch = useDispatch();
-  const { t } = useTranslation();
-  const {
-    handleSubmit,
-    register,
-    formState: { errors },
-    reset,
-  } = useForm({
-    mode: "onBlur",
-  });
   const [pending, setPending] = useState(false);
 
   return (
@@ -65,28 +62,27 @@ const DeleteModal = (props) => {
                   disabled={pending}
                   onClick={() => {
                     setPending(true);
-                    let [id, url] = props.props;
                     Api.delete(url, id)
                       .then((res) => {
                         dispatch(setPageRerender());
-                        props.result({
+                        result({
                           type: "success",
-                          message: "Успешно",
+                          message: "Запись успешно удалена",
                         });
                       })
                       .catch((e) => {
-                        props.result({
+                        result({
                           type: "error",
                           message: e.response.data.message.includes(
                             "Cannot delete or update a parent row"
                           )
                             ? "От этой записи зависят другие"
-                            : "Ошибка",
+                            : "Невозможно удалить запись",
                         });
                       })
                       .finally(() => {
                         setPending(false);
-                        props.onClose();
+                        onClose();
                       });
                   }}>
                   Да
@@ -107,7 +103,7 @@ const DeleteModal = (props) => {
                   variant="contained"
                   color="warning"
                   disabled={pending}
-                  onClick={props.onClose}>
+                  onClick={onClose}>
                   Нет
                 </Button>
               </Grid>
