@@ -44,10 +44,13 @@ const MasterSave = (props) => {
     await instance({ url: `/masters`, method: "post", data: data })
       .then(() => {
         dispatch(setPageRerender());
-        props.result({ type: "success", message: "Успешно" });
+        props.result({ type: "success", message: "Новый мастер добавлен" });
       })
       .catch(() => {
-        props.result({ type: "error", message: "Ошибка" });
+        props.result({
+          type: "error",
+          message: "Невозможно добавить такого мастера",
+        });
       })
       .finally(() => {
         setPending(false);

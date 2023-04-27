@@ -9,7 +9,6 @@ import { useForm } from "react-hook-form";
 import { useState } from "react";
 import CloseIcon from "@mui/icons-material/Close";
 import { setPageRerender } from "../../../redux/rerenderReducer";
-import { RootState } from "../../../redux/rootReducer";
 import { Validator } from "../../../utils/constants";
 import { modalBoxStyle, redSaveButtonStyle } from "../../../styles/styles";
 
@@ -33,10 +32,13 @@ const ClientSave = (props) => {
     await instance({ url: `clients`, method: "post", data: data })
       .then(() => {
         dispatch(setPageRerender());
-        props.result({ type: "success", message: "Успешно" });
+        props.result({ type: "success", message: "Новый клиент добавлен" });
       })
       .catch(() => {
-        props.result({ type: "error", message: "Ошибка" });
+        props.result({
+          type: "error",
+          message: "Невозможно добавить такого клиента",
+        });
       })
       .finally(() => {
         setPending(false);

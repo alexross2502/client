@@ -3,7 +3,7 @@ import React from "react";
 import { instance } from "../../AdminComponents/axios-utils";
 
 const AvailableMastersForm = (props) => {
-  const [master, orderData] = [props.data, props.orderData];
+  const { data: master, orderData, result, onClose } = props;
   let data = {
     day: orderData.day,
     size: orderData.size,
@@ -36,29 +36,32 @@ const AvailableMastersForm = (props) => {
           data: data,
         })
           .then((res) => {
-            props.result({
+            result({
               type: "success",
               message: "Заказ создан, письмо отправленно",
             });
           })
           .catch((err) => {
-            props.result({ type: "error", message: "Ошибка" });
+            result({
+              type: "error",
+              message: "Невозможно создать данный заказ",
+            });
           })
-          .finally(props.onClose);
+          .finally(onClose);
       }}>
       <Grid item xs={4}>
         <Typography variant="h6" padding={3} textAlign="center">
-          {props.data.name}
+          {data.name}
         </Typography>
       </Grid>
       <Grid item xs={4}>
         <Typography variant="h6" padding={3} textAlign="center">
-          {props.data.surname}
+          {data.surname}
         </Typography>
       </Grid>
       <Grid item xs={4}>
         <Typography variant="h6" padding={3} textAlign="center">
-          Рейтинг: {props.data.rating}
+          Рейтинг: {data.rating}
         </Typography>
       </Grid>
     </Grid>

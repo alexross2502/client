@@ -52,10 +52,13 @@ const ChangeStatusModal = (props: IProps) => {
       method: "PUT",
     })
       .then((res) => {
-        result({ type: "success", message: "Успешно" });
+        result({ type: "success", message: "Статут заказа успешно обновлен" });
       })
       .catch((e) => {
-        result({ type: "error", message: "Ошибка" });
+        result({
+          type: "error",
+          message: "Невозможно обновить статус єтого заказа",
+        });
       })
       .finally(onClose);
   };

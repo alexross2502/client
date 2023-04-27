@@ -82,10 +82,13 @@ const ReservationSave = (props) => {
         await instance({ url: `/reservation`, method: "post", data: data })
           .then(() => {
             dispatch(setPageRerender());
-            props.result({ type: "success", message: "Успешно" });
+            props.result({ type: "success", message: "Заказ успешно создан" });
           })
           .catch(() => {
-            props.result({ type: "error", message: "Ошибка" });
+            props.result({
+              type: "error",
+              message: "Невозможно создать данный заказ",
+            });
           })
           .finally(() => {
             setPending(false);
@@ -93,7 +96,10 @@ const ReservationSave = (props) => {
           });
       }
     } catch (e) {
-      props.result({ type: "error", message: "Ошибка" });
+      props.result({
+        type: "error",
+        message: "Невозможно создать данный заказ",
+      });
       setPending(false);
       props.onClose();
     }

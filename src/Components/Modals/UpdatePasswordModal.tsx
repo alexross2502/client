@@ -79,13 +79,13 @@ const UpdatePasswordModal = (props: IProps) => {
                       dispatch(setPageRerender());
                       result({
                         type: "success",
-                        message: "Успешно",
+                        message: "Пароль обновлен, данные высланы на почту",
                       });
                     })
                     .catch(() => {
                       result({
                         type: "error",
-                        message: "Ошибка",
+                        message: "Невозможно обновить пароль",
                       });
                     })
                     .finally(() => {

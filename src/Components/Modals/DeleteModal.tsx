@@ -20,6 +20,11 @@ const style = {
 };
 
 const DeleteModal = (props) => {
+  const {
+    onClose,
+    result,
+    props: [id, url],
+  } = props;
   const dispatch = useDispatch();
   const [pending, setPending] = useState(false);
 
@@ -53,28 +58,27 @@ const DeleteModal = (props) => {
                   disabled={pending}
                   onClick={() => {
                     setPending(true);
-                    let [id, url] = props.props;
                     Api.delete(url, id)
                       .then((res) => {
                         dispatch(setPageRerender());
-                        props.result({
+                        result({
                           type: "success",
-                          message: "Успешно",
+                          message: "Запись успешно удалена",
                         });
                       })
                       .catch((e) => {
-                        props.result({
+                        result({
                           type: "error",
                           message: e.response.data.message.includes(
                             "Cannot delete or update a parent row"
                           )
                             ? "От этой записи зависят другие"
-                            : "Ошибка",
+                            : "Невозможно удалить запись",
                         });
                       })
                       .finally(() => {
                         setPending(false);
-                        props.onClose();
+                        onClose();
                       });
                   }}>
                   Да
@@ -95,7 +99,7 @@ const DeleteModal = (props) => {
                   variant="contained"
                   color="warning"
                   disabled={pending}
-                  onClick={props.onClose}>
+                  onClick={onClose}>
                   Нет
                 </Button>
               </Grid>

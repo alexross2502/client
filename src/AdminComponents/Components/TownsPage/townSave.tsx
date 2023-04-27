@@ -35,10 +35,13 @@ const TownSave = (props) => {
     await instance({ url: `/towns`, method: "post", data: data })
       .then(() => {
         dispatch(setPageRerender());
-        props.result({ type: "success", message: "Успешно" });
+        props.result({ type: "success", message: "Город успешно добавлен" });
       })
       .catch(() => {
-        props.result({ type: "error", message: "Ошибка" });
+        props.result({
+          type: "error",
+          message: "Невозможно добавить єтот город",
+        });
       })
       .finally(() => {
         setPending(false);

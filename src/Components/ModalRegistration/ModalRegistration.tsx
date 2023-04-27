@@ -84,7 +84,10 @@ const ModalRegistration = (props: IProps) => {
       })
       .catch((e) => {
         setPending(false);
-        result({ type: "error", message: "Ошибка" });
+        result({
+          type: "error",
+          message: "На данную почту невозможно создать учетную запись",
+        });
       })
       .finally(onClose);
   }

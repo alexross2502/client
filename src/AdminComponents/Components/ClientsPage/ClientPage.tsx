@@ -181,7 +181,7 @@ const ClientPage = () => {
       )}
       {isUpdatePasswordModalActive && (
         <UpdatePasswordModal
-          props={itemForUpdatePassword}
+          props={[itemForUpdatePassword[0], itemForUpdatePassword[1]]}
           onClose={updatePasswordModalHandler}
           result={errorAndSuccessModalHandler}
         />
