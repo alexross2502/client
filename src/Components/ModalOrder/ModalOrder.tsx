@@ -34,14 +34,13 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-type IProps = {
+type TProps = {
   next: (payload) => void;
   onClose: () => void;
   result: (data) => void;
 };
 
-const ModalOrder = (props: IProps) => {
-  const { next, onClose, result } = props;
+const ModalOrder = ({ next, onClose, result }: TProps) => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
   const {

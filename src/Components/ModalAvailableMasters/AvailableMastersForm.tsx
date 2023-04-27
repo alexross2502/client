@@ -2,8 +2,7 @@ import { Grid, Typography } from "@mui/material";
 import React from "react";
 import { instance } from "../../AdminComponents/axios-utils";
 
-const AvailableMastersForm = (props) => {
-  const { data: master, orderData, result, onClose } = props;
+const AvailableMastersForm = ({ data: master, orderData, result, onClose }) => {
   let data = {
     day: orderData.day,
     size: orderData.size,

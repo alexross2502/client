@@ -15,13 +15,12 @@ import { loginSwitchCase } from "../../utils/loginSwitchCase";
 import { Validator } from "../../utils/constants";
 import { modalBoxStyle } from "../../styles/styles";
 
-type IProps = {
+type TProps = {
   onClose: () => void;
   result: (data) => void;
 };
 
-const ModalAuthorization = (props: IProps) => {
-  const { onClose, result } = props;
+const ModalAuthorization = ({ onClose, result }: TProps) => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
   const navigate = useNavigate();

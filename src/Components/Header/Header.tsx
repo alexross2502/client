@@ -20,14 +20,13 @@ import React from "react";
 import { loginSwitchCase } from "../../utils/loginSwitchCase";
 import { headerAppBarStyle } from "../../styles/styles";
 
-type IProps = {
+type TProps = {
   authorization: () => void;
   order: () => void;
   registration: () => void;
 };
 
-const Header = (props: IProps) => {
-  const { authorization, order, registration } = props;
+const Header = ({ authorization, order, registration }: TProps) => {
   const { t } = useTranslation();
   const [value, setValue] = useState();
   const theme = useTheme();
