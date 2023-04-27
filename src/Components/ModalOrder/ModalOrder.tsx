@@ -65,39 +65,37 @@ const ModalOrder = (props: IProps) => {
   const [pending, setPending] = useState<boolean>(false);
   const [isDateDone, setDateDone] = useState<boolean>(false);
   let [currentDate, setCurrentDate] = useState(new Date());
+
   async function submitFunction(atr) {
-    console.log(image);
+    if (new Date() > currentDate) {
+      throw new Error("error");
+    }
+    let data = { ...atr };
+    data.day = currentDate.getTime();
+    setPending(true);
+    await instance({
+      url: `/reservation/available`,
+      method: "post",
+      data: data,
+    })
+      .then((res: any) => {
+        next({
+          masters: [...res],
+          day: currentDate.getTime(),
+          size: atr.size,
+          recipient: atr.email,
+          clientName: atr.name,
+          towns_id: atr.towns_id,
+        });
+      })
+      .catch((e) => {
+        console.log(e);
+      })
+      .finally(() => {
+        setPending(false);
+        onClose();
+      });
   }
-  // async function submitFunction(atr) {
-  //   if (new Date() > currentDate) {
-  //     throw new Error("error");
-  //   }
-  //   let data = { ...atr };
-  //   data.day = currentDate.getTime();
-  //   setPending(true);
-  //   await instance({
-  //     url: `/reservation/available`,
-  //     method: "post",
-  //     data: data,
-  //   })
-  //     .then((res: any) => {
-  //       next({
-  //         masters: [...res],
-  //         day: currentDate.getTime(),
-  //         size: atr.size,
-  //         recipient: atr.email,
-  //         clientName: atr.name,
-  //         towns_id: atr.towns_id,
-  //       });
-  //     })
-  //     .catch((e) => {
-  //       console.log(e);
-  //     })
-  //     .finally(() => {
-  //       setPending(false);
-  //       onClose();
-  //     });
-  // }
   ///Фото
   const [image, setImage] = useState([]);
 
