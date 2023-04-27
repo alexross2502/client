@@ -19,6 +19,7 @@ import { DateCalendar, TimeClock } from "@mui/x-date-pickers";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import { Validator } from "../../utils/constants";
 import { modalBoxStyle, redSaveButtonStyle } from "../../styles/styles";
+import ImageUploader from "../Modals/ImageUploader";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -64,38 +65,59 @@ const ModalOrder = (props: IProps) => {
   const [pending, setPending] = useState<boolean>(false);
   const [isDateDone, setDateDone] = useState<boolean>(false);
   let [currentDate, setCurrentDate] = useState(new Date());
-
   async function submitFunction(atr) {
-    if (new Date() > currentDate) {
-      throw new Error("error");
-    }
-    let data = { ...atr };
-    data.day = currentDate.getTime();
-    setPending(true);
-    await instance({
-      url: `/reservation/available`,
-      method: "post",
-      data: data,
-    })
-      .then((res: any) => {
-        next({
-          masters: [...res],
-          day: currentDate.getTime(),
-          size: atr.size,
-          recipient: atr.email,
-          clientName: atr.name,
-          towns_id: atr.towns_id,
-        });
-      })
-      .catch((e) => {
-        console.log(e);
-      })
-      .finally(() => {
-        setPending(false);
-        onClose();
-      });
+    console.log(image);
   }
+  // async function submitFunction(atr) {
+  //   if (new Date() > currentDate) {
+  //     throw new Error("error");
+  //   }
+  //   let data = { ...atr };
+  //   data.day = currentDate.getTime();
+  //   setPending(true);
+  //   await instance({
+  //     url: `/reservation/available`,
+  //     method: "post",
+  //     data: data,
+  //   })
+  //     .then((res: any) => {
+  //       next({
+  //         masters: [...res],
+  //         day: currentDate.getTime(),
+  //         size: atr.size,
+  //         recipient: atr.email,
+  //         clientName: atr.name,
+  //         towns_id: atr.towns_id,
+  //       });
+  //     })
+  //     .catch((e) => {
+  //       console.log(e);
+  //     })
+  //     .finally(() => {
+  //       setPending(false);
+  //       onClose();
+  //     });
+  // }
+  ///Фото
+  const [image, setImage] = useState([]);
 
+  const handleFileInputChange = (e) => {
+    const file = e.target.files[0];
+
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+
+    reader.onload = () => {
+      setImage([...image, { img: reader.result, id: new Date().getTime() }]);
+    };
+  };
+
+  const handleFileInputDelete = (id) => {
+    const filteredItems = image.filter((item) => item.id !== id);
+    setImage(filteredItems);
+  };
+
+  //////
   return (
     <div className={modalWrapperStyle.modalWrapper}>
       <div className={style.active}>
@@ -237,6 +259,21 @@ const ModalOrder = (props: IProps) => {
                 })}
               </NativeSelect>
             </Grid>
+            <input
+              accept=".jpeg,.png"
+              id="raised-button-file"
+              type="file"
+              disabled={image.length > 4}
+              onChange={(e) => {
+                handleFileInputChange(e);
+              }}
+            />
+            {
+              <ImageUploader
+                itemData={image}
+                handleFileInputDelete={handleFileInputDelete}
+              />
+            }
             <Button
               sx={redSaveButtonStyle}
               variant="contained"
