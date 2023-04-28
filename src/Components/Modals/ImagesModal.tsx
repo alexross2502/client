@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Box, Button, Grid, Typography } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import { useForm } from "react-hook-form";
@@ -9,6 +9,8 @@ import css from "../../Components/Modals/ModalWrapper.module.css";
 import { useDispatch } from "react-redux";
 import ImageList from "@mui/material/ImageList";
 import ImageListItem from "@mui/material/ImageListItem";
+import { InstanceResponse, instance } from "../../AdminComponents/axios-utils";
+import { Watch } from "react-loader-spinner";
 
 const style = {
   position: "absolute" as "absolute",
@@ -27,38 +29,72 @@ const style = {
 
 const ImagesModal = ({
   onClose,
-  url
+  reservationId
 }) => {
-    console.log(url)
-  const dispatch = useDispatch();
-  const [pending, setPending] = useState(false);
+    useEffect(()=>{
+        fetchImages(reservationId)
+      },[])
+    
+    const [imagesList, setImagesList] =
+    useState<InstanceResponse | []>();
+  const [pending, setPending] = useState(true);
+  async function fetchImages(id) {
+    setPending(true)
+    await instance({url:'reservation/images', data:{id}, method: 'POST'})
+    .then(res=>{
+      setImagesList(res)
+      setPending(false)
+    })
+  }
 
+  
+  
   return (
-    <div className={css.modalWrapper} onClick={onClose}>
-       <Box
-          sx={style}
-          onClick={(e) => {
-            e.stopPropagation();
-          }}>
-        <Grid container>
-        <ImageList sx={{ width: 550, height: 450 }} cols={1}>
-      {url?.map((item) => (
-        <ImageListItem
-          key={item.url}
-          sx={{ border: "2px solid black", position: "relative" }}>
-          <img
-            src={`${item.url}`}
-            srcSet={`${item.url}`}
-            alt=""
-            loading="lazy"
-          />
-         
-        </ImageListItem>
-      ))}
-    </ImageList>
-        </Grid>
-      </Box>
+    <>
+        {pending 
+        ? (
+            <Grid
+                  sx={{ position: "fixed", left: "50%", marginTop: "45%" }}>
+                  <Watch
+                    height="80"
+                    width="80"
+                    radius="48"
+                    color="#4fa94d"
+                    ariaLabel="watch-loading"
+                    wrapperStyle={{}}
+                    visible={true}
+                  />
+                </Grid>
+        )
+    : (
+        <div className={css.modalWrapper} onClick={onClose}>
+        <Box
+        sx={style}
+        onClick={(e) => {
+          e.stopPropagation();
+        }}>
+      <Grid container>
+      <ImageList sx={{ width: 550, height: 450 }} cols={1}>
+    {imagesList?.map((item) => (
+      <ImageListItem
+        key={item.url}
+        sx={{ border: "2px solid black", position: "relative" }}>
+        <img
+          src={`${item.url}`}
+          srcSet={`${item.url}`}
+          alt=""
+          loading="lazy"
+        />
+      </ImageListItem>
+    ))}
+  </ImageList>
+      </Grid>
+    </Box>
     </div>
+    )
+    }
+      
+      </>
   );
 };
 

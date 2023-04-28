@@ -264,6 +264,7 @@ const ModalOrder = ({ next, onClose, result }: TProps) => {
                 })}
               </NativeSelect>
             </Grid>
+            <Grid item marginTop={3} sx={{ width: 300 }}>
             <input
               accept=".jpg,.png"
               id="raised-button-file"
@@ -273,12 +274,21 @@ const ModalOrder = ({ next, onClose, result }: TProps) => {
                 handleFileInputChange(e);
               }}
             />
-            {
-              <ImageUploader
+            </Grid>
+            <Grid item marginTop={3} sx={{ width: 300 }}>
+            {image.length === 0 
+            ? (
+              null
+            )
+            :(
+<ImageUploader
                 itemData={image}
                 handleFileInputDelete={handleFileInputDelete}
               />
+            )
+              
             }
+            </Grid>
             <Button
               sx={redSaveButtonStyle}
               variant="contained"

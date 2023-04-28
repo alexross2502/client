@@ -67,8 +67,8 @@ const ReservationPage = () => {
   });
   const [isImagesModalActive, setImagesModalActive] =
     useState<boolean>(false);
-    const [imagesList, setImagesList] =
-    useState<InstanceResponse | []>();
+
+    const [reservationIdForImages, setReservationIdForImages] = useState()
 
   function changeStatusModalHandler() {
     setChangeStatusModalActive(!isChangeStatusModalActive);
@@ -130,12 +130,7 @@ const ReservationPage = () => {
   });
   ////////////////////////////////////////
 
-  async function fetchImages(id) {
-    await instance({url:'reservation/images', data:{id}, method: 'POST'}).then(res=>{
-      setImagesList(res)
-    })
-    
-  }
+ 
 
   return (
     <>
@@ -232,8 +227,8 @@ const ReservationPage = () => {
                     <TableCell align="center">
                       {row.images && (
                         <CameraAltIcon 
-                        onClick={async()=> {
-                          await fetchImages(row.id)
+                        onClick={()=> {
+                          setReservationIdForImages(row.id)
                           imagesModalHandler()
                         }}
                         />
@@ -286,7 +281,7 @@ const ReservationPage = () => {
       {isImagesModalActive && (
         <ImagesModal 
         onClose={imagesModalHandler}
-        url={imagesList}
+        reservationId={reservationIdForImages}
         />
       )}
     </>
