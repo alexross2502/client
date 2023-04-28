@@ -169,6 +169,7 @@ const MastersPage = () => {
                     <TableCell align="left">{row.rating}</TableCell>
                     <TableCell align="left">
                       <CachedIcon
+                        cursor={"pointer"}
                         onClick={() => {
                           setItemForUpdatePassword({
                             email: row.email,
@@ -181,6 +182,7 @@ const MastersPage = () => {
                     <TableCell align="left">
                       {!row.adminApprove && (
                         <ThumbUpIcon
+                          cursor={"pointer"}
                           onClick={() => {
                             instance({
                               url: "masters/approveaccount",

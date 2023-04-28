@@ -33,7 +33,7 @@ import ErrorAndSuccessModal from "../../../Components/Modals/ErrorAndSuccessModa
 import EditIcon from "@mui/icons-material/Edit";
 import ChangeStatusModal from "../../../Components/Modals/ChangeStatusModal";
 import { redAddButtonStyle } from "../../../styles/styles";
-import CameraAltIcon from '@mui/icons-material/CameraAlt';
+import CameraAltIcon from "@mui/icons-material/CameraAlt";
 import ImagesModal from "../../../Components/Modals/ImagesModal";
 
 const ReservationPage = () => {
@@ -65,10 +65,9 @@ const ReservationPage = () => {
     id: "",
     status: "",
   });
-  const [isImagesModalActive, setImagesModalActive] =
-    useState<boolean>(false);
+  const [isImagesModalActive, setImagesModalActive] = useState<boolean>(false);
 
-    const [reservationIdForImages, setReservationIdForImages] = useState()
+  const [reservationIdForImages, setReservationIdForImages] = useState();
 
   function changeStatusModalHandler() {
     setChangeStatusModalActive(!isChangeStatusModalActive);
@@ -130,14 +129,12 @@ const ReservationPage = () => {
   });
   ////////////////////////////////////////
 
- 
-
   return (
     <>
       <Box height={70} />
       <Box sx={{ display: "flex" }}>
         <LeftSideMenu name={"reservation"} />
-        <TableContainer component={Paper} >
+        <TableContainer component={Paper}>
           <Table sx={{ minWidth: 650 }} aria-label="simple table">
             <TableHead sx={{ background: "#a1a1a1" }}>
               <TableRow>
@@ -152,9 +149,7 @@ const ReservationPage = () => {
                 <TableCell align="left" sx={{ minWidth: 140 }}>
                   Статус
                 </TableCell>
-                <TableCell align="left">
-                  Изображения
-                </TableCell>
+                <TableCell align="left">Изображения</TableCell>
                 <TableCell align="right">
                   <Button
                     sx={redAddButtonStyle}
@@ -214,6 +209,7 @@ const ReservationPage = () => {
                       {t(`status.${row.status}`)}
                       {row.editStatus && (
                         <EditIcon
+                          cursor={"pointer"}
                           onClick={() => {
                             changeStatusModalHandler();
                             setChangeStatusData({
@@ -226,11 +222,12 @@ const ReservationPage = () => {
                     </TableCell>
                     <TableCell align="center">
                       {row.images && (
-                        <CameraAltIcon 
-                        onClick={()=> {
-                          setReservationIdForImages(row.id)
-                          imagesModalHandler()
-                        }}
+                        <CameraAltIcon
+                          cursor={"pointer"}
+                          onClick={() => {
+                            setReservationIdForImages(row.id);
+                            imagesModalHandler();
+                          }}
                         />
                       )}
                     </TableCell>
@@ -279,9 +276,9 @@ const ReservationPage = () => {
         />
       )}
       {isImagesModalActive && (
-        <ImagesModal 
-        onClose={imagesModalHandler}
-        reservationId={reservationIdForImages}
+        <ImagesModal
+          onClose={imagesModalHandler}
+          reservationId={reservationIdForImages}
         />
       )}
     </>

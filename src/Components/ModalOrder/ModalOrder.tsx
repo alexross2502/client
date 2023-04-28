@@ -106,10 +106,19 @@ const ModalOrder = ({ next, onClose, result }: TProps) => {
 
   const handleFileInputChange = (e) => {
     const file = e.target.files[0];
+
     const reader = new FileReader();
     reader.readAsDataURL(file);
 
     reader.onload = () => {
+      if (file.size > 1024000) {
+        result({
+          type: "error",
+          message: "Вес картинки слишком большой",
+        });
+        return null;
+      }
+
       setImage([
         ...image,
         { file: file, img: reader.result, id: new Date().getTime() },
@@ -265,29 +274,23 @@ const ModalOrder = ({ next, onClose, result }: TProps) => {
               </NativeSelect>
             </Grid>
             <Grid item marginTop={3} sx={{ width: 300 }}>
-            <input
-              accept=".jpg,.png"
-              id="raised-button-file"
-              type="file"
-              disabled={image.length > 4}
-              onChange={(e) => {
-                handleFileInputChange(e);
-              }}
-            />
+              <input
+                accept=".jpg,.png,.jpeg"
+                id="raised-button-file"
+                type="file"
+                disabled={image.length > 4}
+                onChange={(e) => {
+                  handleFileInputChange(e);
+                }}
+              />
             </Grid>
             <Grid item marginTop={3} sx={{ width: 300 }}>
-            {image.length === 0 
-            ? (
-              null
-            )
-            :(
-<ImageUploader
-                itemData={image}
-                handleFileInputDelete={handleFileInputDelete}
-              />
-            )
-              
-            }
+              {image.length === 0 ? null : (
+                <ImageUploader
+                  itemData={image}
+                  handleFileInputDelete={handleFileInputDelete}
+                />
+              )}
             </Grid>
             <Button
               sx={redSaveButtonStyle}
