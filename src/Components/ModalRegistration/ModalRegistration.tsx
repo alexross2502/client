@@ -44,12 +44,12 @@ const ModalRegistration = ({ onClose, result }: TProps) => {
   useEffect(() => {
     let asyncFunc = async () => {
       let towns = await Api.getAll("towns");
-      setTownsList(towns);
+      setTownsList(towns.data);
     };
     asyncFunc();
   }, []);
 
-  const [townsList, setTownsList] = useState<InstanceResponse | []>([]);
+  const [townsList, setTownsList] = useState([]);
   const [pending, setPending] = useState<boolean>(false);
   const [isMaster, setMaster] = useState<boolean>(false);
   const [isAgree, setAgree] = useState<boolean>(false);

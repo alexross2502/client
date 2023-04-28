@@ -98,7 +98,7 @@ const ReservationPage = () => {
       let masters = await Api.getAll("masters");
       setMastersList(masters);
       let towns = await Api.getAll("towns");
-      setTownsList(towns);
+      setTownsList(towns.data);
       let reservation: any = await Api.getAll("reservation");
       reservation.forEach((el) => {
         new Date(el.day) > new Date()

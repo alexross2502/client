@@ -17,6 +17,8 @@ import {
   TableBody,
   IconButton,
   Typography,
+  TableFooter,
+  TablePagination,
 } from "@mui/material";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import TableContainer from "@mui/material/TableContainer";
@@ -35,6 +37,9 @@ const TownsPage = () => {
   const dispatch = useDispatch();
   const rerender = useSelector((state: RootState) => state.rerender.isRerender);
   const [townsList, setTownsList] = useState<InstanceResponse>();
+  const [totalTowns, setTotalTowns] = useState<number>();
+  const [page, setPage] = useState<number>(0);
+  const [rowsPerPage, setRowsPerPage] = useState<number>(5);
   const [itemForRemove, setItemForRemove] = useState<{
     id: string;
     url: string;
@@ -66,16 +71,33 @@ const TownsPage = () => {
   useEffect(() => {
     let asyncFunc = async () => {
       setLoading(true);
-      let towns: any = await Api.getAll("towns");
-      setTownsList(towns);
+      let towns: any = await Api.getAll("towns", {
+        offset: rowsPerPage * page,
+        limit: rowsPerPage,
+      });
+      setTownsList(towns.data);
+      setTotalTowns(towns.total);
       setLoading(false);
     };
     asyncFunc();
-  }, [rerender]);
+  }, [rerender, page, rowsPerPage, totalTowns]);
 
   const { handleSubmit, register } = useForm({
     mode: "onBlur",
   });
+
+  const handleChangeRowsPerPage = (
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
+  const handleChangePage = (
+    event: React.MouseEvent<HTMLButtonElement> | null,
+    newPage: number
+  ) => {
+    setPage(newPage);
+  };
 
   return (
     <>
@@ -152,6 +174,27 @@ const TownsPage = () => {
                 ))
               )}
             </TableBody>
+            {townsList?.length !== 0 && !isLoading ? (
+              <TableFooter>
+                <TableRow>
+                  <TablePagination
+                    rowsPerPageOptions={[5, 10, 25]}
+                    colSpan={3}
+                    count={totalTowns}
+                    rowsPerPage={rowsPerPage}
+                    page={page}
+                    SelectProps={{
+                      inputProps: {
+                        "aria-label": "записей в строке",
+                      },
+                      native: true,
+                    }}
+                    onPageChange={handleChangePage}
+                    onRowsPerPageChange={handleChangeRowsPerPage}
+                  />
+                </TableRow>
+              </TableFooter>
+            ) : null}
           </Table>
         </TableContainer>
       </Box>

@@ -80,7 +80,7 @@ const MastersPage = () => {
     let asyncFunc = async () => {
       setLoading(true);
       let towns = await Api.getAll("towns");
-      setTownsList(towns);
+      setTownsList(towns.data);
       let masters = await Api.getAll("masters");
       setMastersList(masters);
       setLoading(false);

@@ -15,7 +15,7 @@ const ErrorAndSuccessModal = ({ message, onClose, type }: TProps) => {
     left: "100%",
     transform: "translate(-100%, -100%)",
     bgcolor: type === "success" ? successModalColor : errorModalColor,
-    zIndex: 1999,
+    zIndex: 9999,
   };
 
   setTimeout(() => {

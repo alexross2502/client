@@ -31,7 +31,7 @@ const MasterSave = (props) => {
   useEffect(() => {
     let asyncFunc = async () => {
       let towns = await Api.getAll("towns");
-      setTownsList(towns);
+      setTownsList(towns.data);
     };
     asyncFunc();
   }, [rerender]);

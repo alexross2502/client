@@ -2,10 +2,7 @@ import { AxiosResponse } from "axios";
 import { instance } from "../axios-utils";
 
 interface IApi {
-  getAll: (
-    url: string,
-    params?: any
-  ) => Promise<AxiosResponse<object[], number>>;
+  getAll: (url: string, params?: any) => Promise<AxiosResponse<any, number>>;
   delete: (url: string, id: string) => Promise<AxiosResponse<number, number>>;
   getAvailable: (
     url: string,
