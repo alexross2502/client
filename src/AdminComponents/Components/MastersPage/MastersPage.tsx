@@ -82,7 +82,7 @@ const MastersPage = () => {
       let towns = await Api.getAll("towns");
       setTownsList(towns.data);
       let masters = await Api.getAll("masters");
-      setMastersList(masters);
+      setMastersList(masters.data);
       setLoading(false);
     };
     asyncFunc();

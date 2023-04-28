@@ -94,19 +94,19 @@ const ReservationPage = () => {
     let asyncFunc = async () => {
       setLoading(true);
       let clients = await Api.getAll("clients");
-      setClientsList(clients);
+      setClientsList(clients.data);
       let masters = await Api.getAll("masters");
-      setMastersList(masters);
+      setMastersList(masters.data);
       let towns = await Api.getAll("towns");
       setTownsList(towns.data);
       let reservation: any = await Api.getAll("reservation");
-      reservation.forEach((el) => {
+      reservation.data.forEach((el) => {
         new Date(el.day) > new Date()
           ? (el.editStatus = true)
           : (el.editStatus = false);
         dateConverter(el);
       });
-      setReservationList(reservation);
+      setReservationList(reservation.data);
       setLoading(false);
     };
     asyncFunc();

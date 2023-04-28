@@ -31,11 +31,15 @@ import ErrorAndSuccessModal from "../../../Components/Modals/ErrorAndSuccessModa
 import { redAddButtonStyle } from "../../../styles/styles";
 import TableFooter from "@material-ui/core/TableFooter";
 import TablePagination from "@material-ui/core/TablePagination";
+import Api from "../api";
 
 const ClientPage = () => {
   const { t } = useTranslation();
   const rerender = useSelector((state: RootState) => state.rerender.isRerender);
   const [clientsList, setClientsList] = useState<InstanceResponse | []>();
+  const [totalClients, setTotalClients] = useState<number>();
+  const [page, setPage] = useState<number>(0);
+  const [rowsPerPage, setRowsPerPage] = useState<number>(5);
   const [itemForRemove, setItemForRemove] = useState<{
     id: string;
     url: string;
@@ -77,8 +81,12 @@ const ClientPage = () => {
   useEffect(() => {
     let asyncFunc = async () => {
       setLoading(true);
-      let clients = await instance({ url: `/clients`, method: "GET" });
-      setClientsList(clients);
+      let clients: any = await Api.getAll(`clients`, {
+        offset: rowsPerPage * page,
+        limit: rowsPerPage,
+      });
+      setClientsList(clients.data);
+      setTotalClients(clients.total);
       setLoading(false);
     };
     asyncFunc();
@@ -89,6 +97,19 @@ const ClientPage = () => {
   });
 
   //////////////////////////
+
+  const handleChangeRowsPerPage = (
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
+  const handleChangePage = (
+    event: React.MouseEvent<HTMLButtonElement> | null,
+    newPage: number
+  ) => {
+    setPage(newPage);
+  };
 
   return (
     <>
@@ -182,6 +203,27 @@ const ClientPage = () => {
                 ))
               )}
             </TableBody>
+            {clientsList?.length !== 0 && !isLoading ? (
+              <TableFooter>
+                <TableRow>
+                  <TablePagination
+                    rowsPerPageOptions={[5, 10, 25]}
+                    colSpan={3}
+                    count={totalClients}
+                    rowsPerPage={rowsPerPage}
+                    page={page}
+                    SelectProps={{
+                      inputProps: {
+                        "aria-label": "записей в строке",
+                      },
+                      native: true,
+                    }}
+                    onPageChange={handleChangePage}
+                    onRowsPerPageChange={handleChangeRowsPerPage}
+                  />
+                </TableRow>
+              </TableFooter>
+            ) : null}
           </Table>
         </TableContainer>
       </Box>
