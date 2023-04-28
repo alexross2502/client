@@ -29,6 +29,8 @@ import CachedIcon from "@mui/icons-material/Cached";
 import UpdatePasswordModal from "../../../Components/Modals/UpdatePasswordModal";
 import ErrorAndSuccessModal from "../../../Components/Modals/ErrorAndSuccessModal";
 import { redAddButtonStyle } from "../../../styles/styles";
+import TableFooter from '@material-ui/core/TableFooter';
+import TablePagination from '@material-ui/core/TablePagination';
 
 const ClientPage = () => {
   const { t } = useTranslation();
@@ -86,12 +88,16 @@ const ClientPage = () => {
     mode: "onBlur",
   });
 
+  //////////////////////////
+ 
   return (
     <>
+    
       <Box height={70} />
 
       <Box sx={{ display: "flex" }}>
         <LeftSideMenu name={"clients"} />
+       
         <TableContainer component={Paper}>
           <Table sx={{ minWidth: 650 }} aria-label="simple table">
             <TableHead sx={{ background: "#a1a1a1" }}>
@@ -176,8 +182,10 @@ const ClientPage = () => {
                 ))
               )}
             </TableBody>
+            
           </Table>
         </TableContainer>
+        
       </Box>
       {isDeleteModalActive && (
         <DeleteModal

@@ -265,7 +265,7 @@ const ModalOrder = ({ next, onClose, result }: TProps) => {
               </NativeSelect>
             </Grid>
             <input
-              accept=".jpeg,.png"
+              accept=".jpg,.png"
               id="raised-button-file"
               type="file"
               disabled={image.length > 4}

@@ -26,13 +26,15 @@ import DeleteModal from "../../../Components/Modals/DeleteModal";
 import { Watch } from "react-loader-spinner";
 import CopyIcon from "../CopyIcon";
 import { RootState } from "../../../redux/rootReducer";
-import { InstanceResponse } from "../../axios-utils";
+import { InstanceResponse, instance } from "../../axios-utils";
 import { dateConverter } from "../dateConverter";
 import { priceFormatterToFloat } from "../../../utils/priceFormatterToFloat";
 import ErrorAndSuccessModal from "../../../Components/Modals/ErrorAndSuccessModal";
 import EditIcon from "@mui/icons-material/Edit";
 import ChangeStatusModal from "../../../Components/Modals/ChangeStatusModal";
 import { redAddButtonStyle } from "../../../styles/styles";
+import CameraAltIcon from '@mui/icons-material/CameraAlt';
+import ImagesModal from "../../../Components/Modals/ImagesModal";
 
 const ReservationPage = () => {
   const { t } = useTranslation();
@@ -63,6 +65,10 @@ const ReservationPage = () => {
     id: "",
     status: "",
   });
+  const [isImagesModalActive, setImagesModalActive] =
+    useState<boolean>(false);
+    const [imagesList, setImagesList] =
+    useState<InstanceResponse | []>();
 
   function changeStatusModalHandler() {
     setChangeStatusModalActive(!isChangeStatusModalActive);
@@ -74,6 +80,10 @@ const ReservationPage = () => {
 
   function deleteModalHandler() {
     setDeleteModalActive(!isDeleteModalActive);
+  }
+
+  function imagesModalHandler() {
+    setImagesModalActive(!isImagesModalActive);
   }
 
   function errorAndSuccessModalHandler(data) {
@@ -120,12 +130,19 @@ const ReservationPage = () => {
   });
   ////////////////////////////////////////
 
+  async function fetchImages(id) {
+    await instance({url:'reservation/images', data:{id}, method: 'POST'}).then(res=>{
+      setImagesList(res)
+    })
+    
+  }
+
   return (
     <>
       <Box height={70} />
       <Box sx={{ display: "flex" }}>
         <LeftSideMenu name={"reservation"} />
-        <TableContainer component={Paper}>
+        <TableContainer component={Paper} >
           <Table sx={{ minWidth: 650 }} aria-label="simple table">
             <TableHead sx={{ background: "#a1a1a1" }}>
               <TableRow>
@@ -139,6 +156,9 @@ const ReservationPage = () => {
                 <TableCell align="left">Цена</TableCell>
                 <TableCell align="left" sx={{ minWidth: 140 }}>
                   Статус
+                </TableCell>
+                <TableCell align="left">
+                  Изображения
                 </TableCell>
                 <TableCell align="right">
                   <Button
@@ -209,6 +229,16 @@ const ReservationPage = () => {
                         />
                       )}
                     </TableCell>
+                    <TableCell align="center">
+                      {row.images && (
+                        <CameraAltIcon 
+                        onClick={async()=> {
+                          await fetchImages(row.id)
+                          imagesModalHandler()
+                        }}
+                        />
+                      )}
+                    </TableCell>
 
                     <TableCell align="right">
                       <IconButton
@@ -251,6 +281,12 @@ const ReservationPage = () => {
         <ReservationSave
           onClose={reservationSaveModalHandler}
           result={errorAndSuccessModalHandler}
+        />
+      )}
+      {isImagesModalActive && (
+        <ImagesModal 
+        onClose={imagesModalHandler}
+        url={imagesList}
         />
       )}
     </>
