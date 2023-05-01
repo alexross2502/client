@@ -36,10 +36,10 @@ const TownsPage = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const rerender = useSelector((state: RootState) => state.rerender.isRerender);
-  const [townsList, setTownsList] = useState<InstanceResponse>();
+  const [townsList, setTownsList] = useState<InstanceResponse | []>();
   const [totalTowns, setTotalTowns] = useState<number>();
   const [page, setPage] = useState<number>(0);
-  const [rowsPerPage, setRowsPerPage] = useState<number>(5);
+  const [rowsPerPage, setRowsPerPage] = useState<number>(10);
   const [itemForRemove, setItemForRemove] = useState<{
     id: string;
     url: string;
@@ -176,9 +176,9 @@ const TownsPage = () => {
             </TableBody>
             {townsList?.length !== 0 && !isLoading ? (
               <TableFooter>
-                <TableRow>
+                
                   <TablePagination
-                    rowsPerPageOptions={[5, 10, 25]}
+                    rowsPerPageOptions={[10, 20, 50]}
                     colSpan={3}
                     count={totalTowns}
                     rowsPerPage={rowsPerPage}
@@ -192,7 +192,7 @@ const TownsPage = () => {
                     onPageChange={handleChangePage}
                     onRowsPerPageChange={handleChangeRowsPerPage}
                   />
-                </TableRow>
+                
               </TableFooter>
             ) : null}
           </Table>

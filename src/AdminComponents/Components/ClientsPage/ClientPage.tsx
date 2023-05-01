@@ -39,7 +39,7 @@ const ClientPage = () => {
   const [clientsList, setClientsList] = useState<InstanceResponse | []>();
   const [totalClients, setTotalClients] = useState<number>();
   const [page, setPage] = useState<number>(0);
-  const [rowsPerPage, setRowsPerPage] = useState<number>(5);
+  const [rowsPerPage, setRowsPerPage] = useState<number>(10);
   const [itemForRemove, setItemForRemove] = useState<{
     id: string;
     url: string;
@@ -207,7 +207,7 @@ const ClientPage = () => {
               <TableFooter>
                 <TableRow>
                   <TablePagination
-                    rowsPerPageOptions={[5, 10, 25]}
+                    rowsPerPageOptions={[10, 20, 50]}
                     colSpan={3}
                     count={totalClients}
                     rowsPerPage={rowsPerPage}

@@ -18,6 +18,8 @@ import {
   Button,
   IconButton,
   Typography,
+  TableFooter,
+  TablePagination,
 } from "@mui/material";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import TableContainer from "@mui/material/TableContainer";
@@ -45,6 +47,9 @@ const ReservationPage = () => {
   const [reservationList, setReservationList] = useState<
     InstanceResponse | []
   >();
+  const [totalReservations, setTotalReservations] = useState<number>();
+  const [page, setPage] = useState<number>(0);
+  const [rowsPerPage, setRowsPerPage] = useState<number>(10);
   const [itemForRemove, setItemForRemove] = useState<{
     id: string;
     url: string;
@@ -100,17 +105,31 @@ const ReservationPage = () => {
       let towns = await Api.getAll("towns");
       setTownsList(towns.data);
       let reservation: any = await Api.getAll("reservation");
-      reservation.data.forEach((el) => {
+      reservation?.data.forEach((el) => {
         new Date(el.day) > new Date()
           ? (el.editStatus = true)
           : (el.editStatus = false);
         dateConverter(el);
       });
       setReservationList(reservation.data);
+      setTotalReservations(reservation.total);
       setLoading(false);
     };
     asyncFunc();
-  }, [rerender]);
+  }, [rerender, page, rowsPerPage, totalReservations]);
+
+  const handleChangeRowsPerPage = (
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
+  const handleChangePage = (
+    event: React.MouseEvent<HTMLButtonElement> | null,
+    newPage: number
+  ) => {
+    setPage(newPage);
+  };
 
   const { handleSubmit, register } = useForm({
     mode: "onBlur",
@@ -118,13 +137,13 @@ const ReservationPage = () => {
 
   //Объект для отображения имен городов, клиентов, мастеров, а не айдишников
   let IdToName = {};
-  townsList.forEach((el) => {
+  townsList?.forEach((el) => {
     IdToName[el.id] = el?.name;
   });
-  clientsList.forEach((el) => {
+  clientsList?.forEach((el) => {
     IdToName[el.id] = el?.name;
   });
-  mastersList.forEach((el) => {
+  mastersList?.forEach((el) => {
     IdToName[el.id] = el?.name;
   });
   ////////////////////////////////////////
@@ -245,9 +264,33 @@ const ReservationPage = () => {
                 ))
               )}
             </TableBody>
+            {reservationList?.length !== 0 && !isLoading ? (
+              <TableFooter>
+                <TableRow>
+                  <TablePagination
+                    rowsPerPageOptions={[10, 20, 50]}
+                    colSpan={3}
+                    count={totalReservations}
+                    rowsPerPage={rowsPerPage}
+                    page={page}
+                    SelectProps={{
+                      inputProps: {
+                        "aria-label": "записей в строке",
+                      },
+                      native: true,
+                    }}
+                    onPageChange={handleChangePage}
+                    onRowsPerPageChange={handleChangeRowsPerPage}
+                  />
+                </TableRow>
+              </TableFooter>
+            ) : null}
           </Table>
+          
         </TableContainer>
+       
       </Box>
+      
       {isChangeStatusModalActive && (
         <ChangeStatusModal
           props={changeStatusData}
