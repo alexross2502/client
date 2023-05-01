@@ -104,7 +104,10 @@ const ReservationPage = () => {
       setMastersList(masters.data);
       let towns = await Api.getAll("towns");
       setTownsList(towns.data);
-      let reservation: any = await Api.getAll("reservation");
+      let reservation: any = await Api.getAll("reservation", {
+        offset: rowsPerPage * page,
+        limit: rowsPerPage,
+      });
       reservation?.data.forEach((el) => {
         new Date(el.day) > new Date()
           ? (el.editStatus = true)

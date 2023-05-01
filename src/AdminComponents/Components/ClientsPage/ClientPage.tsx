@@ -90,7 +90,7 @@ const ClientPage = () => {
       setLoading(false);
     };
     asyncFunc();
-  }, [rerender]);
+  }, [rerender, page, rowsPerPage, totalClients]);
 
   const { handleSubmit, register } = useForm({
     mode: "onBlur",

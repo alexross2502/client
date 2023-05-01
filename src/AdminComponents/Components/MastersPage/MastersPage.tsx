@@ -86,7 +86,10 @@ const MastersPage = () => {
       setLoading(true);
       let towns = await Api.getAll("towns");
       setTownsList(towns.data);
-      let masters:any = await Api.getAll("masters");
+      let masters:any = await Api.getAll("masters", {
+        offset: rowsPerPage * page,
+        limit: rowsPerPage,
+      });
       setMastersList(masters.data);
       setTotalMasters(masters.total);
       setLoading(false);

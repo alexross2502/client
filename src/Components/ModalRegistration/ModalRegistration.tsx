@@ -49,7 +49,7 @@ const ModalRegistration = ({ onClose, result }: TProps) => {
     asyncFunc();
   }, []);
 
-  const [townsList, setTownsList] = useState([]);
+  const [townsList, setTownsList] = useState<InstanceResponse | []>([]);
   const [pending, setPending] = useState<boolean>(false);
   const [isMaster, setMaster] = useState<boolean>(false);
   const [isAgree, setAgree] = useState<boolean>(false);
