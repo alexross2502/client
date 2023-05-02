@@ -18,6 +18,7 @@ import {
   Typography,
   TableFooter,
   TablePagination,
+  TableSortLabel,
 } from "@mui/material";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import TableContainer from "@mui/material/TableContainer";
@@ -122,7 +123,15 @@ const ClientPage = () => {
           <Table sx={{ minWidth: 650 }} aria-label="simple table">
             <TableHead sx={{ background: "#a1a1a1" }}>
               <TableRow>
-                <TableCell>Номер клиента</TableCell>
+                <TableCell>
+                  <TableSortLabel
+                    active={true}
+                    direction={"asc"}
+                    //onClick={}
+                  >
+                    Номер клиента
+                  </TableSortLabel>
+                </TableCell>
                 <TableCell align="left">Имя</TableCell>
                 <TableCell align="left">Почта</TableCell>
                 <TableCell>Сбросить пароль</TableCell>
