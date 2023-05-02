@@ -176,23 +176,21 @@ const TownsPage = () => {
             </TableBody>
             {townsList?.length !== 0 && !isLoading ? (
               <TableFooter>
-                
-                  <TablePagination
-                    rowsPerPageOptions={[10, 20, 50]}
-                    colSpan={3}
-                    count={totalTowns}
-                    rowsPerPage={rowsPerPage}
-                    page={page}
-                    SelectProps={{
-                      inputProps: {
-                        "aria-label": "записей в строке",
-                      },
-                      native: true,
-                    }}
-                    onPageChange={handleChangePage}
-                    onRowsPerPageChange={handleChangeRowsPerPage}
-                  />
-                
+                <TablePagination
+                  rowsPerPageOptions={[10, 20, 50]}
+                  colSpan={3}
+                  count={totalTowns}
+                  rowsPerPage={rowsPerPage}
+                  page={page}
+                  SelectProps={{
+                    inputProps: {
+                      "aria-label": "записей в строке",
+                    },
+                    native: true,
+                  }}
+                  onPageChange={handleChangePage}
+                  onRowsPerPageChange={handleChangeRowsPerPage}
+                />
               </TableFooter>
             ) : null}
           </Table>
