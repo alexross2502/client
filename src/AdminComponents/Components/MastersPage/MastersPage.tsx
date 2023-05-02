@@ -86,7 +86,7 @@ const MastersPage = () => {
       setLoading(true);
       let towns = await Api.getAll("towns");
       setTownsList(towns.data);
-      let masters:any = await Api.getAll("masters", {
+      let masters: any = await Api.getAll("masters", {
         offset: rowsPerPage * page,
         limit: rowsPerPage,
       });
@@ -243,27 +243,25 @@ const MastersPage = () => {
                 ))
               )}
             </TableBody>
-            {mastersList?.length !== 0 && !isLoading ? (
-              <TableFooter>
-                <TableRow>
-                  <TablePagination
-                    rowsPerPageOptions={[10, 20, 50]}
-                    colSpan={3}
-                    count={totalMasters}
-                    rowsPerPage={rowsPerPage}
-                    page={page}
-                    SelectProps={{
-                      inputProps: {
-                        "aria-label": "записей в строке",
-                      },
-                      native: true,
-                    }}
-                    onPageChange={handleChangePage}
-                    onRowsPerPageChange={handleChangeRowsPerPage}
-                  />
-                </TableRow>
-              </TableFooter>
-            ) : null}
+            <TableFooter>
+              {mastersList?.length !== 0 && !isLoading ? (
+                <TablePagination
+                  rowsPerPageOptions={[10, 20, 50]}
+                  colSpan={5}
+                  count={totalMasters}
+                  rowsPerPage={rowsPerPage}
+                  page={page}
+                  SelectProps={{
+                    inputProps: {
+                      "aria-label": "записей в строке",
+                    },
+                    native: true,
+                  }}
+                  onPageChange={handleChangePage}
+                  onRowsPerPageChange={handleChangeRowsPerPage}
+                />
+              ) : null}
+            </TableFooter>
           </Table>
         </TableContainer>
       </Box>

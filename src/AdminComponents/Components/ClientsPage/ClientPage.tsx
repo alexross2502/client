@@ -203,27 +203,25 @@ const ClientPage = () => {
                 ))
               )}
             </TableBody>
-            {clientsList?.length !== 0 && !isLoading ? (
-              <TableFooter>
-                <TableRow>
-                  <TablePagination
-                    rowsPerPageOptions={[10, 20, 50]}
-                    colSpan={3}
-                    count={totalClients}
-                    rowsPerPage={rowsPerPage}
-                    page={page}
-                    SelectProps={{
-                      inputProps: {
-                        "aria-label": "записей в строке",
-                      },
-                      native: true,
-                    }}
-                    onPageChange={handleChangePage}
-                    onRowsPerPageChange={handleChangeRowsPerPage}
-                  />
-                </TableRow>
-              </TableFooter>
-            ) : null}
+            <TableFooter>
+              {clientsList?.length !== 0 && !isLoading ? (
+                <TablePagination
+                  rowsPerPageOptions={[10, 20, 50]}
+                  colSpan={3}
+                  count={totalClients}
+                  rowsPerPage={rowsPerPage}
+                  page={page}
+                  SelectProps={{
+                    inputProps: {
+                      "aria-label": "записей в строке",
+                    },
+                    native: true,
+                  }}
+                  onPageChange={handleChangePage}
+                  onRowsPerPageChange={handleChangeRowsPerPage}
+                />
+              ) : null}
+            </TableFooter>
           </Table>
         </TableContainer>
       </Box>

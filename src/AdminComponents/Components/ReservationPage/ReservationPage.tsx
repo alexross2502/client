@@ -272,7 +272,7 @@ const ReservationPage = () => {
                 <TableRow>
                   <TablePagination
                     rowsPerPageOptions={[10, 20, 50]}
-                    colSpan={3}
+                    colSpan={7}
                     count={totalReservations}
                     rowsPerPage={rowsPerPage}
                     page={page}
@@ -289,11 +289,9 @@ const ReservationPage = () => {
               </TableFooter>
             ) : null}
           </Table>
-          
         </TableContainer>
-       
       </Box>
-      
+
       {isChangeStatusModalActive && (
         <ChangeStatusModal
           props={changeStatusData}
