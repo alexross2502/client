@@ -16,21 +16,21 @@ import {
   TableBody,
   IconButton,
   Typography,
+  TableFooter,
+  TablePagination,
 } from "@mui/material";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import TableContainer from "@mui/material/TableContainer";
 import Paper from "@mui/material/Paper";
 import DeleteModal from "../../../Components/Modals/DeleteModal";
 import { Watch } from "react-loader-spinner";
-import { instance, InstanceResponse } from "../../axios-utils";
+import { InstanceResponse } from "../../axios-utils";
 import CopyIcon from "../CopyIcon";
 import { RootState } from "../../../redux/rootReducer";
 import CachedIcon from "@mui/icons-material/Cached";
 import UpdatePasswordModal from "../../../Components/Modals/UpdatePasswordModal";
 import ErrorAndSuccessModal from "../../../Components/Modals/ErrorAndSuccessModal";
 import { redAddButtonStyle } from "../../../styles/styles";
-import TableFooter from "@material-ui/core/TableFooter";
-import TablePagination from "@material-ui/core/TablePagination";
 import Api from "../api";
 
 const ClientPage = () => {
