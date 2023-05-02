@@ -32,3 +32,16 @@ export const Validator = {
     message: "Неверный формат",
   },
 };
+
+export enum SORTING_ORDER {
+  ASC = "asc",
+  DESC = "desc",
+}
+
+export enum SORTED_FIELD {
+  ID = "id",
+  NAME = "name",
+  EMAIL = "email",
+  TOWN = "town",
+  RATING = "rating",
+}

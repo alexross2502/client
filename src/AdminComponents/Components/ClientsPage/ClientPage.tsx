@@ -33,6 +33,7 @@ import UpdatePasswordModal from "../../../Components/Modals/UpdatePasswordModal"
 import ErrorAndSuccessModal from "../../../Components/Modals/ErrorAndSuccessModal";
 import { redAddButtonStyle } from "../../../styles/styles";
 import Api from "../api";
+import { SORTING_ORDER, SORTED_FIELD } from "../../../utils/constants";
 
 const ClientPage = () => {
   const { t } = useTranslation();
@@ -62,6 +63,15 @@ const ClientPage = () => {
   const [isClientSaveModalActive, setClientSaveModalActive] =
     useState<boolean>(false);
 
+  const [sortedField, setSortedField] = useState<string>("id");
+  const [sortingOrder, setSortingOrder] = useState<"asc" | "desc">("asc");
+
+  const handleRequestSort = (field) => {
+    const isAsc = sortedField === field && sortingOrder === SORTING_ORDER.ASC;
+    setSortingOrder(isAsc ? SORTING_ORDER.DESC : SORTING_ORDER.ASC);
+    setSortedField(field);
+  };
+
   function clientSaveModalHandler() {
     setClientSaveModalActive(!isClientSaveModalActive);
   }
@@ -85,13 +95,15 @@ const ClientPage = () => {
       let clients: any = await Api.getAll(`clients`, {
         offset: rowsPerPage * page,
         limit: rowsPerPage,
+        sortedField,
+        sortingOrder,
       });
       setClientsList(clients.data);
       setTotalClients(clients.total);
       setLoading(false);
     };
     asyncFunc();
-  }, [rerender, page, rowsPerPage, totalClients]);
+  }, [rerender, page, rowsPerPage, totalClients, sortedField, sortingOrder]);
 
   const { handleSubmit, register } = useForm({
     mode: "onBlur",
@@ -125,15 +137,46 @@ const ClientPage = () => {
               <TableRow>
                 <TableCell>
                   <TableSortLabel
-                    active={true}
-                    direction={"asc"}
-                    //onClick={}
-                  >
+                    active={sortedField === SORTED_FIELD.ID}
+                    direction={
+                      sortedField === SORTED_FIELD.ID
+                        ? sortingOrder
+                        : SORTING_ORDER.ASC
+                    }
+                    onClick={(e) => {
+                      handleRequestSort(SORTED_FIELD.ID);
+                    }}>
                     Номер клиента
                   </TableSortLabel>
                 </TableCell>
-                <TableCell align="left">Имя</TableCell>
-                <TableCell align="left">Почта</TableCell>
+                <TableCell align="left">
+                  <TableSortLabel
+                    active={sortedField === SORTED_FIELD.NAME}
+                    direction={
+                      sortedField === SORTED_FIELD.NAME
+                        ? sortingOrder
+                        : SORTING_ORDER.ASC
+                    }
+                    onClick={(e) => {
+                      handleRequestSort(SORTED_FIELD.NAME);
+                    }}>
+                    Имя
+                  </TableSortLabel>
+                </TableCell>
+                <TableCell align="left">
+                  <TableSortLabel
+                    active={sortedField === SORTED_FIELD.EMAIL}
+                    direction={
+                      sortedField === SORTED_FIELD.EMAIL
+                        ? sortingOrder
+                        : SORTING_ORDER.ASC
+                    }
+                    onClick={(e) => {
+                      handleRequestSort(SORTED_FIELD.EMAIL);
+                    }}>
+                    Почта
+                  </TableSortLabel>
+                </TableCell>
                 <TableCell>Сбросить пароль</TableCell>
                 <TableCell align="right">
                   <Button

@@ -19,6 +19,7 @@ import {
   Typography,
   TablePagination,
   TableFooter,
+  TableSortLabel,
 } from "@mui/material";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import TableContainer from "@mui/material/TableContainer";
@@ -33,6 +34,8 @@ import UpdatePasswordModal from "../../../Components/Modals/UpdatePasswordModal"
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 import ErrorAndSuccessModal from "../../../Components/Modals/ErrorAndSuccessModal";
 import { redAddButtonStyle } from "../../../styles/styles";
+import { handleRequestSort } from "../../../utils/handleRequestSort";
+import { SORTED_FIELD, SORTING_ORDER } from "../../../utils/constants";
 
 const MastersPage = () => {
   const { t } = useTranslation();
@@ -64,6 +67,15 @@ const MastersPage = () => {
   const [isMasterSaveModalActive, setMasterSaveModalActive] =
     useState<boolean>(false);
 
+  const [sortedField, setSortedField] = useState<string>("id");
+  const [sortingOrder, setSortingOrder] = useState<"asc" | "desc">("asc");
+
+  const handleRequestSort = (field) => {
+    const isAsc = sortedField === field && sortingOrder === SORTING_ORDER.ASC;
+    setSortingOrder(isAsc ? SORTING_ORDER.DESC : SORTING_ORDER.ASC);
+    setSortedField(field);
+  };
+
   function masterSaveModalHandler() {
     setMasterSaveModalActive(!isMasterSaveModalActive);
   }
@@ -89,6 +101,8 @@ const MastersPage = () => {
       let masters: any = await Api.getAll("masters", {
         offset: rowsPerPage * page,
         limit: rowsPerPage,
+        sortedField,
+        sortingOrder,
       });
       setMastersList(masters.data);
       setTotalMasters(masters.total);
@@ -131,7 +145,20 @@ const MastersPage = () => {
           <Table sx={{ minWidth: 650 }} aria-label="simple table">
             <TableHead sx={{ background: "#a1a1a1" }}>
               <TableRow>
-                <TableCell>Номер мастера</TableCell>
+                <TableCell>
+                  <TableSortLabel
+                    active={sortedField === SORTED_FIELD.ID}
+                    direction={
+                      sortedField === SORTED_FIELD.ID
+                        ? sortingOrder
+                        : SORTING_ORDER.ASC
+                    }
+                    onClick={(e) => {
+                      handleRequestSort(SORTED_FIELD.ID);
+                    }}>
+                    Номер мастера
+                  </TableSortLabel>
+                </TableCell>
                 <TableCell align="left">ФИО</TableCell>
                 <TableCell align="left">Город</TableCell>
                 <TableCell align="left">Рейтинг</TableCell>
