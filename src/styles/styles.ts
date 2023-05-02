@@ -10,6 +10,7 @@ export const redSaveButtonStyle = {
 export const redAddButtonStyle = {
   marginLeft: "auto",
   background: "rgba(180,58,58,1)",
+  backgroundColor: "rgba(180,58,58,1)",
 };
 
 export const modalBoxStyle = {
