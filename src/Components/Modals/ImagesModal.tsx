@@ -25,76 +25,66 @@ const style = {
   zIndex: 999,
 };
 
+const ImagesModal = ({ onClose, reservationId }) => {
+  useEffect(() => {
+    fetchImages(reservationId);
+  }, []);
 
-
-const ImagesModal = ({
-  onClose,
-  reservationId
-}) => {
-    useEffect(()=>{
-        fetchImages(reservationId)
-      },[])
-    
-    const [imagesList, setImagesList] =
-    useState<InstanceResponse | []>();
+  const [imagesList, setImagesList] = useState<InstanceResponse | []>();
   const [pending, setPending] = useState(true);
   async function fetchImages(id) {
-    setPending(true)
-    await instance({url:'reservation/images', data:{id}, method: 'POST'})
-    .then(res=>{
-      setImagesList(res)
-      setPending(false)
-    })
+    setPending(true);
+    await instance({
+      url: "reservation/images",
+      data: { id },
+      method: "POST",
+    }).then((res) => {
+      setImagesList(res);
+      setPending(false);
+    });
   }
 
-  
-  
   return (
     <>
-        {pending 
-        ? (
-            <Grid
-                  sx={{ position: "fixed", left: "50%", marginTop: "45%" }}>
-                  <Watch
-                    height="80"
-                    width="80"
-                    radius="48"
-                    color="#4fa94d"
-                    ariaLabel="watch-loading"
-                    wrapperStyle={{}}
-                    visible={true}
-                  />
-                </Grid>
-        )
-    : (
+      {pending ? (
+        <Grid sx={{ position: "fixed", left: "50%", marginTop: "45%" }}>
+          <Watch
+            height="80"
+            width="80"
+            radius="48"
+            color="#4fa94d"
+            ariaLabel="watch-loading"
+            wrapperStyle={{}}
+            visible={true}
+          />
+        </Grid>
+      ) : (
         <div className={css.modalWrapper} onClick={onClose}>
-        <Box
-        sx={style}
-        onClick={(e) => {
-          e.stopPropagation();
-        }}>
-      <Grid container>
-      <ImageList sx={{ width: 550, height: 450 }} cols={1}>
-    {imagesList?.map((item) => (
-      <ImageListItem
-        key={item.url}
-        sx={{ border: "2px solid black", position: "relative" }}>
-        <img
-          src={`${item.url}`}
-          srcSet={`${item.url}`}
-          alt=""
-          loading="lazy"
-        />
-      </ImageListItem>
-    ))}
-  </ImageList>
-      </Grid>
-    </Box>
-    </div>
-    )
-    }
-      
-      </>
+          <Box
+            sx={style}
+            onClick={(e) => {
+              e.stopPropagation();
+            }}>
+            <Grid container>
+              <ImageList sx={{ width: 550, height: 450 }} cols={1}>
+                {imagesList?.map((item) => (
+                  <ImageListItem
+                    key={item.url}
+                    sx={{ border: "2px solid black", position: "relative" }}>
+                    <img
+                      src={`${item.url}`}
+                      srcSet={`${item.url}`}
+                      alt=""
+                      loading="lazy"
+                    />
+                  </ImageListItem>
+                ))}
+              </ImageList>
+            </Grid>
+          </Box>
+        </div>
+      )}
+    </>
   );
 };
 
