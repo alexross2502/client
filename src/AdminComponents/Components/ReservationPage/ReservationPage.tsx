@@ -20,6 +20,7 @@ import {
   Typography,
   TableFooter,
   TablePagination,
+  TableSortLabel,
 } from "@mui/material";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import TableContainer from "@mui/material/TableContainer";
@@ -37,6 +38,7 @@ import ChangeStatusModal from "../../../Components/Modals/ChangeStatusModal";
 import { redAddButtonStyle } from "../../../styles/styles";
 import CameraAltIcon from "@mui/icons-material/CameraAlt";
 import ImagesModal from "../../../Components/Modals/ImagesModal";
+import { SORTED_FIELD, SORTING_ORDER } from "../../../utils/constants";
 
 const ReservationPage = () => {
   const { t } = useTranslation();
@@ -73,6 +75,14 @@ const ReservationPage = () => {
   const [isImagesModalActive, setImagesModalActive] = useState<boolean>(false);
 
   const [reservationIdForImages, setReservationIdForImages] = useState();
+  const [sortedField, setSortedField] = useState<string>("id");
+  const [sortingOrder, setSortingOrder] = useState<"asc" | "desc">("asc");
+
+  const handleRequestSort = (field) => {
+    const isAsc = sortedField === field && sortingOrder === SORTING_ORDER.ASC;
+    setSortingOrder(isAsc ? SORTING_ORDER.DESC : SORTING_ORDER.ASC);
+    setSortedField(field);
+  };
 
   function changeStatusModalHandler() {
     setChangeStatusModalActive(!isChangeStatusModalActive);
@@ -107,6 +117,8 @@ const ReservationPage = () => {
       let reservation: any = await Api.getAll("reservation", {
         offset: rowsPerPage * page,
         limit: rowsPerPage,
+        sortedField,
+        sortingOrder,
       });
       reservation?.data.forEach((el) => {
         new Date(el.day) > new Date()
@@ -119,7 +131,14 @@ const ReservationPage = () => {
       setLoading(false);
     };
     asyncFunc();
-  }, [rerender, page, rowsPerPage, totalReservations]);
+  }, [
+    rerender,
+    page,
+    rowsPerPage,
+    totalReservations,
+    sortedField,
+    sortingOrder,
+  ]);
 
   const handleChangeRowsPerPage = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -160,25 +179,151 @@ const ReservationPage = () => {
           <Table sx={{ minWidth: 650 }} aria-label="simple table">
             <TableHead sx={{ background: "#a1a1a1" }}>
               <TableRow>
-                <TableCell>Номер резерва</TableCell>
-                <TableCell align="left">День</TableCell>
-                <TableCell align="left">Размер</TableCell>
-                <TableCell align="left">Время</TableCell>
-                <TableCell align="left">Мастер</TableCell>
-                <TableCell align="left">Город</TableCell>
-                <TableCell align="left">Клиент</TableCell>
-                <TableCell align="left">Цена</TableCell>
-                <TableCell align="left" sx={{ minWidth: 140 }}>
-                  Статус
+                <TableCell>
+                  <TableSortLabel
+                    active={sortedField === SORTED_FIELD.ID}
+                    direction={
+                      sortedField === SORTED_FIELD.ID
+                        ? sortingOrder
+                        : SORTING_ORDER.ASC
+                    }
+                    onClick={(e) => {
+                      handleRequestSort(SORTED_FIELD.ID);
+                    }}
+                  >
+                    Номер резерва
+                  </TableSortLabel>
                 </TableCell>
-                <TableCell align="left">Изображения</TableCell>
+                <TableCell align="left">
+                  <TableSortLabel
+                    active={sortedField === SORTED_FIELD.DAY}
+                    direction={
+                      sortedField === SORTED_FIELD.DAY
+                        ? sortingOrder
+                        : SORTING_ORDER.ASC
+                    }
+                    onClick={(e) => {
+                      handleRequestSort(SORTED_FIELD.DAY);
+                    }}
+                  >
+                    День
+                  </TableSortLabel>
+                </TableCell>
+                <TableCell align="left">
+                  <TableSortLabel
+                    active={sortedField === SORTED_FIELD.SIZE}
+                    direction={
+                      sortedField === SORTED_FIELD.SIZE
+                        ? sortingOrder
+                        : SORTING_ORDER.ASC
+                    }
+                    onClick={(e) => {
+                      handleRequestSort(SORTED_FIELD.SIZE);
+                    }}
+                  >
+                    Размер
+                  </TableSortLabel>
+                </TableCell>
+                <TableCell align="left">Время</TableCell>
+                <TableCell align="left">
+                  {" "}
+                  <TableSortLabel
+                    active={sortedField === SORTED_FIELD.MASTER}
+                    direction={
+                      sortedField === SORTED_FIELD.MASTER
+                        ? sortingOrder
+                        : SORTING_ORDER.ASC
+                    }
+                    onClick={(e) => {
+                      handleRequestSort(SORTED_FIELD.MASTER);
+                    }}
+                  >
+                    Мастер
+                  </TableSortLabel>
+                </TableCell>
+                <TableCell align="left">
+                  <TableSortLabel
+                    active={sortedField === SORTED_FIELD.TOWN}
+                    direction={
+                      sortedField === SORTED_FIELD.TOWN
+                        ? sortingOrder
+                        : SORTING_ORDER.ASC
+                    }
+                    onClick={(e) => {
+                      handleRequestSort(SORTED_FIELD.TOWN);
+                    }}
+                  >
+                    Город
+                  </TableSortLabel>
+                </TableCell>
+                <TableCell align="left">
+                  <TableSortLabel
+                    active={sortedField === SORTED_FIELD.CLIENT}
+                    direction={
+                      sortedField === SORTED_FIELD.CLIENT
+                        ? sortingOrder
+                        : SORTING_ORDER.ASC
+                    }
+                    onClick={(e) => {
+                      handleRequestSort(SORTED_FIELD.CLIENT);
+                    }}
+                  >
+                    Клиент
+                  </TableSortLabel>
+                </TableCell>
+                <TableCell align="left">
+                  <TableSortLabel
+                    active={sortedField === SORTED_FIELD.PRICE}
+                    direction={
+                      sortedField === SORTED_FIELD.PRICE
+                        ? sortingOrder
+                        : SORTING_ORDER.ASC
+                    }
+                    onClick={(e) => {
+                      handleRequestSort(SORTED_FIELD.PRICE);
+                    }}
+                  >
+                    Цена
+                  </TableSortLabel>
+                </TableCell>
+                <TableCell align="left" sx={{ minWidth: 140 }}>
+                  <TableSortLabel
+                    active={sortedField === SORTED_FIELD.STATUS}
+                    direction={
+                      sortedField === SORTED_FIELD.STATUS
+                        ? sortingOrder
+                        : SORTING_ORDER.ASC
+                    }
+                    onClick={(e) => {
+                      handleRequestSort(SORTED_FIELD.STATUS);
+                    }}
+                  >
+                    Статус
+                  </TableSortLabel>
+                </TableCell>
+                <TableCell align="left">
+                  <TableSortLabel
+                    active={sortedField === SORTED_FIELD.IMAGES}
+                    direction={
+                      sortedField === SORTED_FIELD.IMAGES
+                        ? sortingOrder
+                        : SORTING_ORDER.ASC
+                    }
+                    onClick={(e) => {
+                      handleRequestSort(SORTED_FIELD.IMAGES);
+                    }}
+                  >
+                    Изображения
+                  </TableSortLabel>
+                </TableCell>
                 <TableCell align="right">
                   <Button
                     sx={redAddButtonStyle}
                     variant="contained"
                     onClick={() => {
                       reservationSaveModalHandler();
-                    }}>
+                    }}
+                  >
                     {t("table.add")}
                   </Button>
                 </TableCell>
@@ -187,7 +332,8 @@ const ReservationPage = () => {
             <TableBody>
               {isLoading && (
                 <Grid
-                  sx={{ position: "absolute", left: "50%", marginTop: "20px" }}>
+                  sx={{ position: "absolute", left: "50%", marginTop: "20px" }}
+                >
                   <Watch
                     height="80"
                     width="80"
@@ -207,11 +353,13 @@ const ReservationPage = () => {
                 reservationList?.map((row) => (
                   <TableRow
                     key={row.id}
-                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
+                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                  >
                     <TableCell component="th" scope="row">
                       <Typography
                         className={style.clue}
-                        data-clue={`${row.id}`}>
+                        data-clue={`${row.id}`}
+                      >
                         {row.id.slice(0, 15) + "..."}
                       </Typography>
                       <CopyIcon data={row.id} />
@@ -259,7 +407,8 @@ const ReservationPage = () => {
                         onClick={() => {
                           setItemForRemove({ id: row.id, url: "reservation" });
                           deleteModalHandler();
-                        }}>
+                        }}
+                      >
                         <DeleteForeverIcon></DeleteForeverIcon>
                       </IconButton>
                     </TableCell>

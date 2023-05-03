@@ -34,7 +34,6 @@ import UpdatePasswordModal from "../../../Components/Modals/UpdatePasswordModal"
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 import ErrorAndSuccessModal from "../../../Components/Modals/ErrorAndSuccessModal";
 import { redAddButtonStyle } from "../../../styles/styles";
-import { handleRequestSort } from "../../../utils/handleRequestSort";
 import { SORTED_FIELD, SORTING_ORDER } from "../../../utils/constants";
 
 const MastersPage = () => {
@@ -109,7 +108,7 @@ const MastersPage = () => {
       setLoading(false);
     };
     asyncFunc();
-  }, [rerender, page, rowsPerPage, totalMasters]);
+  }, [rerender, page, rowsPerPage, totalMasters, sortedField, sortingOrder]);
 
   const handleChangeRowsPerPage = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -155,20 +154,78 @@ const MastersPage = () => {
                     }
                     onClick={(e) => {
                       handleRequestSort(SORTED_FIELD.ID);
-                    }}>
+                    }}
+                  >
                     Номер мастера
                   </TableSortLabel>
                 </TableCell>
-                <TableCell align="left">ФИО</TableCell>
-                <TableCell align="left">Город</TableCell>
-                <TableCell align="left">Рейтинг</TableCell>
+                <TableCell align="left">
+                  <TableSortLabel
+                    active={sortedField === SORTED_FIELD.NAME}
+                    direction={
+                      sortedField === SORTED_FIELD.NAME
+                        ? sortingOrder
+                        : SORTING_ORDER.ASC
+                    }
+                    onClick={(e) => {
+                      handleRequestSort(SORTED_FIELD.NAME);
+                    }}
+                  >
+                    ФИО
+                  </TableSortLabel>
+                </TableCell>
+                <TableCell align="left">
+                  <TableSortLabel
+                    active={sortedField === SORTED_FIELD.TOWN}
+                    direction={
+                      sortedField === SORTED_FIELD.TOWN
+                        ? sortingOrder
+                        : SORTING_ORDER.ASC
+                    }
+                    onClick={(e) => {
+                      handleRequestSort(SORTED_FIELD.TOWN);
+                    }}
+                  >
+                    Город
+                  </TableSortLabel>
+                </TableCell>
+                <TableCell align="left">
+                  <TableSortLabel
+                    active={sortedField === SORTED_FIELD.RATING}
+                    direction={
+                      sortedField === SORTED_FIELD.RATING
+                        ? sortingOrder
+                        : SORTING_ORDER.ASC
+                    }
+                    onClick={(e) => {
+                      handleRequestSort(SORTED_FIELD.RATING);
+                    }}
+                  >
+                    Рейтинг
+                  </TableSortLabel>
+                </TableCell>
                 <TableCell align="left">Сбросить пароль</TableCell>
-                <TableCell align="left">Подтвердить</TableCell>
+                <TableCell align="left">
+                  <TableSortLabel
+                    active={sortedField === SORTED_FIELD.ADMIN_APPROVE}
+                    direction={
+                      sortedField === SORTED_FIELD.ADMIN_APPROVE
+                        ? sortingOrder
+                        : SORTING_ORDER.ASC
+                    }
+                    onClick={(e) => {
+                      handleRequestSort(SORTED_FIELD.ADMIN_APPROVE);
+                    }}
+                  >
+                    Подтвердить
+                  </TableSortLabel>
+                </TableCell>
                 <TableCell align="right">
                   <Button
                     sx={redAddButtonStyle}
                     variant="contained"
-                    onClick={masterSaveModalHandler}>
+                    onClick={masterSaveModalHandler}
+                  >
                     {t("table.add")}
                   </Button>
                 </TableCell>
@@ -177,7 +234,8 @@ const MastersPage = () => {
             <TableBody>
               {isLoading && (
                 <Grid
-                  sx={{ position: "absolute", left: "50%", marginTop: "20px" }}>
+                  sx={{ position: "absolute", left: "50%", marginTop: "20px" }}
+                >
                   <Watch
                     height="80"
                     width="80"
@@ -199,11 +257,13 @@ const MastersPage = () => {
                 mastersList?.map((row) => (
                   <TableRow
                     key={row.id}
-                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
+                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                  >
                     <TableCell component="th" scope="row">
                       <Typography
                         className={style.clue}
-                        data-clue={`${row.id}`}>
+                        data-clue={`${row.id}`}
+                      >
                         {row.id.slice(0, 15) + "..."}
                       </Typography>
                       <CopyIcon data={row.id} />
@@ -262,7 +322,8 @@ const MastersPage = () => {
                         onClick={() => {
                           setItemForRemove({ id: row.id, url: "masters" });
                           deleteModalHandler();
-                        }}>
+                        }}
+                      >
                         <DeleteForeverIcon></DeleteForeverIcon>
                       </IconButton>
                     </TableCell>
