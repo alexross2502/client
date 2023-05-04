@@ -74,7 +74,7 @@ const ModalOrder = ({ next, onClose, result }: TProps) => {
     for (let i = 0; i < image.length; i++) {
       formData.append(`${i}`, image[i].file);
     }
-    data.image = formData;
+    data.images = formData;
     data.day = currentDate.getTime();
     setPending(true);
     await instance({
@@ -85,7 +85,7 @@ const ModalOrder = ({ next, onClose, result }: TProps) => {
       .then((res: any) => {
         next({
           masters: [...res],
-          image: image,
+          images: image,
           day: currentDate.getTime(),
           size: atr.size,
           recipient: atr.email,
@@ -147,7 +147,8 @@ const ModalOrder = ({ next, onClose, result }: TProps) => {
             padding={3}
             borderRadius={5}
             boxShadow={"5px 5px 10px #ccc"}
-            sx={modalBoxStyle}>
+            sx={modalBoxStyle}
+          >
             <Grid container maxHeight={200}>
               <Grid item xs={1}></Grid>
               <Grid item xs={10}>
@@ -245,7 +246,8 @@ const ModalOrder = ({ next, onClose, result }: TProps) => {
                 fullWidth={true}
                 {...register("towns_id", {
                   required: `${t("adminPopup.emptyField")}`,
-                })}>
+                })}
+              >
                 {townsList.map((el) => {
                   return (
                     <option value={el.id} key={el.id}>
@@ -267,7 +269,8 @@ const ModalOrder = ({ next, onClose, result }: TProps) => {
                 fullWidth={true}
                 {...register("size", {
                   required: `${t("adminPopup.emptyField")}`,
-                })}>
+                })}
+              >
                 {Object.keys(repairTime).map((el) => {
                   return <option value={el}>{t(`size.${el}`)}</option>;
                 })}
@@ -297,7 +300,8 @@ const ModalOrder = ({ next, onClose, result }: TProps) => {
               variant="contained"
               color="warning"
               type="submit"
-              disabled={pending}>
+              disabled={pending}
+            >
               Заказать
             </Button>
           </Box>
