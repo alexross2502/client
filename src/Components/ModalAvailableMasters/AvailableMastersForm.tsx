@@ -13,7 +13,7 @@ const AvailableMastersForm = ({ data: master, orderData, result, onClose }) => {
     surname: master.surname,
     rating: master.rating,
     clientName: orderData.clientName,
-    image: orderData.image,
+    images: orderData.images,
   };
 
   return (
@@ -48,7 +48,8 @@ const AvailableMastersForm = ({ data: master, orderData, result, onClose }) => {
             });
           })
           .finally(onClose);
-      }}>
+      }}
+    >
       <Grid item xs={4}>
         <Typography variant="h6" padding={3} textAlign="center">
           {data.name}
