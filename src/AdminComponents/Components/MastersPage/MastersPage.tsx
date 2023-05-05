@@ -17,6 +17,8 @@ import {
   TableBody,
   IconButton,
   Typography,
+  TablePagination,
+  TableFooter,
 } from "@mui/material";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import TableContainer from "@mui/material/TableContainer";
@@ -38,6 +40,9 @@ const MastersPage = () => {
   const rerender = useSelector((state: RootState) => state.rerender.isRerender);
   const [mastersList, setMastersList] = useState<InstanceResponse | []>();
   const [townsList, setTownsList] = useState<InstanceResponse | []>([]);
+  const [totalMasters, setTotalMasters] = useState<number>();
+  const [page, setPage] = useState<number>(0);
+  const [rowsPerPage, setRowsPerPage] = useState<number>(10);
   const [itemForRemove, setItemForRemove] = useState<{
     id: string;
     url: string;
@@ -80,13 +85,30 @@ const MastersPage = () => {
     let asyncFunc = async () => {
       setLoading(true);
       let towns = await Api.getAll("towns");
-      setTownsList(towns);
-      let masters = await Api.getAll("masters");
-      setMastersList(masters);
+      setTownsList(towns.data);
+      let masters: any = await Api.getAll("masters", {
+        offset: rowsPerPage * page,
+        limit: rowsPerPage,
+      });
+      setMastersList(masters.data);
+      setTotalMasters(masters.total);
       setLoading(false);
     };
     asyncFunc();
-  }, [rerender]);
+  }, [rerender, page, rowsPerPage, totalMasters]);
+
+  const handleChangeRowsPerPage = (
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
+  const handleChangePage = (
+    event: React.MouseEvent<HTMLButtonElement> | null,
+    newPage: number
+  ) => {
+    setPage(newPage);
+  };
 
   const { handleSubmit, register } = useForm({
     mode: "onBlur",
@@ -169,6 +191,7 @@ const MastersPage = () => {
                     <TableCell align="left">{row.rating}</TableCell>
                     <TableCell align="left">
                       <CachedIcon
+                        cursor={"pointer"}
                         onClick={() => {
                           setItemForUpdatePassword({
                             email: row.email,
@@ -181,6 +204,7 @@ const MastersPage = () => {
                     <TableCell align="left">
                       {!row.adminApprove && (
                         <ThumbUpIcon
+                          cursor={"pointer"}
                           onClick={() => {
                             instance({
                               url: "masters/approveaccount",
@@ -219,6 +243,25 @@ const MastersPage = () => {
                 ))
               )}
             </TableBody>
+            <TableFooter>
+              {mastersList?.length !== 0 && !isLoading ? (
+                <TablePagination
+                  rowsPerPageOptions={[10, 20, 50]}
+                  colSpan={5}
+                  count={totalMasters}
+                  rowsPerPage={rowsPerPage}
+                  page={page}
+                  SelectProps={{
+                    inputProps: {
+                      "aria-label": "записей в строке",
+                    },
+                    native: true,
+                  }}
+                  onPageChange={handleChangePage}
+                  onRowsPerPageChange={handleChangeRowsPerPage}
+                />
+              ) : null}
+            </TableFooter>
           </Table>
         </TableContainer>
       </Box>

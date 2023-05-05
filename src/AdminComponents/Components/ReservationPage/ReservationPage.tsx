@@ -18,6 +18,8 @@ import {
   Button,
   IconButton,
   Typography,
+  TableFooter,
+  TablePagination,
 } from "@mui/material";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import TableContainer from "@mui/material/TableContainer";
@@ -26,13 +28,15 @@ import DeleteModal from "../../../Components/Modals/DeleteModal";
 import { Watch } from "react-loader-spinner";
 import CopyIcon from "../CopyIcon";
 import { RootState } from "../../../redux/rootReducer";
-import { InstanceResponse } from "../../axios-utils";
+import { InstanceResponse, instance } from "../../axios-utils";
 import { dateConverter } from "../dateConverter";
 import { priceFormatterToFloat } from "../../../utils/priceFormatterToFloat";
 import ErrorAndSuccessModal from "../../../Components/Modals/ErrorAndSuccessModal";
 import EditIcon from "@mui/icons-material/Edit";
 import ChangeStatusModal from "../../../Components/Modals/ChangeStatusModal";
 import { redAddButtonStyle } from "../../../styles/styles";
+import CameraAltIcon from "@mui/icons-material/CameraAlt";
+import ImagesModal from "../../../Components/Modals/ImagesModal";
 
 const ReservationPage = () => {
   const { t } = useTranslation();
@@ -43,6 +47,9 @@ const ReservationPage = () => {
   const [reservationList, setReservationList] = useState<
     InstanceResponse | []
   >();
+  const [totalReservations, setTotalReservations] = useState<number>();
+  const [page, setPage] = useState<number>(0);
+  const [rowsPerPage, setRowsPerPage] = useState<number>(10);
   const [itemForRemove, setItemForRemove] = useState<{
     id: string;
     url: string;
@@ -63,6 +70,9 @@ const ReservationPage = () => {
     id: "",
     status: "",
   });
+  const [isImagesModalActive, setImagesModalActive] = useState<boolean>(false);
+
+  const [reservationIdForImages, setReservationIdForImages] = useState();
 
   function changeStatusModalHandler() {
     setChangeStatusModalActive(!isChangeStatusModalActive);
@@ -76,6 +86,10 @@ const ReservationPage = () => {
     setDeleteModalActive(!isDeleteModalActive);
   }
 
+  function imagesModalHandler() {
+    setImagesModalActive(!isImagesModalActive);
+  }
+
   function errorAndSuccessModalHandler(data) {
     setErrorAndSuccessModalData(data);
     setErrorAndSuccessModalActive(!isErrorAndSuccessModalActive);
@@ -85,23 +99,40 @@ const ReservationPage = () => {
     let asyncFunc = async () => {
       setLoading(true);
       let clients = await Api.getAll("clients");
-      setClientsList(clients);
+      setClientsList(clients.data);
       let masters = await Api.getAll("masters");
-      setMastersList(masters);
+      setMastersList(masters.data);
       let towns = await Api.getAll("towns");
-      setTownsList(towns);
-      let reservation: any = await Api.getAll("reservation");
-      reservation.forEach((el) => {
+      setTownsList(towns.data);
+      let reservation: any = await Api.getAll("reservation", {
+        offset: rowsPerPage * page,
+        limit: rowsPerPage,
+      });
+      reservation?.data.forEach((el) => {
         new Date(el.day) > new Date()
           ? (el.editStatus = true)
           : (el.editStatus = false);
         dateConverter(el);
       });
-      setReservationList(reservation);
+      setReservationList(reservation.data);
+      setTotalReservations(reservation.total);
       setLoading(false);
     };
     asyncFunc();
-  }, [rerender]);
+  }, [rerender, page, rowsPerPage, totalReservations]);
+
+  const handleChangeRowsPerPage = (
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
+  const handleChangePage = (
+    event: React.MouseEvent<HTMLButtonElement> | null,
+    newPage: number
+  ) => {
+    setPage(newPage);
+  };
 
   const { handleSubmit, register } = useForm({
     mode: "onBlur",
@@ -109,13 +140,13 @@ const ReservationPage = () => {
 
   //Объект для отображения имен городов, клиентов, мастеров, а не айдишников
   let IdToName = {};
-  townsList.forEach((el) => {
+  townsList?.forEach((el) => {
     IdToName[el.id] = el?.name;
   });
-  clientsList.forEach((el) => {
+  clientsList?.forEach((el) => {
     IdToName[el.id] = el?.name;
   });
-  mastersList.forEach((el) => {
+  mastersList?.forEach((el) => {
     IdToName[el.id] = el?.name;
   });
   ////////////////////////////////////////
@@ -140,6 +171,7 @@ const ReservationPage = () => {
                 <TableCell align="left" sx={{ minWidth: 140 }}>
                   Статус
                 </TableCell>
+                <TableCell align="left">Изображения</TableCell>
                 <TableCell align="right">
                   <Button
                     sx={redAddButtonStyle}
@@ -199,12 +231,24 @@ const ReservationPage = () => {
                       {t(`status.${row.status}`)}
                       {row.editStatus && (
                         <EditIcon
+                          cursor={"pointer"}
                           onClick={() => {
                             changeStatusModalHandler();
                             setChangeStatusData({
                               id: row.id,
                               status: row.status,
                             });
+                          }}
+                        />
+                      )}
+                    </TableCell>
+                    <TableCell align="center">
+                      {row.images && (
+                        <CameraAltIcon
+                          cursor={"pointer"}
+                          onClick={() => {
+                            setReservationIdForImages(row.id);
+                            imagesModalHandler();
                           }}
                         />
                       )}
@@ -223,9 +267,31 @@ const ReservationPage = () => {
                 ))
               )}
             </TableBody>
+            {reservationList?.length !== 0 && !isLoading ? (
+              <TableFooter>
+                <TableRow>
+                  <TablePagination
+                    rowsPerPageOptions={[10, 20, 50]}
+                    colSpan={7}
+                    count={totalReservations}
+                    rowsPerPage={rowsPerPage}
+                    page={page}
+                    SelectProps={{
+                      inputProps: {
+                        "aria-label": "записей в строке",
+                      },
+                      native: true,
+                    }}
+                    onPageChange={handleChangePage}
+                    onRowsPerPageChange={handleChangeRowsPerPage}
+                  />
+                </TableRow>
+              </TableFooter>
+            ) : null}
           </Table>
         </TableContainer>
       </Box>
+
       {isChangeStatusModalActive && (
         <ChangeStatusModal
           props={changeStatusData}
@@ -251,6 +317,12 @@ const ReservationPage = () => {
         <ReservationSave
           onClose={reservationSaveModalHandler}
           result={errorAndSuccessModalHandler}
+        />
+      )}
+      {isImagesModalActive && (
+        <ImagesModal
+          onClose={imagesModalHandler}
+          reservationId={reservationIdForImages}
         />
       )}
     </>

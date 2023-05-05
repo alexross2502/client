@@ -12,7 +12,7 @@ import { setPageRerender } from "../../../redux/rerenderReducer";
 import { Validator } from "../../../utils/constants";
 import { modalBoxStyle, redSaveButtonStyle } from "../../../styles/styles";
 
-const ClientSave = (props) => {
+const ClientSave = ({ onClose, result }) => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
   const {
@@ -32,17 +32,17 @@ const ClientSave = (props) => {
     await instance({ url: `clients`, method: "post", data: data })
       .then(() => {
         dispatch(setPageRerender());
-        props.result({ type: "success", message: "Новый клиент добавлен" });
+        result({ type: "success", message: "Новый клиент добавлен" });
       })
       .catch(() => {
-        props.result({
+        result({
           type: "error",
           message: "Невозможно добавить такого клиента",
         });
       })
       .finally(() => {
         setPending(false);
-        props.onClose();
+        onClose();
       });
   }
 
@@ -71,7 +71,7 @@ const ClientSave = (props) => {
                   </Typography>
                 </Grid>
                 <Grid item xs={1}>
-                  <CloseIcon onClick={props.onClose} />
+                  <CloseIcon onClick={onClose} />
                 </Grid>
               </Grid>
               {

@@ -19,6 +19,7 @@ import { DateCalendar, TimeClock } from "@mui/x-date-pickers";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import { Validator } from "../../utils/constants";
 import { modalBoxStyle, redSaveButtonStyle } from "../../styles/styles";
+import ImageUploader from "../Modals/ImageUploader";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -55,7 +56,7 @@ const ModalOrder = ({ next, onClose, result }: TProps) => {
   useEffect(() => {
     let asyncFunc = async () => {
       let towns = await Api.getAll("towns");
-      setTownsList(towns);
+      setTownsList(towns.data);
     };
     asyncFunc();
   }, []);
@@ -68,7 +69,12 @@ const ModalOrder = ({ next, onClose, result }: TProps) => {
     if (new Date() > currentDate) {
       throw new Error("error");
     }
+    const formData = new FormData();
     let data = { ...atr };
+    for (let i = 0; i < image.length; i++) {
+      formData.append(`${i}`, image[i].file);
+    }
+    data.images = formData;
     data.day = currentDate.getTime();
     setPending(true);
     await instance({
@@ -79,6 +85,7 @@ const ModalOrder = ({ next, onClose, result }: TProps) => {
       .then((res: any) => {
         next({
           masters: [...res],
+          images: image,
           day: currentDate.getTime(),
           size: atr.size,
           recipient: atr.email,
@@ -94,7 +101,37 @@ const ModalOrder = ({ next, onClose, result }: TProps) => {
         onClose();
       });
   }
+  ///Фото
+  const [image, setImage] = useState([]);
 
+  const handleFileInputChange = (e) => {
+    const file = e.target.files[0];
+
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+
+    reader.onload = () => {
+      if (file.size > 1024000) {
+        result({
+          type: "error",
+          message: "Вес картинки слишком большой",
+        });
+        return null;
+      }
+
+      setImage([
+        ...image,
+        { file: file, img: reader.result, id: new Date().getTime() },
+      ]);
+    };
+  };
+
+  const handleFileInputDelete = (id) => {
+    const filteredItems = image.filter((item) => item.id !== id);
+    setImage(filteredItems);
+  };
+
+  //////
   return (
     <div className={modalWrapperStyle.modalWrapper}>
       <div className={style.active}>
@@ -110,7 +147,8 @@ const ModalOrder = ({ next, onClose, result }: TProps) => {
             padding={3}
             borderRadius={5}
             boxShadow={"5px 5px 10px #ccc"}
-            sx={modalBoxStyle}>
+            sx={modalBoxStyle}
+          >
             <Grid container maxHeight={200}>
               <Grid item xs={1}></Grid>
               <Grid item xs={10}>
@@ -208,7 +246,8 @@ const ModalOrder = ({ next, onClose, result }: TProps) => {
                 fullWidth={true}
                 {...register("towns_id", {
                   required: `${t("adminPopup.emptyField")}`,
-                })}>
+                })}
+              >
                 {townsList.map((el) => {
                   return (
                     <option value={el.id} key={el.id}>
@@ -230,18 +269,39 @@ const ModalOrder = ({ next, onClose, result }: TProps) => {
                 fullWidth={true}
                 {...register("size", {
                   required: `${t("adminPopup.emptyField")}`,
-                })}>
+                })}
+              >
                 {Object.keys(repairTime).map((el) => {
                   return <option value={el}>{t(`size.${el}`)}</option>;
                 })}
               </NativeSelect>
+            </Grid>
+            <Grid item marginTop={3} sx={{ width: 300 }}>
+              <input
+                accept=".jpg,.png,.jpeg"
+                id="raised-button-file"
+                type="file"
+                disabled={image.length > 4}
+                onChange={(e) => {
+                  handleFileInputChange(e);
+                }}
+              />
+            </Grid>
+            <Grid item marginTop={3} sx={{ width: 300 }}>
+              {image.length === 0 ? null : (
+                <ImageUploader
+                  itemData={image}
+                  handleFileInputDelete={handleFileInputDelete}
+                />
+              )}
             </Grid>
             <Button
               sx={redSaveButtonStyle}
               variant="contained"
               color="warning"
               type="submit"
-              disabled={pending}>
+              disabled={pending}
+            >
               Заказать
             </Button>
           </Box>

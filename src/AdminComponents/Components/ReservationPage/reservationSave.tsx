@@ -57,14 +57,14 @@ const ReservationSave = (props) => {
   useEffect(() => {
     let asyncFunc = async () => {
       let towns = await Api.getAll("towns");
-      setTownsList(towns);
+      setTownsList(towns.data);
       let clients = await Api.getAll("clients", { mailConfirmation: true });
-      setClientsList(clients);
+      setClientsList(clients.data);
       let masters = await Api.getAll("masters", {
         mailConfirmation: true,
         adminApprove: true,
       });
-      setMastersList(masters);
+      setMastersList(masters.data);
     };
     asyncFunc();
   }, [rerender]);

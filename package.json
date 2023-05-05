@@ -19,6 +19,7 @@
     "@testing-library/react": "^12.1.2",
     "@testing-library/user-event": "^13.5.0",
     "axios": "^1.2.2",
+    "data-grid": "^3.0.0",
     "date-fns": "^2.29.3",
     "dotenv": "^16.0.3",
     "i18next": "^21.6.6",

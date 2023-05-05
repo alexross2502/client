@@ -44,7 +44,7 @@ const ModalRegistration = ({ onClose, result }: TProps) => {
   useEffect(() => {
     let asyncFunc = async () => {
       let towns = await Api.getAll("towns");
-      setTownsList(towns);
+      setTownsList(towns.data);
     };
     asyncFunc();
   }, []);
