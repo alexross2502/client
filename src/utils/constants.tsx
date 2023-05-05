@@ -38,20 +38,31 @@ export enum SORTING_ORDER {
   DESC = "desc",
 }
 
-export enum SORTED_FIELD {
-  ID = "id",
-  NAME = "name",
-  EMAIL = "email",
+export enum RESERVATION_SORTED_FIELDS {
   TOWN = "towns",
-  RATING = "rating",
-  ADMIN_APPROVE = "AdminApprove",
   CLIENT = "clients",
   MASTER = "masters",
-  TARIFF = "tariff",
   DAY = "day",
   SIZE = "size",
   END = "end",
   PRICE = "price",
   STATUS = "status",
   IMAGES = "image",
+}
+
+export enum CLIENTS_SORTED_FIELDS {
+  NAME = "name",
+  EMAIL = "email",
+}
+
+export enum MASTERS_SORTED_FIELDS {
+  NAME = "name",
+  TOWN = "towns",
+  RATING = "rating",
+  ADMIN_APPROVE = "AdminApprove",
+}
+
+export enum TOWNS_SORTED_FIELDS {
+  NAME = "name",
+  TARIFF = "tariff",
 }

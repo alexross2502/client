@@ -32,7 +32,7 @@ import { priceFormatterToFloat } from "../../../utils/priceFormatterToFloat";
 import ErrorAndSuccessModal from "../../../Components/Modals/ErrorAndSuccessModal";
 import DeleteModal from "../../../Components/Modals/DeleteModal";
 import { redAddButtonStyle } from "../../../styles/styles";
-import { SORTED_FIELD, SORTING_ORDER } from "../../../utils/constants";
+import { TOWNS_SORTED_FIELDS, SORTING_ORDER } from "../../../utils/constants";
 
 const TownsPage = () => {
   const { t } = useTranslation();
@@ -120,48 +120,32 @@ const TownsPage = () => {
           <Table sx={{ minWidth: 650 }} aria-label="simple table">
             <TableHead sx={{ background: "#a1a1a1" }}>
               <TableRow>
-                <TableCell>
-                  <TableSortLabel
-                    active={sortedField === SORTED_FIELD.ID}
-                    direction={
-                      sortedField === SORTED_FIELD.ID
-                        ? sortingOrder
-                        : SORTING_ORDER.ASC
-                    }
-                    onClick={(e) => {
-                      handleRequestSort(SORTED_FIELD.ID);
-                    }}
-                  >
-                    Номер города
-                  </TableSortLabel>
-                </TableCell>
+                <TableCell>Номер города</TableCell>
                 <TableCell align="left">
                   <TableSortLabel
-                    active={sortedField === SORTED_FIELD.NAME}
+                    active={sortedField === TOWNS_SORTED_FIELDS.NAME}
                     direction={
-                      sortedField === SORTED_FIELD.NAME
+                      sortedField === TOWNS_SORTED_FIELDS.NAME
                         ? sortingOrder
                         : SORTING_ORDER.ASC
                     }
                     onClick={(e) => {
-                      handleRequestSort(SORTED_FIELD.NAME);
-                    }}
-                  >
+                      handleRequestSort(TOWNS_SORTED_FIELDS.NAME);
+                    }}>
                     Имя
                   </TableSortLabel>
                 </TableCell>
                 <TableCell align="left">
                   <TableSortLabel
-                    active={sortedField === SORTED_FIELD.TARIFF}
+                    active={sortedField === TOWNS_SORTED_FIELDS.TARIFF}
                     direction={
-                      sortedField === SORTED_FIELD.TARIFF
+                      sortedField === TOWNS_SORTED_FIELDS.TARIFF
                         ? sortingOrder
                         : SORTING_ORDER.ASC
                     }
                     onClick={(e) => {
-                      handleRequestSort(SORTED_FIELD.TARIFF);
-                    }}
-                  >
+                      handleRequestSort(TOWNS_SORTED_FIELDS.TARIFF);
+                    }}>
                     Тариф
                   </TableSortLabel>
                 </TableCell>
@@ -171,8 +155,7 @@ const TownsPage = () => {
                     variant="contained"
                     onClick={() => {
                       dispatch(townSaveModalHandler);
-                    }}
-                  >
+                    }}>
                     {t("table.add")}
                   </Button>
                 </TableCell>
@@ -181,8 +164,7 @@ const TownsPage = () => {
             <TableBody>
               {isLoading && (
                 <Grid
-                  sx={{ position: "absolute", left: "50%", marginTop: "20px" }}
-                >
+                  sx={{ position: "absolute", left: "50%", marginTop: "20px" }}>
                   <Watch
                     height="80"
                     width="80"
@@ -204,13 +186,11 @@ const TownsPage = () => {
                 townsList?.map((row) => (
                   <TableRow
                     key={row.id}
-                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                  >
+                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
                     <TableCell component="th" scope="row">
                       <Typography
                         className={style.clue}
-                        data-clue={`${row.id}`}
-                      >
+                        data-clue={`${row.id}`}>
                         {row.id.slice(0, 15) + "..."}
                       </Typography>
                       <CopyIcon data={row.id} />
@@ -224,8 +204,7 @@ const TownsPage = () => {
                         onClick={() => {
                           setItemForRemove({ id: row.id, url: "towns" });
                           deleteModalHandler();
-                        }}
-                      >
+                        }}>
                         <DeleteForeverIcon></DeleteForeverIcon>
                       </IconButton>
                     </TableCell>

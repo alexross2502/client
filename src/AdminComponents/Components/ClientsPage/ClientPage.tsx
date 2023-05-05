@@ -33,7 +33,7 @@ import UpdatePasswordModal from "../../../Components/Modals/UpdatePasswordModal"
 import ErrorAndSuccessModal from "../../../Components/Modals/ErrorAndSuccessModal";
 import { redAddButtonStyle } from "../../../styles/styles";
 import Api from "../api";
-import { SORTING_ORDER, SORTED_FIELD } from "../../../utils/constants";
+import { SORTING_ORDER, CLIENTS_SORTED_FIELDS } from "../../../utils/constants";
 
 const ClientPage = () => {
   const { t } = useTranslation();
@@ -135,44 +135,31 @@ const ClientPage = () => {
           <Table sx={{ minWidth: 650 }} aria-label="simple table">
             <TableHead sx={{ background: "#a1a1a1" }}>
               <TableRow>
-                <TableCell>
-                  <TableSortLabel
-                    active={sortedField === SORTED_FIELD.ID}
-                    direction={
-                      sortedField === SORTED_FIELD.ID
-                        ? sortingOrder
-                        : SORTING_ORDER.ASC
-                    }
-                    onClick={(e) => {
-                      handleRequestSort(SORTED_FIELD.ID);
-                    }}>
-                    Номер клиента
-                  </TableSortLabel>
-                </TableCell>
+                <TableCell>Номер клиента</TableCell>
                 <TableCell align="left">
                   <TableSortLabel
-                    active={sortedField === SORTED_FIELD.NAME}
+                    active={sortedField === CLIENTS_SORTED_FIELDS.NAME}
                     direction={
-                      sortedField === SORTED_FIELD.NAME
+                      sortedField === CLIENTS_SORTED_FIELDS.NAME
                         ? sortingOrder
                         : SORTING_ORDER.ASC
                     }
                     onClick={(e) => {
-                      handleRequestSort(SORTED_FIELD.NAME);
+                      handleRequestSort(CLIENTS_SORTED_FIELDS.NAME);
                     }}>
                     Имя
                   </TableSortLabel>
                 </TableCell>
                 <TableCell align="left">
                   <TableSortLabel
-                    active={sortedField === SORTED_FIELD.EMAIL}
+                    active={sortedField === CLIENTS_SORTED_FIELDS.EMAIL}
                     direction={
-                      sortedField === SORTED_FIELD.EMAIL
+                      sortedField === CLIENTS_SORTED_FIELDS.EMAIL
                         ? sortingOrder
                         : SORTING_ORDER.ASC
                     }
                     onClick={(e) => {
-                      handleRequestSort(SORTED_FIELD.EMAIL);
+                      handleRequestSort(CLIENTS_SORTED_FIELDS.EMAIL);
                     }}>
                     Почта
                   </TableSortLabel>

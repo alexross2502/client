@@ -38,7 +38,10 @@ import ChangeStatusModal from "../../../Components/Modals/ChangeStatusModal";
 import { redAddButtonStyle } from "../../../styles/styles";
 import CameraAltIcon from "@mui/icons-material/CameraAlt";
 import ImagesModal from "../../../Components/Modals/ImagesModal";
-import { SORTED_FIELD, SORTING_ORDER } from "../../../utils/constants";
+import {
+  RESERVATION_SORTED_FIELDS,
+  SORTING_ORDER,
+} from "../../../utils/constants";
 
 const ReservationPage = () => {
   const { t } = useTranslation();
@@ -179,48 +182,32 @@ const ReservationPage = () => {
           <Table sx={{ minWidth: 650 }} aria-label="simple table">
             <TableHead sx={{ background: "#a1a1a1" }}>
               <TableRow>
-                <TableCell>
-                  <TableSortLabel
-                    active={sortedField === SORTED_FIELD.ID}
-                    direction={
-                      sortedField === SORTED_FIELD.ID
-                        ? sortingOrder
-                        : SORTING_ORDER.ASC
-                    }
-                    onClick={(e) => {
-                      handleRequestSort(SORTED_FIELD.ID);
-                    }}
-                  >
-                    Номер резерва
-                  </TableSortLabel>
-                </TableCell>
+                <TableCell>Номер резерва</TableCell>
                 <TableCell align="left">
                   <TableSortLabel
-                    active={sortedField === SORTED_FIELD.DAY}
+                    active={sortedField === RESERVATION_SORTED_FIELDS.DAY}
                     direction={
-                      sortedField === SORTED_FIELD.DAY
+                      sortedField === RESERVATION_SORTED_FIELDS.DAY
                         ? sortingOrder
                         : SORTING_ORDER.ASC
                     }
                     onClick={(e) => {
-                      handleRequestSort(SORTED_FIELD.DAY);
-                    }}
-                  >
+                      handleRequestSort(RESERVATION_SORTED_FIELDS.DAY);
+                    }}>
                     День
                   </TableSortLabel>
                 </TableCell>
                 <TableCell align="left">
                   <TableSortLabel
-                    active={sortedField === SORTED_FIELD.SIZE}
+                    active={sortedField === RESERVATION_SORTED_FIELDS.SIZE}
                     direction={
-                      sortedField === SORTED_FIELD.SIZE
+                      sortedField === RESERVATION_SORTED_FIELDS.SIZE
                         ? sortingOrder
                         : SORTING_ORDER.ASC
                     }
                     onClick={(e) => {
-                      handleRequestSort(SORTED_FIELD.SIZE);
-                    }}
-                  >
+                      handleRequestSort(RESERVATION_SORTED_FIELDS.SIZE);
+                    }}>
                     Размер
                   </TableSortLabel>
                 </TableCell>
@@ -228,91 +215,85 @@ const ReservationPage = () => {
                 <TableCell align="left">
                   {" "}
                   <TableSortLabel
-                    active={sortedField === SORTED_FIELD.MASTER}
+                    active={sortedField === RESERVATION_SORTED_FIELDS.MASTER}
                     direction={
-                      sortedField === SORTED_FIELD.MASTER
+                      sortedField === RESERVATION_SORTED_FIELDS.MASTER
                         ? sortingOrder
                         : SORTING_ORDER.ASC
                     }
                     onClick={(e) => {
-                      handleRequestSort(SORTED_FIELD.MASTER);
-                    }}
-                  >
+                      handleRequestSort(RESERVATION_SORTED_FIELDS.MASTER);
+                    }}>
                     Мастер
                   </TableSortLabel>
                 </TableCell>
                 <TableCell align="left">
                   <TableSortLabel
-                    active={sortedField === SORTED_FIELD.TOWN}
+                    active={sortedField === RESERVATION_SORTED_FIELDS.TOWN}
                     direction={
-                      sortedField === SORTED_FIELD.TOWN
+                      sortedField === RESERVATION_SORTED_FIELDS.TOWN
                         ? sortingOrder
                         : SORTING_ORDER.ASC
                     }
                     onClick={(e) => {
-                      handleRequestSort(SORTED_FIELD.TOWN);
-                    }}
-                  >
+                      handleRequestSort(RESERVATION_SORTED_FIELDS.TOWN);
+                    }}>
                     Город
                   </TableSortLabel>
                 </TableCell>
                 <TableCell align="left">
                   <TableSortLabel
-                    active={sortedField === SORTED_FIELD.CLIENT}
+                    active={sortedField === RESERVATION_SORTED_FIELDS.CLIENT}
                     direction={
-                      sortedField === SORTED_FIELD.CLIENT
+                      sortedField === RESERVATION_SORTED_FIELDS.CLIENT
                         ? sortingOrder
                         : SORTING_ORDER.ASC
                     }
                     onClick={(e) => {
-                      handleRequestSort(SORTED_FIELD.CLIENT);
-                    }}
-                  >
+                      handleRequestSort(RESERVATION_SORTED_FIELDS.CLIENT);
+                    }}>
                     Клиент
                   </TableSortLabel>
                 </TableCell>
                 <TableCell align="left">
                   <TableSortLabel
-                    active={sortedField === SORTED_FIELD.PRICE}
+                    active={sortedField === RESERVATION_SORTED_FIELDS.PRICE}
                     direction={
-                      sortedField === SORTED_FIELD.PRICE
+                      sortedField === RESERVATION_SORTED_FIELDS.PRICE
                         ? sortingOrder
                         : SORTING_ORDER.ASC
                     }
                     onClick={(e) => {
-                      handleRequestSort(SORTED_FIELD.PRICE);
-                    }}
-                  >
+                      handleRequestSort(RESERVATION_SORTED_FIELDS.PRICE);
+                    }}>
                     Цена
                   </TableSortLabel>
                 </TableCell>
                 <TableCell align="left" sx={{ minWidth: 140 }}>
                   <TableSortLabel
-                    active={sortedField === SORTED_FIELD.STATUS}
+                    active={sortedField === RESERVATION_SORTED_FIELDS.STATUS}
                     direction={
-                      sortedField === SORTED_FIELD.STATUS
+                      sortedField === RESERVATION_SORTED_FIELDS.STATUS
                         ? sortingOrder
                         : SORTING_ORDER.ASC
                     }
                     onClick={(e) => {
-                      handleRequestSort(SORTED_FIELD.STATUS);
-                    }}
-                  >
+                      handleRequestSort(RESERVATION_SORTED_FIELDS.STATUS);
+                    }}>
                     Статус
                   </TableSortLabel>
                 </TableCell>
                 <TableCell align="left">
                   <TableSortLabel
-                    active={sortedField === SORTED_FIELD.IMAGES}
+                    active={sortedField === RESERVATION_SORTED_FIELDS.IMAGES}
                     direction={
-                      sortedField === SORTED_FIELD.IMAGES
+                      sortedField === RESERVATION_SORTED_FIELDS.IMAGES
                         ? sortingOrder
                         : SORTING_ORDER.ASC
                     }
                     onClick={(e) => {
-                      handleRequestSort(SORTED_FIELD.IMAGES);
-                    }}
-                  >
+                      handleRequestSort(RESERVATION_SORTED_FIELDS.IMAGES);
+                    }}>
                     Изображения
                   </TableSortLabel>
                 </TableCell>
@@ -322,8 +303,7 @@ const ReservationPage = () => {
                     variant="contained"
                     onClick={() => {
                       reservationSaveModalHandler();
-                    }}
-                  >
+                    }}>
                     {t("table.add")}
                   </Button>
                 </TableCell>
@@ -332,8 +312,7 @@ const ReservationPage = () => {
             <TableBody>
               {isLoading && (
                 <Grid
-                  sx={{ position: "absolute", left: "50%", marginTop: "20px" }}
-                >
+                  sx={{ position: "absolute", left: "50%", marginTop: "20px" }}>
                   <Watch
                     height="80"
                     width="80"
@@ -353,13 +332,11 @@ const ReservationPage = () => {
                 reservationList?.map((row) => (
                   <TableRow
                     key={row.id}
-                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                  >
+                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
                     <TableCell component="th" scope="row">
                       <Typography
                         className={style.clue}
-                        data-clue={`${row.id}`}
-                      >
+                        data-clue={`${row.id}`}>
                         {row.id.slice(0, 15) + "..."}
                       </Typography>
                       <CopyIcon data={row.id} />
@@ -407,8 +384,7 @@ const ReservationPage = () => {
                         onClick={() => {
                           setItemForRemove({ id: row.id, url: "reservation" });
                           deleteModalHandler();
-                        }}
-                      >
+                        }}>
                         <DeleteForeverIcon></DeleteForeverIcon>
                       </IconButton>
                     </TableCell>

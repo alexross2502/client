@@ -34,7 +34,7 @@ import UpdatePasswordModal from "../../../Components/Modals/UpdatePasswordModal"
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 import ErrorAndSuccessModal from "../../../Components/Modals/ErrorAndSuccessModal";
 import { redAddButtonStyle } from "../../../styles/styles";
-import { SORTED_FIELD, SORTING_ORDER } from "../../../utils/constants";
+import { MASTERS_SORTED_FIELDS, SORTING_ORDER } from "../../../utils/constants";
 
 const MastersPage = () => {
   const { t } = useTranslation();
@@ -144,79 +144,61 @@ const MastersPage = () => {
           <Table sx={{ minWidth: 650 }} aria-label="simple table">
             <TableHead sx={{ background: "#a1a1a1" }}>
               <TableRow>
-                <TableCell>
-                  <TableSortLabel
-                    active={sortedField === SORTED_FIELD.ID}
-                    direction={
-                      sortedField === SORTED_FIELD.ID
-                        ? sortingOrder
-                        : SORTING_ORDER.ASC
-                    }
-                    onClick={(e) => {
-                      handleRequestSort(SORTED_FIELD.ID);
-                    }}
-                  >
-                    Номер мастера
-                  </TableSortLabel>
-                </TableCell>
+                <TableCell>Номер мастера</TableCell>
                 <TableCell align="left">
                   <TableSortLabel
-                    active={sortedField === SORTED_FIELD.NAME}
+                    active={sortedField === MASTERS_SORTED_FIELDS.NAME}
                     direction={
-                      sortedField === SORTED_FIELD.NAME
+                      sortedField === MASTERS_SORTED_FIELDS.NAME
                         ? sortingOrder
                         : SORTING_ORDER.ASC
                     }
                     onClick={(e) => {
-                      handleRequestSort(SORTED_FIELD.NAME);
-                    }}
-                  >
+                      handleRequestSort(MASTERS_SORTED_FIELDS.NAME);
+                    }}>
                     ФИО
                   </TableSortLabel>
                 </TableCell>
                 <TableCell align="left">
                   <TableSortLabel
-                    active={sortedField === SORTED_FIELD.TOWN}
+                    active={sortedField === MASTERS_SORTED_FIELDS.TOWN}
                     direction={
-                      sortedField === SORTED_FIELD.TOWN
+                      sortedField === MASTERS_SORTED_FIELDS.TOWN
                         ? sortingOrder
                         : SORTING_ORDER.ASC
                     }
                     onClick={(e) => {
-                      handleRequestSort(SORTED_FIELD.TOWN);
-                    }}
-                  >
+                      handleRequestSort(MASTERS_SORTED_FIELDS.TOWN);
+                    }}>
                     Город
                   </TableSortLabel>
                 </TableCell>
                 <TableCell align="left">
                   <TableSortLabel
-                    active={sortedField === SORTED_FIELD.RATING}
+                    active={sortedField === MASTERS_SORTED_FIELDS.RATING}
                     direction={
-                      sortedField === SORTED_FIELD.RATING
+                      sortedField === MASTERS_SORTED_FIELDS.RATING
                         ? sortingOrder
                         : SORTING_ORDER.ASC
                     }
                     onClick={(e) => {
-                      handleRequestSort(SORTED_FIELD.RATING);
-                    }}
-                  >
+                      handleRequestSort(MASTERS_SORTED_FIELDS.RATING);
+                    }}>
                     Рейтинг
                   </TableSortLabel>
                 </TableCell>
                 <TableCell align="left">Сбросить пароль</TableCell>
                 <TableCell align="left">
                   <TableSortLabel
-                    active={sortedField === SORTED_FIELD.ADMIN_APPROVE}
+                    active={sortedField === MASTERS_SORTED_FIELDS.ADMIN_APPROVE}
                     direction={
-                      sortedField === SORTED_FIELD.ADMIN_APPROVE
+                      sortedField === MASTERS_SORTED_FIELDS.ADMIN_APPROVE
                         ? sortingOrder
                         : SORTING_ORDER.ASC
                     }
                     onClick={(e) => {
-                      handleRequestSort(SORTED_FIELD.ADMIN_APPROVE);
-                    }}
-                  >
+                      handleRequestSort(MASTERS_SORTED_FIELDS.ADMIN_APPROVE);
+                    }}>
                     Подтвердить
                   </TableSortLabel>
                 </TableCell>
@@ -224,8 +206,7 @@ const MastersPage = () => {
                   <Button
                     sx={redAddButtonStyle}
                     variant="contained"
-                    onClick={masterSaveModalHandler}
-                  >
+                    onClick={masterSaveModalHandler}>
                     {t("table.add")}
                   </Button>
                 </TableCell>
@@ -234,8 +215,7 @@ const MastersPage = () => {
             <TableBody>
               {isLoading && (
                 <Grid
-                  sx={{ position: "absolute", left: "50%", marginTop: "20px" }}
-                >
+                  sx={{ position: "absolute", left: "50%", marginTop: "20px" }}>
                   <Watch
                     height="80"
                     width="80"
@@ -257,13 +237,11 @@ const MastersPage = () => {
                 mastersList?.map((row) => (
                   <TableRow
                     key={row.id}
-                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                  >
+                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
                     <TableCell component="th" scope="row">
                       <Typography
                         className={style.clue}
-                        data-clue={`${row.id}`}
-                      >
+                        data-clue={`${row.id}`}>
                         {row.id.slice(0, 15) + "..."}
                       </Typography>
                       <CopyIcon data={row.id} />
@@ -322,8 +300,7 @@ const MastersPage = () => {
                         onClick={() => {
                           setItemForRemove({ id: row.id, url: "masters" });
                           deleteModalHandler();
-                        }}
-                      >
+                        }}>
                         <DeleteForeverIcon></DeleteForeverIcon>
                       </IconButton>
                     </TableCell>
