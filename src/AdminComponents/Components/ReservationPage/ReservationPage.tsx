@@ -21,6 +21,8 @@ import {
   TableFooter,
   TablePagination,
   TableSortLabel,
+  Chip,
+  Input,
 } from "@mui/material";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import TableContainer from "@mui/material/TableContainer";
@@ -42,6 +44,7 @@ import {
   RESERVATION_SORTED_FIELDS,
   SORTING_ORDER,
 } from "../../../utils/constants";
+import FilterListIcon from "@mui/icons-material/FilterList";
 
 const ReservationPage = () => {
   const { t } = useTranslation();
@@ -80,12 +83,17 @@ const ReservationPage = () => {
   const [reservationIdForImages, setReservationIdForImages] = useState();
   const [sortedField, setSortedField] = useState<string>("id");
   const [sortingOrder, setSortingOrder] = useState<"asc" | "desc">("asc");
+  const [isFilterTabActive, setFilterTabActive] = useState<boolean>(false);
 
   const handleRequestSort = (field) => {
     const isAsc = sortedField === field && sortingOrder === SORTING_ORDER.ASC;
     setSortingOrder(isAsc ? SORTING_ORDER.DESC : SORTING_ORDER.ASC);
     setSortedField(field);
   };
+
+  function filterTabActiveHandler() {
+    setFilterTabActive(!isFilterTabActive);
+  }
 
   function changeStatusModalHandler() {
     setChangeStatusModalActive(!isChangeStatusModalActive);
@@ -182,7 +190,7 @@ const ReservationPage = () => {
           <Table sx={{ minWidth: 650 }} aria-label="simple table">
             <TableHead sx={{ background: "#a1a1a1" }}>
               <TableRow>
-                <TableCell>Номер резерва</TableCell>
+                <TableCell sx={{ minWidth: "200px" }}>Номер резерва</TableCell>
                 <TableCell align="left">
                   <TableSortLabel
                     active={sortedField === RESERVATION_SORTED_FIELDS.DAY}
@@ -297,6 +305,14 @@ const ReservationPage = () => {
                     Изображения
                   </TableSortLabel>
                 </TableCell>
+                <TableCell style={{ width: "1500px" }}>
+                  <FilterListIcon
+                    color="primary"
+                    cursor="pointer"
+                    sx={{ fontSize: "30px" }}
+                    onClick={filterTabActiveHandler}
+                  />
+                </TableCell>
                 <TableCell align="right">
                   <Button
                     sx={redAddButtonStyle}
@@ -378,8 +394,8 @@ const ReservationPage = () => {
                         />
                       )}
                     </TableCell>
-
-                    <TableCell align="right">
+                    <TableCell></TableCell>
+                    <TableCell align="left">
                       <IconButton
                         onClick={() => {
                           setItemForRemove({ id: row.id, url: "reservation" });
@@ -416,7 +432,9 @@ const ReservationPage = () => {
           </Table>
         </TableContainer>
       </Box>
-
+      {isFilterTabActive && (
+        
+      )}
       {isChangeStatusModalActive && (
         <ChangeStatusModal
           props={changeStatusData}
