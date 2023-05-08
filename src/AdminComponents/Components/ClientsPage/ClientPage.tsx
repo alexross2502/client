@@ -19,6 +19,7 @@ import {
   TableFooter,
   TablePagination,
   TableSortLabel,
+  Input,
 } from "@mui/material";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import TableContainer from "@mui/material/TableContainer";
@@ -34,9 +35,12 @@ import ErrorAndSuccessModal from "../../../Components/Modals/ErrorAndSuccessModa
 import { redAddButtonStyle } from "../../../styles/styles";
 import Api from "../api";
 import { SORTING_ORDER, CLIENTS_SORTED_FIELDS } from "../../../utils/constants";
+import SearchIcon from "@mui/icons-material/Search";
+import SearchOffIcon from "@mui/icons-material/SearchOff";
 
 const ClientPage = () => {
   const { t } = useTranslation();
+  const [timer, setTimer] = useState(null);
   const rerender = useSelector((state: RootState) => state.rerender.isRerender);
   const [clientsList, setClientsList] = useState<InstanceResponse | []>();
   const [totalClients, setTotalClients] = useState<number>();
@@ -65,12 +69,31 @@ const ClientPage = () => {
 
   const [sortedField, setSortedField] = useState<string>("id");
   const [sortingOrder, setSortingOrder] = useState<"asc" | "desc">("asc");
+  const [isNameFilterActive, setNameFilterActive] = useState<boolean>(false);
+  const [nameFilterValue, setNameFilterValue] = useState<string>();
+  const [sendFilterRequest, setSendFilterRequest] = useState<boolean>(false);
 
   const handleRequestSort = (field) => {
     const isAsc = sortedField === field && sortingOrder === SORTING_ORDER.ASC;
     setSortingOrder(isAsc ? SORTING_ORDER.DESC : SORTING_ORDER.ASC);
     setSortedField(field);
   };
+
+  function nameFilterOnChangeHandler(value) {
+    if (timer) {
+      clearTimeout(timer);
+    }
+    setNameFilterValue(value);
+    const newTimer = setTimeout(() => {
+      setSendFilterRequest(!sendFilterRequest);
+      setPage(0);
+    }, 1000);
+    setTimer(newTimer);
+  }
+
+  function nameFilterHandrel() {
+    setNameFilterActive(!isNameFilterActive);
+  }
 
   function clientSaveModalHandler() {
     setClientSaveModalActive(!isClientSaveModalActive);
@@ -97,13 +120,22 @@ const ClientPage = () => {
         limit: rowsPerPage,
         sortedField,
         sortingOrder,
+        nameFilterValue,
       });
       setClientsList(clients.data);
       setTotalClients(clients.total);
       setLoading(false);
     };
     asyncFunc();
-  }, [rerender, page, rowsPerPage, totalClients, sortedField, sortingOrder]);
+  }, [
+    rerender,
+    page,
+    rowsPerPage,
+    totalClients,
+    sortedField,
+    sortingOrder,
+    sendFilterRequest,
+  ]);
 
   const { handleSubmit, register } = useForm({
     mode: "onBlur",
@@ -136,19 +168,53 @@ const ClientPage = () => {
             <TableHead sx={{ background: "#a1a1a1" }}>
               <TableRow>
                 <TableCell>Номер клиента</TableCell>
-                <TableCell align="left">
-                  <TableSortLabel
-                    active={sortedField === CLIENTS_SORTED_FIELDS.NAME}
-                    direction={
-                      sortedField === CLIENTS_SORTED_FIELDS.NAME
-                        ? sortingOrder
-                        : SORTING_ORDER.ASC
-                    }
-                    onClick={(e) => {
-                      handleRequestSort(CLIENTS_SORTED_FIELDS.NAME);
-                    }}>
-                    Имя
-                  </TableSortLabel>
+                <TableCell align="left" sx={{ width: "150px" }}>
+                  {isNameFilterActive ? (
+                    <Grid container direction={"row"}>
+                      <Grid item>
+                        <Input
+                          sx={{ width: "80px" }}
+                          disabled={isLoading}
+                          onChange={(e) =>
+                            nameFilterOnChangeHandler(e.target.value)
+                          }
+                        />
+                      </Grid>
+                      <Grid item>
+                        <SearchOffIcon
+                          onClick={nameFilterHandrel}
+                          cursor={"pointer"}
+                        />
+                      </Grid>
+                    </Grid>
+                  ) : (
+                    <Grid
+                      container
+                      direction={"row"}
+                      display={"flex"}
+                      alignItems={"center"}>
+                      <Grid item>
+                        <SearchIcon
+                          onClick={nameFilterHandrel}
+                          cursor={"pointer"}
+                        />
+                      </Grid>
+                      <Grid item>
+                        <TableSortLabel
+                          active={sortedField === CLIENTS_SORTED_FIELDS.NAME}
+                          direction={
+                            sortedField === CLIENTS_SORTED_FIELDS.NAME
+                              ? sortingOrder
+                              : SORTING_ORDER.ASC
+                          }
+                          onClick={(e) => {
+                            handleRequestSort(CLIENTS_SORTED_FIELDS.NAME);
+                          }}>
+                          Имя
+                        </TableSortLabel>
+                      </Grid>
+                    </Grid>
+                  )}
                 </TableCell>
                 <TableCell align="left">
                   <TableSortLabel
