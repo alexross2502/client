@@ -19,6 +19,7 @@ import {
   Typography,
   TablePagination,
   TableFooter,
+  TableSortLabel,
 } from "@mui/material";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import TableContainer from "@mui/material/TableContainer";
@@ -33,6 +34,7 @@ import UpdatePasswordModal from "../../../Components/Modals/UpdatePasswordModal"
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 import ErrorAndSuccessModal from "../../../Components/Modals/ErrorAndSuccessModal";
 import { redAddButtonStyle } from "../../../styles/styles";
+import { MASTERS_SORTED_FIELDS, SORTING_ORDER } from "../../../utils/constants";
 
 const MastersPage = () => {
   const { t } = useTranslation();
@@ -64,6 +66,15 @@ const MastersPage = () => {
   const [isMasterSaveModalActive, setMasterSaveModalActive] =
     useState<boolean>(false);
 
+  const [sortedField, setSortedField] = useState<string>("id");
+  const [sortingOrder, setSortingOrder] = useState<"asc" | "desc">("asc");
+
+  const handleRequestSort = (field) => {
+    const isAsc = sortedField === field && sortingOrder === SORTING_ORDER.ASC;
+    setSortingOrder(isAsc ? SORTING_ORDER.DESC : SORTING_ORDER.ASC);
+    setSortedField(field);
+  };
+
   function masterSaveModalHandler() {
     setMasterSaveModalActive(!isMasterSaveModalActive);
   }
@@ -89,13 +100,15 @@ const MastersPage = () => {
       let masters: any = await Api.getAll("masters", {
         offset: rowsPerPage * page,
         limit: rowsPerPage,
+        sortedField,
+        sortingOrder,
       });
       setMastersList(masters.data);
       setTotalMasters(masters.total);
       setLoading(false);
     };
     asyncFunc();
-  }, [rerender, page, rowsPerPage, totalMasters]);
+  }, [rerender, page, rowsPerPage, totalMasters, sortedField, sortingOrder]);
 
   const handleChangeRowsPerPage = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -132,11 +145,63 @@ const MastersPage = () => {
             <TableHead sx={{ background: "#a1a1a1" }}>
               <TableRow>
                 <TableCell>Номер мастера</TableCell>
-                <TableCell align="left">ФИО</TableCell>
-                <TableCell align="left">Город</TableCell>
-                <TableCell align="left">Рейтинг</TableCell>
+                <TableCell align="left">
+                  <TableSortLabel
+                    active={sortedField === MASTERS_SORTED_FIELDS.NAME}
+                    direction={
+                      sortedField === MASTERS_SORTED_FIELDS.NAME
+                        ? sortingOrder
+                        : SORTING_ORDER.ASC
+                    }
+                    onClick={(e) => {
+                      handleRequestSort(MASTERS_SORTED_FIELDS.NAME);
+                    }}>
+                    ФИО
+                  </TableSortLabel>
+                </TableCell>
+                <TableCell align="left">
+                  <TableSortLabel
+                    active={sortedField === MASTERS_SORTED_FIELDS.TOWN}
+                    direction={
+                      sortedField === MASTERS_SORTED_FIELDS.TOWN
+                        ? sortingOrder
+                        : SORTING_ORDER.ASC
+                    }
+                    onClick={(e) => {
+                      handleRequestSort(MASTERS_SORTED_FIELDS.TOWN);
+                    }}>
+                    Город
+                  </TableSortLabel>
+                </TableCell>
+                <TableCell align="left">
+                  <TableSortLabel
+                    active={sortedField === MASTERS_SORTED_FIELDS.RATING}
+                    direction={
+                      sortedField === MASTERS_SORTED_FIELDS.RATING
+                        ? sortingOrder
+                        : SORTING_ORDER.ASC
+                    }
+                    onClick={(e) => {
+                      handleRequestSort(MASTERS_SORTED_FIELDS.RATING);
+                    }}>
+                    Рейтинг
+                  </TableSortLabel>
+                </TableCell>
                 <TableCell align="left">Сбросить пароль</TableCell>
-                <TableCell align="left">Подтвердить</TableCell>
+                <TableCell align="left">
+                  <TableSortLabel
+                    active={sortedField === MASTERS_SORTED_FIELDS.ADMIN_APPROVE}
+                    direction={
+                      sortedField === MASTERS_SORTED_FIELDS.ADMIN_APPROVE
+                        ? sortingOrder
+                        : SORTING_ORDER.ASC
+                    }
+                    onClick={(e) => {
+                      handleRequestSort(MASTERS_SORTED_FIELDS.ADMIN_APPROVE);
+                    }}>
+                    Подтвердить
+                  </TableSortLabel>
+                </TableCell>
                 <TableCell align="right">
                   <Button
                     sx={redAddButtonStyle}

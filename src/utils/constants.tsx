@@ -32,3 +32,37 @@ export const Validator = {
     message: "Неверный формат",
   },
 };
+
+export enum SORTING_ORDER {
+  ASC = "asc",
+  DESC = "desc",
+}
+
+export enum RESERVATION_SORTED_FIELDS {
+  TOWN = "towns",
+  CLIENT = "clients",
+  MASTER = "masters",
+  DAY = "day",
+  SIZE = "size",
+  END = "end",
+  PRICE = "price",
+  STATUS = "status",
+  IMAGES = "image",
+}
+
+export enum CLIENTS_SORTED_FIELDS {
+  NAME = "name",
+  EMAIL = "email",
+}
+
+export enum MASTERS_SORTED_FIELDS {
+  NAME = "name",
+  TOWN = "towns",
+  RATING = "rating",
+  ADMIN_APPROVE = "AdminApprove",
+}
+
+export enum TOWNS_SORTED_FIELDS {
+  NAME = "name",
+  TARIFF = "tariff",
+}

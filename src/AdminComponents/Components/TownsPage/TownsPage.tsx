@@ -19,6 +19,7 @@ import {
   Typography,
   TableFooter,
   TablePagination,
+  TableSortLabel,
 } from "@mui/material";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import TableContainer from "@mui/material/TableContainer";
@@ -31,6 +32,7 @@ import { priceFormatterToFloat } from "../../../utils/priceFormatterToFloat";
 import ErrorAndSuccessModal from "../../../Components/Modals/ErrorAndSuccessModal";
 import DeleteModal from "../../../Components/Modals/DeleteModal";
 import { redAddButtonStyle } from "../../../styles/styles";
+import { TOWNS_SORTED_FIELDS, SORTING_ORDER } from "../../../utils/constants";
 
 const TownsPage = () => {
   const { t } = useTranslation();
@@ -54,6 +56,14 @@ const TownsPage = () => {
   });
   const [isTownSaveModalActive, setTownSaveModalActive] =
     useState<boolean>(false);
+  const [sortedField, setSortedField] = useState<string>("id");
+  const [sortingOrder, setSortingOrder] = useState<"asc" | "desc">("asc");
+
+  const handleRequestSort = (field) => {
+    const isAsc = sortedField === field && sortingOrder === SORTING_ORDER.ASC;
+    setSortingOrder(isAsc ? SORTING_ORDER.DESC : SORTING_ORDER.ASC);
+    setSortedField(field);
+  };
 
   function townSaveModalHandler() {
     setTownSaveModalActive(!isTownSaveModalActive);
@@ -74,13 +84,15 @@ const TownsPage = () => {
       let towns: any = await Api.getAll("towns", {
         offset: rowsPerPage * page,
         limit: rowsPerPage,
+        sortedField,
+        sortingOrder,
       });
       setTownsList(towns.data);
       setTotalTowns(towns.total);
       setLoading(false);
     };
     asyncFunc();
-  }, [rerender, page, rowsPerPage, totalTowns]);
+  }, [rerender, page, rowsPerPage, totalTowns, sortedField, sortingOrder]);
 
   const { handleSubmit, register } = useForm({
     mode: "onBlur",
@@ -109,8 +121,34 @@ const TownsPage = () => {
             <TableHead sx={{ background: "#a1a1a1" }}>
               <TableRow>
                 <TableCell>Номер города</TableCell>
-                <TableCell align="left">Имя</TableCell>
-                <TableCell align="left">Тариф</TableCell>
+                <TableCell align="left">
+                  <TableSortLabel
+                    active={sortedField === TOWNS_SORTED_FIELDS.NAME}
+                    direction={
+                      sortedField === TOWNS_SORTED_FIELDS.NAME
+                        ? sortingOrder
+                        : SORTING_ORDER.ASC
+                    }
+                    onClick={(e) => {
+                      handleRequestSort(TOWNS_SORTED_FIELDS.NAME);
+                    }}>
+                    Имя
+                  </TableSortLabel>
+                </TableCell>
+                <TableCell align="left">
+                  <TableSortLabel
+                    active={sortedField === TOWNS_SORTED_FIELDS.TARIFF}
+                    direction={
+                      sortedField === TOWNS_SORTED_FIELDS.TARIFF
+                        ? sortingOrder
+                        : SORTING_ORDER.ASC
+                    }
+                    onClick={(e) => {
+                      handleRequestSort(TOWNS_SORTED_FIELDS.TARIFF);
+                    }}>
+                    Тариф
+                  </TableSortLabel>
+                </TableCell>
                 <TableCell align="right">
                   <Button
                     sx={redAddButtonStyle}

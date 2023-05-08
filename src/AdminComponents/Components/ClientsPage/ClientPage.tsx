@@ -18,6 +18,7 @@ import {
   Typography,
   TableFooter,
   TablePagination,
+  TableSortLabel,
 } from "@mui/material";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import TableContainer from "@mui/material/TableContainer";
@@ -32,6 +33,7 @@ import UpdatePasswordModal from "../../../Components/Modals/UpdatePasswordModal"
 import ErrorAndSuccessModal from "../../../Components/Modals/ErrorAndSuccessModal";
 import { redAddButtonStyle } from "../../../styles/styles";
 import Api from "../api";
+import { SORTING_ORDER, CLIENTS_SORTED_FIELDS } from "../../../utils/constants";
 
 const ClientPage = () => {
   const { t } = useTranslation();
@@ -61,6 +63,15 @@ const ClientPage = () => {
   const [isClientSaveModalActive, setClientSaveModalActive] =
     useState<boolean>(false);
 
+  const [sortedField, setSortedField] = useState<string>("id");
+  const [sortingOrder, setSortingOrder] = useState<"asc" | "desc">("asc");
+
+  const handleRequestSort = (field) => {
+    const isAsc = sortedField === field && sortingOrder === SORTING_ORDER.ASC;
+    setSortingOrder(isAsc ? SORTING_ORDER.DESC : SORTING_ORDER.ASC);
+    setSortedField(field);
+  };
+
   function clientSaveModalHandler() {
     setClientSaveModalActive(!isClientSaveModalActive);
   }
@@ -84,13 +95,15 @@ const ClientPage = () => {
       let clients: any = await Api.getAll(`clients`, {
         offset: rowsPerPage * page,
         limit: rowsPerPage,
+        sortedField,
+        sortingOrder,
       });
       setClientsList(clients.data);
       setTotalClients(clients.total);
       setLoading(false);
     };
     asyncFunc();
-  }, [rerender, page, rowsPerPage, totalClients]);
+  }, [rerender, page, rowsPerPage, totalClients, sortedField, sortingOrder]);
 
   const { handleSubmit, register } = useForm({
     mode: "onBlur",
@@ -123,8 +136,34 @@ const ClientPage = () => {
             <TableHead sx={{ background: "#a1a1a1" }}>
               <TableRow>
                 <TableCell>Номер клиента</TableCell>
-                <TableCell align="left">Имя</TableCell>
-                <TableCell align="left">Почта</TableCell>
+                <TableCell align="left">
+                  <TableSortLabel
+                    active={sortedField === CLIENTS_SORTED_FIELDS.NAME}
+                    direction={
+                      sortedField === CLIENTS_SORTED_FIELDS.NAME
+                        ? sortingOrder
+                        : SORTING_ORDER.ASC
+                    }
+                    onClick={(e) => {
+                      handleRequestSort(CLIENTS_SORTED_FIELDS.NAME);
+                    }}>
+                    Имя
+                  </TableSortLabel>
+                </TableCell>
+                <TableCell align="left">
+                  <TableSortLabel
+                    active={sortedField === CLIENTS_SORTED_FIELDS.EMAIL}
+                    direction={
+                      sortedField === CLIENTS_SORTED_FIELDS.EMAIL
+                        ? sortingOrder
+                        : SORTING_ORDER.ASC
+                    }
+                    onClick={(e) => {
+                      handleRequestSort(CLIENTS_SORTED_FIELDS.EMAIL);
+                    }}>
+                    Почта
+                  </TableSortLabel>
+                </TableCell>
                 <TableCell>Сбросить пароль</TableCell>
                 <TableCell align="right">
                   <Button
