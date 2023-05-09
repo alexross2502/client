@@ -20,6 +20,7 @@ import {
   TablePagination,
   TableFooter,
   TableSortLabel,
+  Input,
 } from "@mui/material";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import TableContainer from "@mui/material/TableContainer";
@@ -35,9 +36,12 @@ import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 import ErrorAndSuccessModal from "../../../Components/Modals/ErrorAndSuccessModal";
 import { redAddButtonStyle } from "../../../styles/styles";
 import { MASTERS_SORTED_FIELDS, SORTING_ORDER } from "../../../utils/constants";
+import SearchIcon from "@mui/icons-material/Search";
+import SearchOffIcon from "@mui/icons-material/SearchOff";
 
 const MastersPage = () => {
   const { t } = useTranslation();
+  const [timer, setTimer] = useState(null);
   const dispatch = useDispatch();
   const rerender = useSelector((state: RootState) => state.rerender.isRerender);
   const [mastersList, setMastersList] = useState<InstanceResponse | []>();
@@ -68,12 +72,32 @@ const MastersPage = () => {
 
   const [sortedField, setSortedField] = useState<string>("id");
   const [sortingOrder, setSortingOrder] = useState<"asc" | "desc">("asc");
+  const [isSurnameFilterActive, setSurnameFilterActive] =
+    useState<boolean>(false);
+  const [surnameFilterValue, setSurnameFilterValue] = useState<string>("");
+  const [sendFilterRequest, setSendFilterRequest] = useState<boolean>(false);
 
   const handleRequestSort = (field) => {
     const isAsc = sortedField === field && sortingOrder === SORTING_ORDER.ASC;
     setSortingOrder(isAsc ? SORTING_ORDER.DESC : SORTING_ORDER.ASC);
     setSortedField(field);
   };
+
+  function surnameFilterOnChangeHandler(value) {
+    if (timer) {
+      clearTimeout(timer);
+    }
+    setSurnameFilterValue(value);
+    const newTimer = setTimeout(() => {
+      setSendFilterRequest(!sendFilterRequest);
+      setPage(0);
+    }, 1000);
+    setTimer(newTimer);
+  }
+
+  function surnameFilterHandler() {
+    setSurnameFilterActive(!isSurnameFilterActive);
+  }
 
   function masterSaveModalHandler() {
     setMasterSaveModalActive(!isMasterSaveModalActive);
@@ -102,13 +126,22 @@ const MastersPage = () => {
         limit: rowsPerPage,
         sortedField,
         sortingOrder,
+        surnameFilterValue,
       });
       setMastersList(masters.data);
       setTotalMasters(masters.total);
       setLoading(false);
     };
     asyncFunc();
-  }, [rerender, page, rowsPerPage, totalMasters, sortedField, sortingOrder]);
+  }, [
+    rerender,
+    page,
+    rowsPerPage,
+    totalMasters,
+    sortedField,
+    sortingOrder,
+    sendFilterRequest,
+  ]);
 
   const handleChangeRowsPerPage = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -145,19 +178,61 @@ const MastersPage = () => {
             <TableHead sx={{ background: "#a1a1a1" }}>
               <TableRow>
                 <TableCell>Номер мастера</TableCell>
-                <TableCell align="left">
-                  <TableSortLabel
-                    active={sortedField === MASTERS_SORTED_FIELDS.NAME}
-                    direction={
-                      sortedField === MASTERS_SORTED_FIELDS.NAME
-                        ? sortingOrder
-                        : SORTING_ORDER.ASC
-                    }
-                    onClick={(e) => {
-                      handleRequestSort(MASTERS_SORTED_FIELDS.NAME);
-                    }}>
-                    ФИО
-                  </TableSortLabel>
+                <TableCell align="left" sx={{ width: "170px" }}>
+                  {isSurnameFilterActive ? (
+                    <Grid container direction={"row"}>
+                      <Grid item>
+                        <Input
+                          sx={{ width: "80px" }}
+                          disabled={isLoading}
+                          value={surnameFilterValue}
+                          onChange={(e) =>
+                            surnameFilterOnChangeHandler(e.target.value)
+                          }
+                        />
+                      </Grid>
+                      <Grid item>
+                        <SearchOffIcon
+                          onClick={surnameFilterHandler}
+                          cursor={"pointer"}
+                        />
+                      </Grid>
+                    </Grid>
+                  ) : (
+                    <Grid
+                      container
+                      direction={"row"}
+                      display={"flex"}
+                      alignItems={"center"}
+                    >
+                      <Grid item>
+                        <SearchIcon
+                          onClick={surnameFilterHandler}
+                          cursor={"pointer"}
+                          sx={
+                            surnameFilterValue === ""
+                              ? { color: "black" }
+                              : { color: "blue" }
+                          }
+                        />
+                      </Grid>
+                      <Grid item>
+                        <TableSortLabel
+                          active={sortedField === MASTERS_SORTED_FIELDS.NAME}
+                          direction={
+                            sortedField === MASTERS_SORTED_FIELDS.NAME
+                              ? sortingOrder
+                              : SORTING_ORDER.ASC
+                          }
+                          onClick={(e) => {
+                            handleRequestSort(MASTERS_SORTED_FIELDS.NAME);
+                          }}
+                        >
+                          ФИО
+                        </TableSortLabel>
+                      </Grid>
+                    </Grid>
+                  )}
                 </TableCell>
                 <TableCell align="left">
                   <TableSortLabel
@@ -169,7 +244,8 @@ const MastersPage = () => {
                     }
                     onClick={(e) => {
                       handleRequestSort(MASTERS_SORTED_FIELDS.TOWN);
-                    }}>
+                    }}
+                  >
                     Город
                   </TableSortLabel>
                 </TableCell>
@@ -183,7 +259,8 @@ const MastersPage = () => {
                     }
                     onClick={(e) => {
                       handleRequestSort(MASTERS_SORTED_FIELDS.RATING);
-                    }}>
+                    }}
+                  >
                     Рейтинг
                   </TableSortLabel>
                 </TableCell>
@@ -198,7 +275,8 @@ const MastersPage = () => {
                     }
                     onClick={(e) => {
                       handleRequestSort(MASTERS_SORTED_FIELDS.ADMIN_APPROVE);
-                    }}>
+                    }}
+                  >
                     Подтвердить
                   </TableSortLabel>
                 </TableCell>
@@ -206,7 +284,8 @@ const MastersPage = () => {
                   <Button
                     sx={redAddButtonStyle}
                     variant="contained"
-                    onClick={masterSaveModalHandler}>
+                    onClick={masterSaveModalHandler}
+                  >
                     {t("table.add")}
                   </Button>
                 </TableCell>
@@ -215,7 +294,8 @@ const MastersPage = () => {
             <TableBody>
               {isLoading && (
                 <Grid
-                  sx={{ position: "absolute", left: "50%", marginTop: "20px" }}>
+                  sx={{ position: "absolute", left: "50%", marginTop: "20px" }}
+                >
                   <Watch
                     height="80"
                     width="80"
@@ -237,11 +317,13 @@ const MastersPage = () => {
                 mastersList?.map((row) => (
                   <TableRow
                     key={row.id}
-                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
+                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                  >
                     <TableCell component="th" scope="row">
                       <Typography
                         className={style.clue}
-                        data-clue={`${row.id}`}>
+                        data-clue={`${row.id}`}
+                      >
                         {row.id.slice(0, 15) + "..."}
                       </Typography>
                       <CopyIcon data={row.id} />
@@ -300,7 +382,8 @@ const MastersPage = () => {
                         onClick={() => {
                           setItemForRemove({ id: row.id, url: "masters" });
                           deleteModalHandler();
-                        }}>
+                        }}
+                      >
                         <DeleteForeverIcon></DeleteForeverIcon>
                       </IconButton>
                     </TableCell>
