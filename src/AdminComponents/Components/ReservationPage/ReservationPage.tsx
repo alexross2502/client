@@ -45,6 +45,7 @@ import {
   SORTING_ORDER,
 } from "../../../utils/constants";
 import FilterListIcon from "@mui/icons-material/FilterList";
+import ReservationFilterModal from "../../../Components/Modals/ReservationFilterModal";
 
 const ReservationPage = () => {
   const { t } = useTranslation();
@@ -85,10 +86,35 @@ const ReservationPage = () => {
   const [sortingOrder, setSortingOrder] = useState<"asc" | "desc">("asc");
   const [isFilterTabActive, setFilterTabActive] = useState<boolean>(false);
 
+  const [filterState, setFilterState] = useState({
+    day: null,
+    master: null,
+    size: null,
+    time: null,
+    town: null,
+    client: null,
+    price: null,
+    status: null,
+    image: null,
+  });
+
   const handleRequestSort = (field) => {
     const isAsc = sortedField === field && sortingOrder === SORTING_ORDER.ASC;
     setSortingOrder(isAsc ? SORTING_ORDER.DESC : SORTING_ORDER.ASC);
     setSortedField(field);
+  };
+
+  const filterStateHandler = {
+    get: function () {
+      console.log();
+      return filterState;
+    },
+    set: function (field, value) {
+      setFilterState({ ...filterState, [field]: value });
+    },
+    // reset: function () {
+    //   Object.keys(filterState).forEach((el) => (el = null));
+    // },
   };
 
   function filterTabActiveHandler() {
@@ -433,7 +459,14 @@ const ReservationPage = () => {
         </TableContainer>
       </Box>
       {isFilterTabActive && (
-        
+        <ReservationFilterModal
+          onClose={filterTabActiveHandler}
+          towns={townsList}
+          masters={mastersList}
+          clients={clientsList}
+          filterStateHandler={filterStateHandler}
+          initialState={filterState}
+        />
       )}
       {isChangeStatusModalActive && (
         <ChangeStatusModal
