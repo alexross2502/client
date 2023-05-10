@@ -193,8 +193,7 @@ const ClientPage = () => {
                       container
                       direction={"row"}
                       display={"flex"}
-                      alignItems={"center"}
-                    >
+                      alignItems={"center"}>
                       <Grid item>
                         <SearchIcon
                           onClick={nameFilterHandler}
@@ -216,8 +215,7 @@ const ClientPage = () => {
                           }
                           onClick={(e) => {
                             handleRequestSort(CLIENTS_SORTED_FIELDS.NAME);
-                          }}
-                        >
+                          }}>
                           Имя
                         </TableSortLabel>
                       </Grid>
@@ -234,8 +232,7 @@ const ClientPage = () => {
                     }
                     onClick={(e) => {
                       handleRequestSort(CLIENTS_SORTED_FIELDS.EMAIL);
-                    }}
-                  >
+                    }}>
                     Почта
                   </TableSortLabel>
                 </TableCell>
@@ -246,8 +243,7 @@ const ClientPage = () => {
                     variant="contained"
                     onClick={() => {
                       clientSaveModalHandler();
-                    }}
-                  >
+                    }}>
                     {t("table.add")}
                   </Button>
                 </TableCell>
@@ -256,8 +252,7 @@ const ClientPage = () => {
             <TableBody>
               {isLoading && (
                 <Grid
-                  sx={{ position: "absolute", left: "50%", marginTop: "20px" }}
-                >
+                  sx={{ position: "absolute", left: "50%", marginTop: "20px" }}>
                   <Watch
                     height="80"
                     width="80"
@@ -279,13 +274,11 @@ const ClientPage = () => {
                 clientsList?.map((row) => (
                   <TableRow
                     key={row.id}
-                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                  >
+                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
                     <TableCell component="th" scope="row">
                       <Typography
                         className={style.clue}
-                        data-clue={`${row.id}`}
-                      >
+                        data-clue={`${row.id}`}>
                         {row.id.slice(0, 15) + "..."}
                       </Typography>
                       <CopyIcon data={row.id} />
@@ -313,8 +306,7 @@ const ClientPage = () => {
                         onClick={() => {
                           setItemForRemove({ id: row.id, url: "clients" });
                           deleteModalHandler();
-                        }}
-                      >
+                        }}>
                         <DeleteForeverIcon></DeleteForeverIcon>
                       </IconButton>
                     </TableCell>

@@ -203,8 +203,7 @@ const MastersPage = () => {
                       container
                       direction={"row"}
                       display={"flex"}
-                      alignItems={"center"}
-                    >
+                      alignItems={"center"}>
                       <Grid item>
                         <SearchIcon
                           onClick={surnameFilterHandler}
@@ -226,8 +225,7 @@ const MastersPage = () => {
                           }
                           onClick={(e) => {
                             handleRequestSort(MASTERS_SORTED_FIELDS.NAME);
-                          }}
-                        >
+                          }}>
                           ФИО
                         </TableSortLabel>
                       </Grid>
@@ -244,8 +242,7 @@ const MastersPage = () => {
                     }
                     onClick={(e) => {
                       handleRequestSort(MASTERS_SORTED_FIELDS.TOWN);
-                    }}
-                  >
+                    }}>
                     Город
                   </TableSortLabel>
                 </TableCell>
@@ -259,8 +256,7 @@ const MastersPage = () => {
                     }
                     onClick={(e) => {
                       handleRequestSort(MASTERS_SORTED_FIELDS.RATING);
-                    }}
-                  >
+                    }}>
                     Рейтинг
                   </TableSortLabel>
                 </TableCell>
@@ -275,8 +271,7 @@ const MastersPage = () => {
                     }
                     onClick={(e) => {
                       handleRequestSort(MASTERS_SORTED_FIELDS.ADMIN_APPROVE);
-                    }}
-                  >
+                    }}>
                     Подтвердить
                   </TableSortLabel>
                 </TableCell>
@@ -284,8 +279,7 @@ const MastersPage = () => {
                   <Button
                     sx={redAddButtonStyle}
                     variant="contained"
-                    onClick={masterSaveModalHandler}
-                  >
+                    onClick={masterSaveModalHandler}>
                     {t("table.add")}
                   </Button>
                 </TableCell>
@@ -294,8 +288,7 @@ const MastersPage = () => {
             <TableBody>
               {isLoading && (
                 <Grid
-                  sx={{ position: "absolute", left: "50%", marginTop: "20px" }}
-                >
+                  sx={{ position: "absolute", left: "50%", marginTop: "20px" }}>
                   <Watch
                     height="80"
                     width="80"
@@ -317,13 +310,11 @@ const MastersPage = () => {
                 mastersList?.map((row) => (
                   <TableRow
                     key={row.id}
-                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                  >
+                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
                     <TableCell component="th" scope="row">
                       <Typography
                         className={style.clue}
-                        data-clue={`${row.id}`}
-                      >
+                        data-clue={`${row.id}`}>
                         {row.id.slice(0, 15) + "..."}
                       </Typography>
                       <CopyIcon data={row.id} />
@@ -382,8 +373,7 @@ const MastersPage = () => {
                         onClick={() => {
                           setItemForRemove({ id: row.id, url: "masters" });
                           deleteModalHandler();
-                        }}
-                      >
+                        }}>
                         <DeleteForeverIcon></DeleteForeverIcon>
                       </IconButton>
                     </TableCell>
