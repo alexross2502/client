@@ -80,23 +80,19 @@ const ReservationPage = () => {
     status: "",
   });
   const [isImagesModalActive, setImagesModalActive] = useState<boolean>(false);
-
   const [reservationIdForImages, setReservationIdForImages] = useState();
   const [sortedField, setSortedField] = useState<string>("id");
   const [sortingOrder, setSortingOrder] = useState<"asc" | "desc">("asc");
   const [isFilterTabActive, setFilterTabActive] = useState<boolean>(false);
-
-  const [filterState, setFilterState] = useState({
-    day: null,
+  const filterInitialState = {
     master: null,
-    size: null,
-    time: null,
-    town: null,
-    client: null,
-    price: null,
+    town: [],
     status: null,
-    image: null,
-  });
+    start: null,
+    end: null,
+  };
+  const [filterState, setFilterState] = useState(filterInitialState);
+  const [sendRequest, setSendRequest] = useState<boolean>(false);
 
   const handleRequestSort = (field) => {
     const isAsc = sortedField === field && sortingOrder === SORTING_ORDER.ASC;
@@ -106,16 +102,22 @@ const ReservationPage = () => {
 
   const filterStateHandler = {
     get: function () {
-      console.log();
       return filterState;
     },
     set: function (field, value) {
       setFilterState({ ...filterState, [field]: value });
     },
-    // reset: function () {
-    //   Object.keys(filterState).forEach((el) => (el = null));
-    // },
+    setAll: function (value) {
+      setFilterState(value);
+    },
+    reset: function () {
+      setFilterState(filterInitialState);
+    },
   };
+
+  function sendRequestFunction() {
+    setSendRequest(!sendRequest);
+  }
 
   function filterTabActiveHandler() {
     setFilterTabActive(!isFilterTabActive);
@@ -151,11 +153,17 @@ const ReservationPage = () => {
       setMastersList(masters.data);
       let towns = await Api.getAll("towns");
       setTownsList(towns.data);
+      let townsId = filterState.town.map((el) => el?.id);
       let reservation: any = await Api.getAll("reservation", {
         offset: rowsPerPage * page,
         limit: rowsPerPage,
         sortedField,
         sortingOrder,
+        master: filterState?.master?.id,
+        town: townsId,
+        status: filterState?.status,
+        start: filterState?.start,
+        end: filterState?.end,
       });
       reservation?.data.forEach((el) => {
         new Date(el.day) > new Date()
@@ -175,6 +183,7 @@ const ReservationPage = () => {
     totalReservations,
     sortedField,
     sortingOrder,
+    sendRequest,
   ]);
 
   const handleChangeRowsPerPage = (
@@ -466,6 +475,7 @@ const ReservationPage = () => {
           clients={clientsList}
           filterStateHandler={filterStateHandler}
           initialState={filterState}
+          sendRequestFunction={sendRequestFunction}
         />
       )}
       {isChangeStatusModalActive && (

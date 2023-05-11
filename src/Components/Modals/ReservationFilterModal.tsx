@@ -1,5 +1,12 @@
 import React from "react";
-import { Box, Button, Grid, TextField, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Grid,
+  IconButton,
+  TextField,
+  Typography,
+} from "@mui/material";
 import { useTranslation } from "react-i18next";
 import { useForm } from "react-hook-form";
 import { useState } from "react";
@@ -12,6 +19,10 @@ import NoSsr from "@material-ui/core/NoSsr";
 //import CloseIcon from "@material-ui/icons-material/Close";
 import styled from "styled-components";
 import { statusVariant } from "../../utils/constants";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
 
 const style = {
   position: "absolute" as "absolute",
@@ -30,6 +41,8 @@ type TProps = {
   towns: any;
   clients: any;
   masters: any;
+  filterStateHandler: () => any;
+  initialState: any;
 };
 
 const ReservationFilterModal = ({
@@ -39,7 +52,11 @@ const ReservationFilterModal = ({
   masters,
   filterStateHandler,
   initialState,
+  sendRequestFunction,
 }) => {
+  // console.log(towns);
+  // console.log(clients);
+
   const dispatch = useDispatch();
   const { t } = useTranslation();
   const {
@@ -50,17 +67,14 @@ const ReservationFilterModal = ({
   } = useForm({
     mode: "onBlur",
   });
-  const [pending, setPending] = useState(false);
   const statusOptions = Object.values(statusVariant);
+  const [state, setState] = useState(initialState);
 
   function getValueFromState(field) {
     const value = filterStateHandler.get();
     console.log(value[field]);
     return value[field];
   }
-
-  console.log(initialState.client, "initial");
-  //console.log(initialState, 'initial');
 
   return (
     <div className={css.modalWrapper}>
@@ -70,56 +84,29 @@ const ReservationFilterModal = ({
             <Autocomplete
               id="master"
               options={masters}
-              //defaultValue={`${initialState.master}`}
-              getOptionLabel={(option: { name }) => {
-                console.log(option, "ssss");
-                return option.name;
-              }}
+              getOptionLabel={(option) => option.name}
               style={{ width: 300 }}
-              value={getValueFromState("master")}
+              value={state.master}
               blurOnSelect={false}
-              freeSolo={true}
               onChange={(event, newValue) => {
-                filterStateHandler.set("master", newValue.name);
+                setState({ ...state, master: newValue });
               }}
               renderInput={(params) => (
-                <TextField {...params} label="Мастера" variant="outlined" />
+                <TextField {...params} label="Мастер" variant="outlined" />
               )}
             />
           </Grid>
           <Grid item>
             <Autocomplete
-              id="client"
-              options={clients}
-              getOptionLabel={(option: { name }) => {
-                console.log(option, "ssss");
-                return option.name;
-              }}
-              //defaultValue={initialState.client}
-              style={{ width: 300 }}
-              blurOnSelect={false}
-              freeSolo={true}
-              onChange={(event, newValue) => {
-                console.log(newValue);
-                //filterStateHandler.set("client", newValue.name);
-              }}
-              renderInput={(params) => (
-                <TextField {...params} label="Клиенты" variant="outlined" />
-              )}
-            />
-          </Grid>
-          <Grid item>
-            <Autocomplete
+              multiple
               id="town"
               options={towns}
-              getOptionLabel={(option: { name: string }) => option.name}
+              getOptionLabel={(option) => option.name}
               style={{ width: 300 }}
-              value={getValueFromState("town")}
+              value={state.town}
               blurOnSelect={false}
-              freeSolo={true}
               onChange={(event, newValue) => {
-                console.log(newValue);
-                filterStateHandler.set("town", newValue.name);
+                setState({ ...state, town: newValue });
               }}
               renderInput={(params) => (
                 <TextField {...params} label="Города" variant="outlined" />
@@ -132,15 +119,60 @@ const ReservationFilterModal = ({
               options={statusOptions}
               getOptionLabel={(option) => t(`status.${option}`)}
               style={{ width: 300 }}
-              value={getValueFromState("status")}
+              value={state.status}
               blurOnSelect={false}
-              freeSolo={true}
               onChange={(event, newValue) => {
-                filterStateHandler.set("status", newValue);
+                setState({ ...state, status: newValue });
               }}
               renderInput={(params) => (
                 <TextField {...params} label="Статус" variant="outlined" />
               )}
+            />
+          </Grid>
+          <Grid container alignItems="center">
+            <LocalizationProvider dateAdapter={AdapterDateFns}>
+              <DatePicker
+                sx={{ width: 300 }}
+                label="С:"
+                value={state.start}
+                onChange={(newValue) => {
+                  setState({
+                    ...state,
+                    start: newValue.getTime(),
+                  });
+                }}
+              />
+            </LocalizationProvider>
+            <RemoveCircleOutlineIcon
+              onClick={() => {
+                setState({
+                  ...state,
+                  start: null,
+                });
+              }}
+            />
+          </Grid>
+          <Grid container alignItems="center">
+            <LocalizationProvider dateAdapter={AdapterDateFns}>
+              <DatePicker
+                sx={{ width: 300 }}
+                value={state.end}
+                label="По:"
+                onChange={(newValue) => {
+                  setState({
+                    ...state,
+                    end: newValue.getTime(),
+                  });
+                }}
+              />
+            </LocalizationProvider>
+            <RemoveCircleOutlineIcon
+              onClick={() => {
+                setState({
+                  ...state,
+                  end: null,
+                });
+              }}
             />
           </Grid>
         </Grid>
@@ -159,11 +191,11 @@ const ReservationFilterModal = ({
                 }}
                 variant="contained"
                 color="warning"
-                disabled={pending}
                 onClick={() => {
-                  console.log(filterStateHandler.get());
-                }}
-              >
+                  filterStateHandler.setAll(state);
+                  sendRequestFunction();
+                  onClose();
+                }}>
                 Применить
               </Button>
             </Grid>
@@ -181,12 +213,11 @@ const ReservationFilterModal = ({
                 }}
                 variant="contained"
                 color="warning"
-                disabled={pending}
                 onClick={() => {
+                  filterStateHandler.reset();
+                  sendRequestFunction();
                   onClose();
-                  console.log(filterStateHandler.get());
-                }}
-              >
+                }}>
                 Отменить
               </Button>
             </Grid>
