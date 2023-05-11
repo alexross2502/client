@@ -59,7 +59,7 @@ const ReservationFilterModal = ({
     return value[field];
   }
 
-  console.log(initialState, "initial");
+  console.log(initialState.client, "initial");
   //console.log(initialState, 'initial');
 
   return (
@@ -71,7 +71,10 @@ const ReservationFilterModal = ({
               id="master"
               options={masters}
               //defaultValue={`${initialState.master}`}
-              getOptionLabel={(option: { name }) => option.name}
+              getOptionLabel={(option: { name }) => {
+                console.log(option, "ssss");
+                return option.name;
+              }}
               style={{ width: 300 }}
               value={getValueFromState("master")}
               blurOnSelect={false}
@@ -92,12 +95,13 @@ const ReservationFilterModal = ({
                 console.log(option, "ssss");
                 return option.name;
               }}
-              defaultValue={initialState.client}
+              //defaultValue={initialState.client}
               style={{ width: 300 }}
               blurOnSelect={false}
               freeSolo={true}
               onChange={(event, newValue) => {
-                filterStateHandler.set("client", newValue.name);
+                console.log(newValue);
+                //filterStateHandler.set("client", newValue.name);
               }}
               renderInput={(params) => (
                 <TextField {...params} label="Клиенты" variant="outlined" />
@@ -158,7 +162,8 @@ const ReservationFilterModal = ({
                 disabled={pending}
                 onClick={() => {
                   console.log(filterStateHandler.get());
-                }}>
+                }}
+              >
                 Применить
               </Button>
             </Grid>
@@ -180,7 +185,8 @@ const ReservationFilterModal = ({
                 onClick={() => {
                   onClose();
                   console.log(filterStateHandler.get());
-                }}>
+                }}
+              >
                 Отменить
               </Button>
             </Grid>
