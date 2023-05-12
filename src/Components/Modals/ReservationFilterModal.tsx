@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import {
   Box,
   Button,
@@ -36,15 +36,6 @@ const style = {
   p: 4,
 };
 
-type TProps = {
-  onClose: () => void;
-  towns: any;
-  clients: any;
-  masters: any;
-  filterStateHandler: () => any;
-  initialState: any;
-};
-
 const ReservationFilterModal = ({
   onClose,
   towns,
@@ -69,18 +60,16 @@ const ReservationFilterModal = ({
   });
   const statusOptions = Object.values(statusVariant);
   const [state, setState] = useState(initialState);
-
-  function getValueFromState(field) {
-    const value = filterStateHandler.get();
-    console.log(value[field]);
-    return value[field];
-  }
+  const [isAddButtonActive, setAddButtonActive] = useState<boolean>(true);
+  useMemo(() => {
+    setAddButtonActive(state == initialState);
+  }, [state]);
 
   return (
     <div className={css.modalWrapper}>
       <Box sx={style}>
         <Grid container direction={"column"}>
-          <Grid item>
+          <Grid item marginBottom={4}>
             <Autocomplete
               id="master"
               options={masters}
@@ -90,13 +79,14 @@ const ReservationFilterModal = ({
               blurOnSelect={false}
               onChange={(event, newValue) => {
                 setState({ ...state, master: newValue });
+                console.log(isAddButtonActive);
               }}
               renderInput={(params) => (
                 <TextField {...params} label="Мастер" variant="outlined" />
               )}
             />
           </Grid>
-          <Grid item>
+          <Grid item marginBottom={4}>
             <Autocomplete
               multiple
               id="town"
@@ -113,7 +103,7 @@ const ReservationFilterModal = ({
               )}
             />
           </Grid>
-          <Grid item>
+          <Grid item marginBottom={4}>
             <Autocomplete
               id="status"
               options={statusOptions}
@@ -129,7 +119,7 @@ const ReservationFilterModal = ({
               )}
             />
           </Grid>
-          <Grid container alignItems="center">
+          <Grid container alignItems="center" marginBottom={4}>
             <LocalizationProvider dateAdapter={AdapterDateFns}>
               <DatePicker
                 sx={{ width: 300 }}
@@ -144,6 +134,7 @@ const ReservationFilterModal = ({
               />
             </LocalizationProvider>
             <RemoveCircleOutlineIcon
+              sx={{ color: "red" }}
               onClick={() => {
                 setState({
                   ...state,
@@ -152,7 +143,7 @@ const ReservationFilterModal = ({
               }}
             />
           </Grid>
-          <Grid container alignItems="center">
+          <Grid container alignItems="center" marginBottom={4}>
             <LocalizationProvider dateAdapter={AdapterDateFns}>
               <DatePicker
                 sx={{ width: 300 }}
@@ -167,6 +158,7 @@ const ReservationFilterModal = ({
               />
             </LocalizationProvider>
             <RemoveCircleOutlineIcon
+              sx={{ color: "red" }}
               onClick={() => {
                 setState({
                   ...state,
@@ -191,6 +183,7 @@ const ReservationFilterModal = ({
                 }}
                 variant="contained"
                 color="warning"
+                disabled={isAddButtonActive}
                 onClick={() => {
                   filterStateHandler.setAll(state);
                   sendRequestFunction();

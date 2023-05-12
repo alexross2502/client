@@ -22,7 +22,6 @@ import {
   TablePagination,
   TableSortLabel,
   Chip,
-  Input,
 } from "@mui/material";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import TableContainer from "@mui/material/TableContainer";
@@ -116,6 +115,7 @@ const ReservationPage = () => {
   };
 
   function sendRequestFunction() {
+    setPage(0);
     setSendRequest(!sendRequest);
   }
 
