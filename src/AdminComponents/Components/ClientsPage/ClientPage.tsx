@@ -37,7 +37,6 @@ import Api from "../api";
 import { SORTING_ORDER, CLIENTS_SORTED_FIELDS } from "../../../utils/constants";
 import SearchIcon from "@mui/icons-material/Search";
 import SearchOffIcon from "@mui/icons-material/SearchOff";
-import { debounce } from "lodash";
 
 const ClientPage = () => {
   const { t } = useTranslation();

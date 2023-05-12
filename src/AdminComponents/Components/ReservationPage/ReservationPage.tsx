@@ -21,7 +21,6 @@ import {
   TableFooter,
   TablePagination,
   TableSortLabel,
-  Chip,
 } from "@mui/material";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import TableContainer from "@mui/material/TableContainer";
