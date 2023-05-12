@@ -472,7 +472,6 @@ const ReservationPage = () => {
           onClose={filterTabActiveHandler}
           towns={townsList}
           masters={mastersList}
-          clients={clientsList}
           filterStateHandler={filterStateHandler}
           initialState={filterState}
           sendRequestFunction={sendRequestFunction}

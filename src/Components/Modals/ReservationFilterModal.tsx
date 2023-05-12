@@ -1,28 +1,17 @@
 import React, { useMemo } from "react";
-import {
-  Box,
-  Button,
-  Grid,
-  IconButton,
-  TextField,
-  Typography,
-} from "@mui/material";
+import { Box, Button, Grid, TextField } from "@mui/material";
 import { useTranslation } from "react-i18next";
-import { useForm } from "react-hook-form";
 import { useState } from "react";
 import css from "../../Components/Modals/ModalWrapper.module.css";
-import { useDispatch } from "react-redux";
 import Autocomplete from "@mui/material/Autocomplete";
-//import useAutocomplete from "@material-ui/lab/useAutocomplete";
-import NoSsr from "@material-ui/core/NoSsr";
-//import CheckIcon from "@material-ui/icons-material/Check";
-//import CloseIcon from "@material-ui/icons-material/Close";
-import styled from "styled-components";
 import { statusVariant } from "../../utils/constants";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
+import CloseIcon from "@mui/icons-material/Close";
+import { isEqual } from "lodash";
+import { greenAcceptButton, redSaveButtonStyle } from "../../styles/styles";
 
 const style = {
   position: "absolute" as "absolute",
@@ -39,36 +28,30 @@ const style = {
 const ReservationFilterModal = ({
   onClose,
   towns,
-  clients,
   masters,
   filterStateHandler,
   initialState,
   sendRequestFunction,
 }) => {
-  // console.log(towns);
-  // console.log(clients);
-
-  const dispatch = useDispatch();
   const { t } = useTranslation();
-  const {
-    handleSubmit,
-    register,
-    formState: { errors },
-    reset,
-  } = useForm({
-    mode: "onBlur",
-  });
   const statusOptions = Object.values(statusVariant);
   const [state, setState] = useState(initialState);
-  const [isAddButtonActive, setAddButtonActive] = useState<boolean>(true);
+  const [isAddButtonActive, setAddButtonActive] = useState<boolean>();
+
   useMemo(() => {
-    setAddButtonActive(state == initialState);
+    setAddButtonActive(isEqual(state, initialState));
   }, [state]);
 
   return (
     <div className={css.modalWrapper}>
       <Box sx={style}>
         <Grid container direction={"column"}>
+          <Grid container marginBottom={2} marginLeft={"10px"}>
+            <Grid item xs={11}></Grid>
+            <Grid item xs={1}>
+              <CloseIcon onClick={onClose} />
+            </Grid>
+          </Grid>
           <Grid item marginBottom={4}>
             <Autocomplete
               id="master"
@@ -79,7 +62,6 @@ const ReservationFilterModal = ({
               blurOnSelect={false}
               onChange={(event, newValue) => {
                 setState({ ...state, master: newValue });
-                console.log(isAddButtonActive);
               }}
               renderInput={(params) => (
                 <TextField {...params} label="Мастер" variant="outlined" />
@@ -172,17 +154,8 @@ const ReservationFilterModal = ({
           <Grid item xs={6}>
             <Grid container justifyContent="center">
               <Button
-                sx={{
-                  background: "#82c434",
-                  marginTop: 3,
-                  borderRadius: 3,
-                  padding: 1,
-                  paddingLeft: 4,
-                  paddingRight: 4,
-                  display: "inline-block",
-                }}
+                sx={greenAcceptButton}
                 variant="contained"
-                color="warning"
                 disabled={isAddButtonActive}
                 onClick={() => {
                   filterStateHandler.setAll(state);
@@ -196,16 +169,8 @@ const ReservationFilterModal = ({
           <Grid item xs={6}>
             <Grid container justifyContent="center">
               <Button
-                sx={{
-                  background: "rgba(180,58,58,1)",
-                  marginTop: 3,
-                  borderRadius: 3,
-                  padding: 1,
-                  paddingLeft: 4,
-                  paddingRight: 4,
-                }}
+                sx={redSaveButtonStyle}
                 variant="contained"
-                color="warning"
                 onClick={() => {
                   filterStateHandler.reset();
                   sendRequestFunction();

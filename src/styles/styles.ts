@@ -20,6 +20,16 @@ export const modalBoxStyle = {
   },
 };
 
+export const greenAcceptButton = {
+  background: "#82c434",
+  marginTop: 3,
+  borderRadius: 3,
+  padding: 1,
+  paddingLeft: 4,
+  paddingRight: 4,
+  display: "inline-block",
+};
+
 export const headerAppBarStyle = {
   backgroundImage:
     "linear-gradient(90deg, rgba(180,58,58,1) 2%, rgba(49,49,116,1) 36%, rgba(105,0,161,1) 73%, rgba(166,69,252,1) 100%)",
