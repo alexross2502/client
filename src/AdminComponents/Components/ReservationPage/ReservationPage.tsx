@@ -42,6 +42,8 @@ import {
   RESERVATION_SORTED_FIELDS,
   SORTING_ORDER,
 } from "../../../utils/constants";
+import FilterListIcon from "@mui/icons-material/FilterList";
+import ReservationFilterModal from "../../../Components/Modals/ReservationFilterModal";
 
 const ReservationPage = () => {
   const { t } = useTranslation();
@@ -76,16 +78,49 @@ const ReservationPage = () => {
     status: "",
   });
   const [isImagesModalActive, setImagesModalActive] = useState<boolean>(false);
-
   const [reservationIdForImages, setReservationIdForImages] = useState();
   const [sortedField, setSortedField] = useState<string>("id");
   const [sortingOrder, setSortingOrder] = useState<"asc" | "desc">("asc");
+  const [isFilterTabActive, setFilterTabActive] = useState<boolean>(false);
+  const filterInitialState = {
+    master: null,
+    town: [],
+    status: null,
+    start: null,
+    end: null,
+  };
+  const [filterState, setFilterState] = useState(filterInitialState);
+  const [sendRequest, setSendRequest] = useState<boolean>(false);
 
   const handleRequestSort = (field) => {
     const isAsc = sortedField === field && sortingOrder === SORTING_ORDER.ASC;
     setSortingOrder(isAsc ? SORTING_ORDER.DESC : SORTING_ORDER.ASC);
     setSortedField(field);
   };
+
+  const filterStateHandler = {
+    get: function () {
+      return filterState;
+    },
+    set: function (field, value) {
+      setFilterState({ ...filterState, [field]: value });
+    },
+    setAll: function (value) {
+      setFilterState(value);
+    },
+    reset: function () {
+      setFilterState(filterInitialState);
+    },
+  };
+
+  function sendRequestFunction() {
+    setPage(0);
+    setSendRequest(!sendRequest);
+  }
+
+  function filterTabActiveHandler() {
+    setFilterTabActive(!isFilterTabActive);
+  }
 
   function changeStatusModalHandler() {
     setChangeStatusModalActive(!isChangeStatusModalActive);
@@ -117,11 +152,17 @@ const ReservationPage = () => {
       setMastersList(masters.data);
       let towns = await Api.getAll("towns");
       setTownsList(towns.data);
+      let townsId = filterState.town.map((el) => el?.id);
       let reservation: any = await Api.getAll("reservation", {
         offset: rowsPerPage * page,
         limit: rowsPerPage,
         sortedField,
         sortingOrder,
+        master: filterState?.master?.id,
+        town: townsId,
+        status: filterState?.status,
+        start: filterState?.start,
+        end: filterState?.end,
       });
       reservation?.data.forEach((el) => {
         new Date(el.day) > new Date()
@@ -141,6 +182,7 @@ const ReservationPage = () => {
     totalReservations,
     sortedField,
     sortingOrder,
+    sendRequest,
   ]);
 
   const handleChangeRowsPerPage = (
@@ -182,7 +224,7 @@ const ReservationPage = () => {
           <Table sx={{ minWidth: 650 }} aria-label="simple table">
             <TableHead sx={{ background: "#a1a1a1" }}>
               <TableRow>
-                <TableCell>Номер резерва</TableCell>
+                <TableCell sx={{ minWidth: "200px" }}>Номер резерва</TableCell>
                 <TableCell align="left">
                   <TableSortLabel
                     active={sortedField === RESERVATION_SORTED_FIELDS.DAY}
@@ -297,6 +339,14 @@ const ReservationPage = () => {
                     Изображения
                   </TableSortLabel>
                 </TableCell>
+                <TableCell style={{ width: "1500px" }}>
+                  <FilterListIcon
+                    color="primary"
+                    cursor="pointer"
+                    sx={{ fontSize: "30px" }}
+                    onClick={filterTabActiveHandler}
+                  />
+                </TableCell>
                 <TableCell align="right">
                   <Button
                     sx={redAddButtonStyle}
@@ -378,8 +428,8 @@ const ReservationPage = () => {
                         />
                       )}
                     </TableCell>
-
-                    <TableCell align="right">
+                    <TableCell></TableCell>
+                    <TableCell align="left">
                       <IconButton
                         onClick={() => {
                           setItemForRemove({ id: row.id, url: "reservation" });
@@ -416,7 +466,16 @@ const ReservationPage = () => {
           </Table>
         </TableContainer>
       </Box>
-
+      {isFilterTabActive && (
+        <ReservationFilterModal
+          onClose={filterTabActiveHandler}
+          towns={townsList}
+          masters={mastersList}
+          filterStateHandler={filterStateHandler}
+          initialState={filterState}
+          sendRequestFunction={sendRequestFunction}
+        />
+      )}
       {isChangeStatusModalActive && (
         <ChangeStatusModal
           props={changeStatusData}
