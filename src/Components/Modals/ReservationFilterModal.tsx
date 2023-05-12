@@ -1,5 +1,5 @@
 import React, { useMemo } from "react";
-import { Box, Button, Grid, TextField } from "@mui/material";
+import { Box, Button, Grid, TextField, Typography } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import { useState } from "react";
 import css from "../../Components/Modals/ModalWrapper.module.css";
@@ -75,10 +75,21 @@ const ReservationFilterModal = ({
     <div className={css.modalWrapper}>
       <Box sx={style}>
         <Grid container direction={"column"}>
-          <Grid container marginBottom={2} marginLeft={"10px"}>
+          <Grid container>
             <Grid item xs={11}></Grid>
             <Grid item xs={1}>
               <CloseIcon onClick={onClose} />
+            </Grid>
+          </Grid>
+          <Grid
+            container
+            marginBottom={2}
+            alignItems="center"
+            justifyContent="center">
+            <Grid item xs={11}>
+              <Typography fontSize={30} align="center">
+                Фильтры
+              </Typography>
             </Grid>
           </Grid>
           <Grid item marginBottom={4}>

@@ -10,12 +10,14 @@ export async function authCheck(formData) {
     password: formData.password,
     login: formData.email,
   };
-
+  console.log("answer");
   let answer: AuthCheck = await instance({
     url: `/admin`,
     method: "post",
     data: data,
   });
-  sessionStorage.setItem("token", answer.token);
+  if (answer.token !== "Bearer secret") {
+    sessionStorage.setItem("token", answer.token);
+  }
   return answer;
 }
