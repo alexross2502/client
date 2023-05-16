@@ -19,7 +19,6 @@ const ConfirmationPage = () => {
   async function makeRequest() {
     try {
       let res = await instance(`/${url}/mailconfirmation/${token}`);
-      console.log(res);
       if (!res) throw new Error("error");
       setResult(true);
     } catch (e) {
