@@ -33,6 +33,8 @@ import { useNavigate } from "react-router-dom";
 import { styled } from "@mui/material/styles";
 import Switch, { SwitchProps } from "@mui/material/Switch";
 import { priceFormatterToFloat } from "../utils/priceFormatterToFloat";
+import CameraAltIcon from "@mui/icons-material/CameraAlt";
+import ImagesModal from "../Components/Modals/ImagesModal";
 
 const IOSSwitch = styled((props: SwitchProps) => (
   <Switch focusVisibleClassName=".Mui-focusVisible" disableRipple {...props} />
@@ -92,6 +94,8 @@ const MasterAccount = () => {
   const rerender = useSelector((state: RootState) => state.rerender.isRerender);
   const [mastersList, setMastersList] = useState<InstanceResponse | []>();
   const [isLoading, setLoading] = useState<boolean>(false);
+  const [isImagesModalActive, setImagesModalActive] = useState<boolean>(false);
+  const [reservationIdForImages, setReservationIdForImages] = useState();
 
   useEffect(() => {
     let asyncFunc = async () => {
@@ -113,6 +117,10 @@ const MasterAccount = () => {
       data: { id: id, status: status },
       method: "PUT",
     });
+  }
+
+  function imagesModalHandler() {
+    setImagesModalActive(!isImagesModalActive);
   }
 
   function checkStatus(status) {
@@ -185,6 +193,7 @@ const MasterAccount = () => {
                   <TableCell align="left">Время</TableCell>
                   <TableCell align="left">Сумма</TableCell>
                   <TableCell align="left">Подтвержден/выполнен</TableCell>
+                  <TableCell align="left">Изображения</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -245,6 +254,18 @@ const MasterAccount = () => {
                           />
                         )}
                       </TableCell>
+                      <TableCell align="center">
+                        {row.images && (
+                          <CameraAltIcon
+                            cursor={"pointer"}
+                            onClick={() => {
+                              setReservationIdForImages(row.id);
+                              imagesModalHandler();
+                              console.log(reservationIdForImages);
+                            }}
+                          />
+                        )}
+                      </TableCell>
                     </TableRow>
                   ))
                 )}
@@ -253,6 +274,12 @@ const MasterAccount = () => {
           </TableContainer>
         </Box>
       </Box>
+      {isImagesModalActive && (
+        <ImagesModal
+          onClose={imagesModalHandler}
+          reservationId={reservationIdForImages}
+        />
+      )}
     </>
   );
 };

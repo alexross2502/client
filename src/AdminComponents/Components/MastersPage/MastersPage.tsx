@@ -361,9 +361,20 @@ const MastersPage = () => {
                                   message: "Невозможно совершить подтверждение",
                                 });
                               })
-                              .finally(async () =>
-                                setMastersList(await Api.getAll("masters"))
-                              );
+                              .finally(async () => {
+                                const masters: any = await Api.getAll(
+                                  "masters",
+                                  {
+                                    offset: rowsPerPage * page,
+                                    limit: rowsPerPage,
+                                    sortedField,
+                                    sortingOrder,
+                                    surnameFilterValue,
+                                  }
+                                );
+                                setMastersList(masters.data);
+                                setTotalMasters(masters.total);
+                              });
                           }}
                         />
                       )}
