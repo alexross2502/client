@@ -20,6 +20,8 @@ import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import { Validator } from "../../utils/constants";
 import { modalBoxStyle, redSaveButtonStyle } from "../../styles/styles";
 import ImageUploader from "../Modals/ImageUploader";
+import { tokenParser } from "../../utils/tokenParser";
+import { getToken } from "../../AdminComponents/token";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -40,6 +42,15 @@ type TProps = {
   result: (data) => void;
 };
 
+type TClientData = {
+  name: string;
+  email: string;
+  id: string;
+  mailConfirmation: boolean;
+  updatedAt: Date;
+  createdAt: Date;
+};
+
 const ModalOrder = ({ next, onClose, result }: TProps) => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
@@ -48,6 +59,7 @@ const ModalOrder = ({ next, onClose, result }: TProps) => {
     register,
     formState: { errors },
     reset,
+    setValue,
   } = useForm({
     mode: "onBlur",
   });
@@ -55,7 +67,12 @@ const ModalOrder = ({ next, onClose, result }: TProps) => {
   const [townsList, setTownsList] = useState<InstanceResponse | []>([]);
   useEffect(() => {
     let asyncFunc = async () => {
-      let towns = await Api.getAll("towns");
+      if (tokenParser(getToken()).role === "client") {
+        const clientData: TClientData = await instance("clients/prefill");
+        setValue("name", clientData.name);
+        setValue("email", clientData.email);
+      }
+      const towns = await Api.getAll("towns");
       setTownsList(towns.data);
     };
     asyncFunc();
@@ -147,8 +164,7 @@ const ModalOrder = ({ next, onClose, result }: TProps) => {
             padding={3}
             borderRadius={5}
             boxShadow={"5px 5px 10px #ccc"}
-            sx={modalBoxStyle}
-          >
+            sx={modalBoxStyle}>
             <Grid container maxHeight={200}>
               <Grid item xs={1}></Grid>
               <Grid item xs={10}>
@@ -246,8 +262,7 @@ const ModalOrder = ({ next, onClose, result }: TProps) => {
                 fullWidth={true}
                 {...register("towns_id", {
                   required: `${t("adminPopup.emptyField")}`,
-                })}
-              >
+                })}>
                 {townsList.map((el) => {
                   return (
                     <option value={el.id} key={el.id}>
@@ -269,8 +284,7 @@ const ModalOrder = ({ next, onClose, result }: TProps) => {
                 fullWidth={true}
                 {...register("size", {
                   required: `${t("adminPopup.emptyField")}`,
-                })}
-              >
+                })}>
                 {Object.keys(repairTime).map((el) => {
                   return <option value={el}>{t(`size.${el}`)}</option>;
                 })}
@@ -300,8 +314,7 @@ const ModalOrder = ({ next, onClose, result }: TProps) => {
               variant="contained"
               color="warning"
               type="submit"
-              disabled={pending}
-            >
+              disabled={pending}>
               Заказать
             </Button>
           </Box>

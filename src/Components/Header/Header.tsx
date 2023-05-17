@@ -19,6 +19,7 @@ import { useNavigate } from "react-router-dom";
 import React from "react";
 import { loginSwitchCase } from "../../utils/loginSwitchCase";
 import { headerAppBarStyle } from "../../styles/styles";
+import { tokenParser } from "../../utils/tokenParser";
 
 type TProps = {
   authorization: () => void;
@@ -87,7 +88,9 @@ const Header = ({ authorization, order, registration }: TProps) => {
                     onClick={() => {
                       navigate(loginSwitchCase(getToken()));
                     }}>
-                    {t("header.authorized")}
+                    {tokenParser(getToken()).role === "admin"
+                      ? "Админ"
+                      : "Кабинет"}
                   </Button>
                 ) : (
                   <Button

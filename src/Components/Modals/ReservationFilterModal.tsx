@@ -216,7 +216,7 @@ const ReservationFilterModal = ({
                   sendRequestFunction();
                   onClose();
                 }}>
-                Отменить
+                Сбросить
               </Button>
             </Grid>
           </Grid>

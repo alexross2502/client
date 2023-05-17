@@ -163,24 +163,6 @@ const MasterSave = (props) => {
                 })}
               />
               <Grid item marginTop={3}>
-                <InputLabel variant="standard" htmlFor="rating">
-                  Рейтинг
-                </InputLabel>
-                <NativeSelect
-                  inputProps={{
-                    name: "rating",
-                    id: "rating",
-                  }}
-                  style={{ width: 200 }}
-                  {...register("rating", {
-                    required: `${t("adminPopup.emptyField")}`,
-                  })}>
-                  {rating.map((el) => {
-                    return <option value={el}>{el}</option>;
-                  })}
-                </NativeSelect>
-              </Grid>
-              <Grid item marginTop={3}>
                 <InputLabel variant="standard" htmlFor="townId">
                   Город
                 </InputLabel>
