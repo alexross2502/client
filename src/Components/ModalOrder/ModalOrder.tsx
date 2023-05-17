@@ -67,13 +67,13 @@ const ModalOrder = ({ next, onClose, result }: TProps) => {
   const [townsList, setTownsList] = useState<InstanceResponse | []>([]);
   useEffect(() => {
     let asyncFunc = async () => {
+      const towns = await Api.getAll("towns");
+      setTownsList(towns.data);
       if (tokenParser(getToken()).role === "client") {
-        const clientData: TClientData = await instance("clients/prefill");
+        const clientData: TClientData = await instance("users");
         setValue("name", clientData.name);
         setValue("email", clientData.email);
       }
-      const towns = await Api.getAll("towns");
-      setTownsList(towns.data);
     };
     asyncFunc();
   }, []);
