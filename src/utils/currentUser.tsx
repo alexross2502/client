@@ -1,3 +1,6 @@
-export const currentUser = () => {
-  return JSON.parse(localStorage.getItem("currentUser")) || null;
+import { instance } from "../AdminComponents/axios-utils";
+
+export const currentUser = async () => {
+  let result = await instance("/users");
+  console.log(result);
 };

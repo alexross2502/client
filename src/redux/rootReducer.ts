@@ -22,6 +22,7 @@ import RemoveAndAddModalReducer from "./RemoveAndAddModalReducer";
 import RemoveAndAddModalErrorReducer from "./RemoveAndAddModalErrorReducer";
 import registrationModalReducer from "./registrationModalReducer";
 import modalUpdatePasswordReducer from "./updatePasswordReducer";
+import userDataReducer from "./userDataReducer";
 
 const rootReducer = combineReducers({
   modalWindow: modalWindowReducer,
@@ -40,7 +41,8 @@ const rootReducer = combineReducers({
   removeAndAdd: RemoveAndAddModalReducer,
   removeAndAddError: RemoveAndAddModalErrorReducer,
   registrationModal: registrationModalReducer,
-  updatePassword: modalUpdatePasswordReducer
+  updatePassword: modalUpdatePasswordReducer,
+  userData: userDataReducer,
 });
 
 const persistConfig = {
