@@ -22,6 +22,7 @@ import { modalBoxStyle, redSaveButtonStyle } from "../../styles/styles";
 import ImageUploader from "../Modals/ImageUploader";
 import { tokenParser } from "../../utils/tokenParser";
 import { getToken } from "../../AdminComponents/token";
+import { currentUser } from "../../utils/currentUser";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -65,11 +66,12 @@ const ModalOrder = ({ next, onClose, result }: TProps) => {
   });
 
   const [townsList, setTownsList] = useState<InstanceResponse | []>([]);
+  const user = currentUser();
   useEffect(() => {
     let asyncFunc = async () => {
       const towns = await Api.getAll("towns");
       setTownsList(towns.data);
-      if (tokenParser(getToken()).role === "client") {
+      if (user?.role === "client") {
         const clientData: TClientData = await instance("users");
         setValue("name", clientData.name);
         setValue("email", clientData.email);

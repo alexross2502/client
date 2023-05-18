@@ -19,7 +19,7 @@ import { useNavigate } from "react-router-dom";
 import React from "react";
 import { loginSwitchCase } from "../../utils/loginSwitchCase";
 import { headerAppBarStyle } from "../../styles/styles";
-import { tokenParser } from "../../utils/tokenParser";
+import { currentUser } from "../../utils/currentUser";
 
 type TProps = {
   authorization: () => void;
@@ -33,6 +33,8 @@ const Header = ({ authorization, order, registration }: TProps) => {
   const theme = useTheme();
   const isMatch = useMediaQuery(theme.breakpoints.down("md"));
   const navigate = useNavigate();
+
+  const user = currentUser();
 
   return (
     <AppBar sx={headerAppBarStyle}>
@@ -88,9 +90,7 @@ const Header = ({ authorization, order, registration }: TProps) => {
                     onClick={() => {
                       navigate(loginSwitchCase(getToken()));
                     }}>
-                    {tokenParser(getToken()).role === "admin"
-                      ? "Админ"
-                      : "Кабинет"}
+                    {user?.role === "admin" ? "Админ" : "Кабинет"}
                   </Button>
                 ) : (
                   <Button

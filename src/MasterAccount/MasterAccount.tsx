@@ -161,6 +161,7 @@ const MasterAccount = () => {
                 onClick={() => {
                   sessionStorage.removeItem("token");
                   sessionStorage.removeItem("persist:main-root");
+                  localStorage.removeItem("currentUser");
                   navigate("/");
                 }}>
                 <ListItemIcon>
