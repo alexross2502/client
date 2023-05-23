@@ -11,7 +11,7 @@ import {
   useMediaQuery,
 } from "@mui/material";
 import AccessAlarmsIcon from "@mui/icons-material/AccessAlarms";
-import { MouseEventHandler, useState } from "react";
+import { MouseEventHandler, useEffect, useState } from "react";
 import { Box } from "@mui/system";
 import { DrawerComp } from "./DrawerComp";
 import { getToken } from "../../AdminComponents/token";
@@ -19,6 +19,12 @@ import { useNavigate } from "react-router-dom";
 import React from "react";
 import { loginSwitchCase } from "../../utils/loginSwitchCase";
 import { headerAppBarStyle } from "../../styles/styles";
+//import { currentUser } from "../../utils/currentUser";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../../redux/rootReducer";
+import { setUserDataReducer } from "../../redux/userDataReducer";
+import { currentUser } from "../../utils/currentUser";
+import { instance } from "../../AdminComponents/axios-utils";
 
 type TProps = {
   authorization: () => void;
@@ -32,6 +38,28 @@ const Header = ({ authorization, order, registration }: TProps) => {
   const theme = useTheme();
   const isMatch = useMediaQuery(theme.breakpoints.down("md"));
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  //const user = currentUser();
+
+  useEffect(() => {
+    let asyncFunc = async () => {
+      //currentUser();
+      let result = await instance("/users");
+      console.log(result);
+    };
+    asyncFunc();
+  });
+
+  dispatch(
+    setUserDataReducer({
+      type: "setUserData",
+      payload: { user: "12345" },
+    })
+  );
+  const userData = useSelector(
+    (state: RootState) => state.userData?.payload || null
+  );
 
   return (
     <AppBar sx={headerAppBarStyle}>
@@ -87,7 +115,7 @@ const Header = ({ authorization, order, registration }: TProps) => {
                     onClick={() => {
                       navigate(loginSwitchCase(getToken()));
                     }}>
-                    {t("header.authorized")}
+                    {/* {user?.role === "admin" ? "Админ" : "Кабинет"} */}
                   </Button>
                 ) : (
                   <Button

@@ -93,6 +93,7 @@ export function LeftSideMenu(props) {
             onClick={() => {
               sessionStorage.removeItem("token");
               sessionStorage.removeItem("persist:main-root");
+              localStorage.removeItem("currentUser");
               dispatch(setAuthorized(false));
               navigate("/");
             }}>

@@ -10,7 +10,6 @@ export async function authCheck(formData) {
     password: formData.password,
     login: formData.email,
   };
-  console.log("answer");
   let answer: AuthCheck = await instance({
     url: `/admin`,
     method: "post",

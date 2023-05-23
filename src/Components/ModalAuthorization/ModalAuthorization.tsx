@@ -14,6 +14,8 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import { loginSwitchCase } from "../../utils/loginSwitchCase";
 import { Validator } from "../../utils/constants";
 import { modalBoxStyle } from "../../styles/styles";
+import { getToken } from "../../AdminComponents/token";
+import { tokenParser } from "../../utils/tokenParser";
 
 type TProps = {
   onClose: () => void;
@@ -40,6 +42,10 @@ const ModalAuthorization = ({ onClose, result }: TProps) => {
     await authCheck(data)
       .then((res) => {
         dispatch(setAuthorized(true));
+        localStorage.setItem(
+          "currentUser",
+          JSON.stringify(tokenParser(getToken()))
+        );
         navigate(loginSwitchCase(res.token));
       })
       .catch(() => {
